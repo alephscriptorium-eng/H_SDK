@@ -5,8 +5,13 @@
     "": {
       "name": "h-sdk",
       "dependencies": {
+        "@zeus/arg-domain": "0.1.0",
+        "@zeus/arg-player-mcp": "0.1.0",
+        "@zeus/arg-runtime": "0.1.1",
         "@zeus/ciudad": "^0.1.1",
         "@zeus/game-engine": "^0.1.4",
+        "@zeus/mockdatas-ciudad": "0.1.0",
+        "@zeus/onfalo-fixture": "0.1.1",
         "@zeus/protocol": "^0.4.1",
         "@zeus/startpack-ciudad": "^0.1.1",
         "@zeus/ui-3d-kit": "^0.1.4",
@@ -25,6 +30,11 @@
       "dependencies": {
         "@h-sdk/core": "workspace:*",
         "@h-sdk/edge-zeus": "workspace:*",
+        "@zeus/arg-domain": "0.1.0",
+        "@zeus/arg-player-mcp": "0.1.0",
+        "@zeus/arg-runtime": "0.1.1",
+        "@zeus/mockdatas-ciudad": "0.1.0",
+        "@zeus/onfalo-fixture": "0.1.1",
       },
     },
     "packages/core": {
@@ -71,15 +81,29 @@
 
     "@types/ws": ["@types/ws@8.18.1", "", { "dependencies": { "@types/node": "*" } }, "sha512-ThVF6DCVhA8kUGy+aazFQ4kXQ7E1Ty7A3ypFOe0IcJV8O/M511G99AW24irKrW56Wt44yG9+ij8FaqoBGkuBXg=="],
 
+    "@zeus/arg-domain": ["@zeus/arg-domain@0.1.0", "https://npm.scriptorium.escrivivir.co/@zeus/arg-domain/-/arg-domain-0.1.0.tgz", { "dependencies": { "@zeus/feed-kit": "^0.3.0", "@zeus/game-engine": "^0.1.4", "@zeus/linea-kit": "^0.3.0", "@zeus/protocol": "^0.4.1" } }, "sha512-iPqyHLQh9VmxWIfMUdbVqobpImUqUxgFd4y1V4UH2PTUInmEJqF4Eg1ADigzhr/VQepEXl9Uk2wD6HF+o/zWXQ=="],
+
+    "@zeus/arg-player-mcp": ["@zeus/arg-player-mcp@0.1.0", "https://npm.scriptorium.escrivivir.co/@zeus/arg-player-mcp/-/arg-player-mcp-0.1.0.tgz", { "dependencies": { "@modelcontextprotocol/sdk": "^1.29.0", "@zeus/arg-domain": "^0.1.0", "@zeus/playbook-kit": "^0.1.3", "@zeus/player-mcp-kit": "^0.1.4", "@zeus/presets-sdk": "^0.1.3", "cors": "^2.8.6", "express": "^5.2.1", "zod": "^4.4.3" } }, "sha512-G6IsCaAXPjY8Q+kYCuF8I8rEcRWXxrpccYxk+IJ7DWUCb9s/AYUjlOkqRu9ncK0vfh72kjVt0mQELsiRTL88tg=="],
+
+    "@zeus/arg-runtime": ["@zeus/arg-runtime@0.1.1", "https://npm.scriptorium.escrivivir.co/@zeus/arg-runtime/-/arg-runtime-0.1.1.tgz", { "dependencies": { "@zeus/arg-domain": "^0.1.0", "@zeus/authority-kit": "^0.4.2" } }, "sha512-JEc/SdP7wsHdiYek2Baaqc1x89v8vfYML3PEn8BJrctNhBWcsKrMPPuTiMBFfvkYUvDKpvs4jkn+qgTMP6Bz+w=="],
+
     "@zeus/authority-kit": ["@zeus/authority-kit@0.4.2", "https://npm.scriptorium.escrivivir.co/@zeus/authority-kit/-/authority-kit-0.4.2.tgz", { "dependencies": { "@zeus/protocol": "0.4.1", "@zeus/rooms": "0.1.2" } }, "sha512-FkEjB5ussQUfGzPxu43i1G5743SjCG/Eui0Y2slxQC48NHqo4UcjaZ5RdXkFVknOon/eRroYeOWrfRpOe6zUOw=="],
 
     "@zeus/ciudad": ["@zeus/ciudad@0.1.1", "https://npm.scriptorium.escrivivir.co/@zeus/ciudad/-/ciudad-0.1.1.tgz", { "dependencies": { "@zeus/authority-kit": "^0.4.2", "@zeus/linea-kit": "^0.3.0", "@zeus/playbook-kit": "^0.1.3", "@zeus/player-mcp-kit": "^0.1.4", "@zeus/presets-sdk": "^0.1.3", "@zeus/protocol": "^0.4.1", "@zeus/rooms": "^0.1.2", "@zeus/startpack-ciudad": "0.1.1", "zod": "^4.4.3" } }, "sha512-cEPFTMGE0a6zLGrgK7i0DzXqtWMj3d+HlliSmCs3glfftOLMbpGQnncmC/KhpDR1i2QohBJkmf9/C4LzElKc1A=="],
+
+    "@zeus/feed-kit": ["@zeus/feed-kit@0.3.0", "https://npm.scriptorium.escrivivir.co/@zeus/feed-kit/-/feed-kit-0.3.0.tgz", { "dependencies": { "@zeus/firehose-core": "*", "@zeus/linea-kit": "*", "@zeus/presets-sdk": "*", "@zeus/volumes-ops": "*" }, "bin": { "zeus-feed-jetstream-sync": "bin/jetstream-sync.mjs" } }, "sha512-3lh/uWTsanM/FXTo6aYc09A6lT4psPYxapZkfbR9voXzWEznIQ7Zy2k8a8bawCYpNVIvepr3yZuRo6P6/mHWXQ=="],
+
+    "@zeus/firehose-core": ["@zeus/firehose-core@0.1.3", "https://npm.scriptorium.escrivivir.co/@zeus/firehose-core/-/firehose-core-0.1.3.tgz", { "dependencies": { "@zeus/presets-sdk": "0.1.3" } }, "sha512-dw2mKAXrthNOryDajuqVVU/LnR/R8GspOu2XLeDX+lFQv6QuKb7PIWz2mXt9hge3spX/iEDlSRRA5qXmR4okWg=="],
 
     "@zeus/game-engine": ["@zeus/game-engine@0.1.4", "https://npm.scriptorium.escrivivir.co/@zeus/game-engine/-/game-engine-0.1.4.tgz", { "dependencies": { "@zeus/protocol": "0.4.1" } }, "sha512-9O3VNh0sh+FUWnmaCMxL+BoBknPYH6URKB8CLdW/A1pyJVmuMsueCVRfxKvBlJso/8MbzLAn/XBujON4VO+3HQ=="],
 
     "@zeus/http-contract": ["@zeus/http-contract@0.1.3", "https://npm.scriptorium.escrivivir.co/@zeus/http-contract/-/http-contract-0.1.3.tgz", { "dependencies": { "@zeus/presets-sdk": "0.1.3", "yaml": "^2.8.0", "zod": "^4.4.3" } }, "sha512-uQiTa/IyiPiLN7K52O6ZgpeRIfFocILIBUQ56v3NkbG4dn8mqy4kqLaNCgEDZ1PcQvZlLkkGgLUr/znXpaHopQ=="],
 
     "@zeus/linea-kit": ["@zeus/linea-kit@0.3.0", "https://npm.scriptorium.escrivivir.co/@zeus/linea-kit/-/linea-kit-0.3.0.tgz", { "dependencies": { "ajv": "^8.17.1", "yaml": "^2.8.0" }, "bin": { "zeus-linea-kit": "bin/linea-kit.mjs" } }, "sha512-oUeOtWUgLWo7/3ZgIwMqSFbGKH1x9dW6cLboNBXARefh+WA/l1hGHRq43M0WzaOmpetdw3IrzKq/YKWCAEKDiw=="],
+
+    "@zeus/mockdatas-ciudad": ["@zeus/mockdatas-ciudad@0.1.0", "https://npm.scriptorium.escrivivir.co/@zeus/mockdatas-ciudad/-/mockdatas-ciudad-0.1.0.tgz", {}, "sha512-b2/rNnW6dLkquUrXWVGryXgxLUFOsXAFOFfKNHrEYTAHr1eNZcJYoajr1CSi2iV+9jh0Dronn4dfD0qTE3QTtQ=="],
+
+    "@zeus/onfalo-fixture": ["@zeus/onfalo-fixture@0.1.1", "https://npm.scriptorium.escrivivir.co/@zeus/onfalo-fixture/-/onfalo-fixture-0.1.1.tgz", {}, "sha512-V3TDQI7AQMCk3l8J2OrNxXEBPImLllAFLAdEnHsdxDpjueswu1UlYVTc0Jc+t0oqhciR0BqOd6gfqVjbUIwurg=="],
 
     "@zeus/playbook-kit": ["@zeus/playbook-kit@0.1.3", "https://npm.scriptorium.escrivivir.co/@zeus/playbook-kit/-/playbook-kit-0.1.3.tgz", { "dependencies": { "@zeus/presets-sdk": "0.1.3" }, "bin": { "zeus-playbook-run": "bin/run-playbook.mjs" } }, "sha512-ewpD+M94aErSFeLNJB5tnj1V+xhJStzSiMOhzV4/245nKqVWojuTUjrcvh7KD5Bm5JvqaC9/1Tuavvc+xUgjdg=="],
 
@@ -102,6 +126,8 @@
     "@zeus/ui-kit": ["@zeus/ui-kit@0.1.3", "https://npm.scriptorium.escrivivir.co/@zeus/ui-kit/-/ui-kit-0.1.3.tgz", { "dependencies": { "@zeus/http-contract": "0.1.3", "express": "^5.2.1", "hyperaxe": "^3.0.2", "zod": "^4.4.3" } }, "sha512-hiBsZtKNPZlv8WH9u2HiN61Q8XUvjYxKihnRda3THcJq1VwHYZQmJQE0RezlUd/Ppk1t8PM69qr50HGvDEhCJA=="],
 
     "@zeus/view-kit": ["@zeus/view-kit@0.1.5", "https://npm.scriptorium.escrivivir.co/@zeus/view-kit/-/view-kit-0.1.5.tgz", { "dependencies": { "@zeus/protocol": "0.4.1", "@zeus/ui-3d-kit": "0.1.4", "three": "^0.170.0" } }, "sha512-tBHGYQkzQKw71zmROlz6Rb91p40u4SQhxoEq6KHAFTfwrvSqmJS736UUoHnL4QFc/knM48rgWTAcmajiwAnuJg=="],
+
+    "@zeus/volumes-ops": ["@zeus/volumes-ops@0.2.4", "https://npm.scriptorium.escrivivir.co/@zeus/volumes-ops/-/volumes-ops-0.2.4.tgz", { "dependencies": { "@zeus/http-contract": "0.1.3", "@zeus/linea-kit": "0.3.0", "@zeus/presets-sdk": "0.1.3", "@zeus/protocol": "0.4.1", "cors": "^2.8.6", "express": "^5.2.1", "zod": "^4.4.3" } }, "sha512-nF1yMAVjNPN1OQjZ22S4/hGsfk2xuPGRUE6ooR/eC979fS9TjZIhX5NXSGWxKknhEybYRj814f1JSTf0R4aRbA=="],
 
     "abort-controller": ["abort-controller@3.0.0", "", { "dependencies": { "event-target-shim": "^5.0.0" } }, "sha512-h8lQ8tacZYnR3vNQTgibj+tODHI5/+l06Au2Pcriv/Gmet0eaj4TwWH41sO9wnHDiQsEj19q0drzdWdeAHtweg=="],
 

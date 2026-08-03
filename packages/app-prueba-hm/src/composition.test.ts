@@ -3,7 +3,7 @@
  */
 
 import { describe, expect, test } from 'bun:test';
-import { actorId, ok } from '@h-sdk/core';
+import { actorId, ok, piezaId } from '@h-sdk/core';
 import {
   arrancarComposition,
   type OpcionesComposition,
@@ -33,6 +33,15 @@ function baseDeps(
         lastStateTs: () => 1,
       },
       close: async () => undefined,
+    }),
+    seleccionarPieza: () => ({
+      ok: true as const,
+      pieza: {
+        id: piezaId('pieza-test'),
+        mediaType: 'text/markdown',
+        size: 1,
+        sha256: 'abc',
+      },
     }),
     ...overrides,
   };
@@ -77,9 +86,10 @@ describe('composition · gates de orden', () => {
     expect(evid.pending_external).toBeTruthy();
   });
 
-  test('camino hasta delta + E pending: no complete', async () => {
+  test('camino hasta onfalo + E pending: no complete', async () => {
     const handle = await arrancarComposition(baseDeps());
     expect(handle.maquina.estado).toBe('pending_external_contract');
+    expect(handle.maquina.pieza).toBe(piezaId('pieza-test'));
     const escena = JSON.parse(handle.readResource(URI_ESCENA)!.text) as {
       sesionId: string | null;
       disponible: boolean;
