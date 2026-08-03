@@ -19,6 +19,14 @@
         "typescript": "^5.9.3",
       },
     },
+    "packages/app-prueba-hm": {
+      "name": "@h-sdk/app-prueba-hm",
+      "version": "0.1.0",
+      "dependencies": {
+        "@h-sdk/core": "workspace:*",
+        "@h-sdk/edge-zeus": "workspace:*",
+      },
+    },
     "packages/core": {
       "name": "@h-sdk/core",
       "version": "0.1.0",
@@ -34,6 +42,8 @@
   },
   "packages": {
     "@alephscript/skills-scriptorium": ["@alephscript/skills-scriptorium@0.12.0", "https://npm.scriptorium.escrivivir.co/@alephscript/skills-scriptorium/-/skills-scriptorium-0.12.0.tgz", { "bin": { "alephscript-skills-sync": "bin/alephscript-skills-sync.mjs" } }, "sha512-AkXpbVllHz/t43HNCbVAj60ZcbKNH5H9mnwH4dyBTIINf9msoGBTG7r4ZUSuiGy7FhljNLArkQVf5KvyuAE6mg=="],
+
+    "@h-sdk/app-prueba-hm": ["@h-sdk/app-prueba-hm@workspace:packages/app-prueba-hm"],
 
     "@h-sdk/core": ["@h-sdk/core@workspace:packages/core"],
 
