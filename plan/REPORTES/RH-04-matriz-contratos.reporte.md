@@ -152,7 +152,11 @@ node scripts/rh-04-matriz-contratos.mjs --json > plan/REPORTES/RH-04-matriz-cont
 
 ## Revisión del orquestador
 
-**DEVUELTO** 2026-08-03 · contrarrevisión adversarial · ver
-`plan/REPORTES/DEVOLUCION-RH-04.md` defecto #1.
+**DEVUELTO** 2026-08-03 · contrarrevisión · `DEVOLUCION-RH-04.md` #1 (falso verde `verdictFor`).
+
+**✅ aceptado** 2026-08-03 · orquestador-H · merge `587beea` · tras fix `a1e1f8e` + re-contrarrevisión **PASS**.
+
+- CA: matriz 4 VERDE / 12 ROJO; `linea-kit@0.3.0` ROJO sin types; mutante `--mutant` → `ROJO / sin d.ts`.
+- Entregables: `RH-04-MATRIZ-CONTRATOS.md`, JSON, script, este reporte.
 
 _(tras corrección: aceptado ✅ / devuelto con lista numerada)_
