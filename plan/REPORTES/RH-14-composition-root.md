@@ -157,5 +157,7 @@ Ninguna bloqueante para revisión. Revisor distinto requerido
 
 ## Revisión del orquestador
 
-_(la rellena el orquestador tras PASS del revisor distinto: aceptado ✅ /
-devuelto con lista numerada)_
+**✅ aceptado** 2026-08-03 · orquestador-H · merge  · contrarrevisión PASS.
+
+- CA: demo → app Bun/TS; game-prueba-hm fuera de workspaces; reachability 8/8; no complete fingido.
+- Assets boceto conservados en disco (borrado diferido).
