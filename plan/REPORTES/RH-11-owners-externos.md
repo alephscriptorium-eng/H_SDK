@@ -5,7 +5,7 @@
 | agente | worker-RH-11 |
 | fecha | 2026-08-03 |
 | rama | `wp/rh-11-owners-externos` |
-| commits | _(hash tras commit de entrega)_ |
+| commits | `3e19938` |
 | eje(s) CA | IV, V |
 | riesgo de revisión | `normal` |
 | revisor distinto del worker | `no requerido` |
