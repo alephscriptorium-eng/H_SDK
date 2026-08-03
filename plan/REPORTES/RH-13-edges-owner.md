@@ -5,7 +5,7 @@
 | agente | worker-RH-13 |
 | fecha | 2026-08-03 |
 | rama | `wp/rh-13-edges-owner` |
-| commits | `13a7826` feat · `040a034` reporte · tip = HEAD de `wp/rh-13-edges-owner` |
+| commits | `13a7826` feat · `040a034` reporte · `72a09d6` fix-#1 · tip = HEAD de `wp/rh-13-edges-owner` |
 | eje(s) CA | I, II, hostil-omite |
 | riesgo de revisión | `independiente` |
 | revisor distinto del worker | `sí` |
@@ -32,7 +32,7 @@ merge, no push, no composition root (RH-14), no vertical E2E (RH-15), no
 **Corrección DEVOLUCION-RH-13 #1:** `abridorDesdeStartArgRuntime` ya no inventa
 `delta:${stateId}:${ledgerId}` si faltan `sessionId` e `id`; devuelve `err`
 explícito. Abridor tipa `Resultado`. Test de omisión + probe mutante añadidos
-(corregido en commit de esta entrega).
+(corregido en commit `72a09d6`).
 
 ## Archivos tocados
 
