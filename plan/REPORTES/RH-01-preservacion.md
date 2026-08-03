@@ -101,4 +101,10 @@ Ningún bloqueo para cierre de preservación. Riesgo `independiente` queda pendi
 
 ## Revisión del orquestador
 
-_(la rellena el orquestador: aceptado ✅ / devuelto con lista numerada)_
+**✅ aceptado** 2026-08-03 · orquestador-H
+
+- CA: status limpio H+G; acta `C:/S_META/HSDK/REPLAN-PRUEBA-HM-REACHABILITY.md` con hash/padre/stat; paths sin `.env`/`node_modules` en diffs.
+- Contrarrevisión adversarial (revisor ≠ worker): **PASS** — no refutó los CA.
+- Merge: **no aplica** (checkpoints ya en `main` / `wp/g-prueba-hm-adaptacion` por excepción del BRIEF).
+- Hallazgo heredado (no bloquea RH-01): `bun-types` corrupto en install H → higiene posterior.
+- Siguiente: RH-02 / RH-03 tras GO de lote.
