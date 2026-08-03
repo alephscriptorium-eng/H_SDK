@@ -122,4 +122,4 @@ Ningún bloqueo para revisión ordinaria. Owner de publicación del artefacto
 
 ## Revisión del orquestador
 
-_(la rellena el orquestador: aceptado ✅ / devuelto con lista numerada)_
+**✅ aceptado** 2026-08-03 · orquestador-H · merge `b132b2b` · revisión ordinaria.

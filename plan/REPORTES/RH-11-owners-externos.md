@@ -97,4 +97,4 @@ OK tipado: **0 / 4**.
 
 ## Revisión del orquestador
 
-_(la rellena el orquestador: aceptado ✅ / devuelto con lista numerada)_
+**✅ aceptado** 2026-08-03 · orquestador-H · merge `520b1ea` · 0/4 tipados = pending_external explícito (bloquea RH-15 hasta owners).
