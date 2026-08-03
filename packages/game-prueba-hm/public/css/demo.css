@@ -1,7 +1,12 @@
 /* ════════════════════════════════════════════════════════════════════════
-   demo.css · «Prueba-H-M» (El Descenso) — W-UI
+   demo.css · «Prueba-H-M» (El Descenso) — W-UI-REAL (R2)
    Overlay DOM estilo terminal de scriptorium sobre la escena three.js.
    Paleta única del brief; nada fuera de ella. Todo movimiento con easing.
+
+   R2: la ESTRUCTURA de los paneles la pone el view-kit real de Scriptorium
+   (createPanel → .arg-panel/.arg-panel-bar/.arg-panel-body; createLogPanel →
+   .log-line/.log-badge/.log-text; widgets → .vk-widget). Este fichero es el
+   TEMA que se pone encima: el kit no trae CSS y no nombra juegos.
    ════════════════════════════════════════════════════════════════════════ */
 
 :root {
@@ -150,6 +155,50 @@ canvas { display: block; }
   color: var(--tenue);
 }
 
+/* ── ventanitas del view-kit (createPanel) ───────────────────────────── */
+/* Estructura del kit: .arg-panel > .arg-panel-bar (título + ▸/▾) +
+   .arg-panel-body. El plegado y su persistencia (vk:<vista>:<id>) son del
+   kit; el vestido, de aquí. La barra de título hace de «ceja». */
+
+.hm-ui .arg-panel { padding: 0; min-height: 0; }
+
+.hm-ui .arg-panel-bar {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 13px 6px;
+  border-bottom: 1px solid var(--linea);
+}
+
+.hm-ui .arg-panel-title {
+  font-family: var(--serif);
+  font-size: 10.5px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--tenue);
+}
+
+.hm-ui .arg-panel-toggle {
+  font: inherit;
+  font-size: 11px;
+  line-height: 1;
+  color: var(--tenue);
+  background: none;
+  border: 1px solid transparent;
+  padding: 1px 5px;
+  cursor: pointer;
+  transition: color .18s var(--ease), border-color .18s var(--ease);
+}
+.hm-ui .arg-panel-toggle:hover { color: var(--oro); border-color: var(--linea2); }
+
+.hm-ui .arg-panel-body { padding: 8px 13px 11px; min-height: 0; }
+.hm-ui .arg-panel.collapsed > .arg-panel-body { display: none; }
+.hm-ui .arg-panel.collapsed > .arg-panel-bar { border-bottom-color: transparent; }
+
+/* el widget del registro no añade caja: la caja ya es el panel */
+.hm-ui .vk-widget { display: block; }
+
 /* ── cabecera ────────────────────────────────────────────────────────── */
 
 .hm-cab {
@@ -215,14 +264,15 @@ canvas { display: block; }
   animation: hmEntra .5s var(--ease) both;
 }
 
-.hm-term-cab {
+/* el cuerpo de la ventanita es la columna log + dock */
+.hm-term > .arg-panel-body {
+  flex: 1;
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 10px;
-  padding: 7px 13px;
-  border-bottom: 1px solid var(--linea);
+  flex-direction: column;
+  min-height: 0;
+  padding: 0;
 }
+
 .hm-pasolbl {
   font-size: 10.5px;
   color: var(--tenue);
@@ -373,7 +423,6 @@ canvas { display: block; }
 }
 
 .hm-panel {
-  padding: 9px 13px 11px;
   flex: none;
   animation: hmEntra .5s var(--ease) both;
 }
@@ -387,11 +436,6 @@ canvas { display: block; }
   to   { opacity: 1; transform: none; }
 }
 
-.hm-panel > .hm-ceja {
-  border-bottom: 1px solid var(--linea);
-  padding-bottom: 5px;
-  margin-bottom: 7px;
-}
 .hm-pie {
   font-size: 10px;
   color: var(--tenue);
@@ -446,24 +490,61 @@ canvas { display: block; }
 .l-denegada  { color: var(--fallo); }
 .l-revocada  { color: var(--tenue); }
 
-/* evidencia */
-.hm-evid {
-  max-height: 168px;
+/* ── evidencia · las DOS cadenas (H oro · M verdigrís) ───────────────── */
+/* Cada cadena la rellena un createLogPanel del view-kit dentro de .hm-log-k:
+   el kit pone .log-line > .log-badge + .log-text, y lo más nuevo, arriba. */
+
+.hm-cadenas { display: grid; gap: 10px; }
+
+.hm-cadena { border-left: 2px solid var(--linea2); padding-left: 8px; }
+.hm-cadena.h { border-left-color: var(--oro-suave); }
+.hm-cadena.m { border-left-color: var(--verdigris); }
+
+.hm-cadena-cab {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  margin: 0 0 3px;
+  font-size: 10px;
+  color: var(--tenue);
+}
+.hm-cadena-cab .lado { font-weight: 700; font-size: 11.5px; letter-spacing: .1em; }
+.hm-cadena.h .lado { color: var(--oro); }
+.hm-cadena.m .lado { color: var(--verdigris); }
+.hm-cadena-cab .ruta {
+  flex: 1;
+  min-width: 0;
+  opacity: .85;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.hm-cadena-cab b { color: var(--tinta); font-weight: 600; }
+
+.hm-log-k {
+  max-height: 112px;
   overflow-y: auto;
   overscroll-behavior: contain;
-  font-size: 11px;
+  font-size: 10.5px;
   -webkit-user-select: text;
   user-select: text;
 }
-.hm-evid .fila {
+.hm-log-k:empty { display: none; }
+
+.hm-ui .log-line {
   display: flex;
-  gap: 8px;
+  gap: 7px;
   padding: 1px 0;
   color: var(--tenue);
   animation: hmLn .22s var(--ease) both;
 }
-.hm-evid .fila .seq { flex: none; width: 2.6em; text-align: right; }
-.hm-evid .fila .vb {
+.hm-ui .log-badge {
+  flex: none;
+  width: 2.9em;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.hm-ui .log-text {
   flex: 1;
   min-width: 0;
   color: var(--tinta);
@@ -471,8 +552,49 @@ canvas { display: block; }
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.hm-evid .fila .dg { flex: none; color: var(--oro-suave); }
-.hm-evid .vacio { color: var(--tenue); font-style: italic; }
+
+.hm-vacio { margin: 2px 0 0; font-size: 10px; font-style: italic; color: var(--tenue); }
+.hm-vacio[hidden] { display: none; }
+.hm-vacio.mal { color: var(--fallo); font-style: normal; }
+
+/* ── acta real (ActaDeBarrio acta/1 devuelta por POST /api/acta) ─────── */
+
+.hm-acta {
+  margin-top: 9px;
+  padding-top: 8px;
+  border-top: 1px solid var(--linea);
+  font-size: 10.5px;
+}
+.hm-acta-cab { margin: 0 0 4px; color: var(--oro); letter-spacing: .06em; }
+.hm-acta .f { display: flex; gap: 8px; padding: 1px 0; color: var(--tenue); }
+.hm-acta .f .k { flex: none; width: 4.6em; }
+.hm-acta .f .v {
+  flex: 1;
+  min-width: 0;
+  color: var(--tinta);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.hm-acta-res { margin: 5px 0 0; color: var(--tinta); font-style: italic; }
+.hm-acta-pend { margin: 4px 0 0; color: var(--fallo); }
+.hm-acta-val { margin: 5px 0 0; font-size: 9.5px; color: var(--ok); }
+
+/* ── frontera real / pendiente ───────────────────────────────────────── */
+
+.hm-frontera { list-style: none; margin: 0; padding: 0; font-size: 11px; }
+.hm-frontera li {
+  display: flex;
+  flex-direction: column;
+  padding: 3px 0;
+  border-bottom: 1px dotted var(--linea);
+  animation: hmLn .22s var(--ease) both;
+}
+.hm-frontera li:last-child { border-bottom: 0; }
+.hm-frontera .que { color: var(--mock); }
+.hm-frontera .que::before { content: "◇ "; }
+.hm-frontera .motivo { color: var(--tenue); font-size: 10px; padding-left: 1.1em; }
+.hm-frontera li.hm-vacio { color: var(--tenue); font-style: italic; border-bottom: 0; }
 
 .hm-panel.sella { animation: hmSello 1.1s var(--ease) 1; }
 @keyframes hmSello {
@@ -495,7 +617,9 @@ canvas { display: block; }
 }
 .hm-mini:hover:not(:disabled) { background: var(--sel); border-color: var(--oro-suave); }
 .hm-mini:disabled { opacity: .4; cursor: default; }
+.hm-mini[hidden] { display: none; }
 .hm-mini.acento { color: var(--oro); border-color: var(--oro-suave); }
+.hm-mini.acento.verde { color: var(--verdigris); border-color: var(--verdigris); }
 
 /* ── conmutador del raíl (sólo pantallas estrechas) ──────────────────── */
 
@@ -528,7 +652,7 @@ canvas { display: block; }
 
 @media (max-width: 1024px) {
   .hm-ui { --w-term: 336px; --w-rail: 276px; }
-  .hm-evid { max-height: 132px; }
+  .hm-log-k { max-height: 92px; }
 }
 
 @media (max-width: 860px) {
@@ -575,7 +699,7 @@ canvas { display: block; }
 
 @media (max-height: 620px) {
   .hm-term { max-height: 60vh; }
-  .hm-evid { max-height: 108px; }
+  .hm-log-k { max-height: 76px; }
 }
 
 /* ── movimiento reducido: se conserva el color, se retira el gesto ───── */

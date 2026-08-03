@@ -9,15 +9,25 @@
  *   III· CEREMONIA el guion determinista de domain.mjs cableado a los paneles
  *                  (DOM), a los cuerpos del barrio y a los efectos de flujo.
  *
- * Cableado del guion (contrato del brief):
- *   lease.grant        → flujo.llaveDesciende(ancla) + barrio.wake()
- *   document.ingest    → flujo.gota(cielo → Ónfalo)          [añadido, misma gramática]
- *   document.analyze   → flujo.gota(Ónfalo → escritorio)
- *   line.materialize   → flujo.cristalLinea(canal)  ×2
- *   unit.stop          → los cristales se disuelven
- *   room.close         → flujo.actaAsciende(Ónfalo → NOTARÍA) + ui.sellar()
- *   cualquier Activity → flujo.cremallera(paso, real ? oro : verdigrís)
+ * Cableado del guion (R2 · el dominio real manda la pista, no el verbo):
+ *   Cada acto de la ceremonia llega DOS veces a `onActivity`, una por mitad:
+ *   `a.side==='H'` sube el raíl oro de la cremallera y `a.side==='M'` el
+ *   verdigrís — las dos mitades del mismo núcleo causal, que es exactamente lo
+ *   que la cremallera de dos raíles dibuja. El efecto 3D NO se decide por
+ *   verbo: sólo la mitad H trae `a.escena` (y `a.escenaVeces`), y así ningún
+ *   efecto se dispara por duplicado:
+ *     'llave'        → barrio.wake() + flujo.llaveDesciende(ancla)   [3 unit.inflate]
+ *     'gota-onfalo'  → flujo.gota(cielo → Ónfalo) ×escenaVeces       [5 source.ingest]
+ *     'gota-analisis'→ flujo.gota(Ónfalo → escritorio)               [5 document.analyze]
+ *     'cristal'      → flujo.cristalLinea(canal) ×escenaVeces        [7 line.materialize]
+ *     'cadena'       → ui.badge('cadena')                            [11 provenance.trace]
+ *     'disolver'     → los cristales se recogen                      [11 unit.stop]
+ *     'acta'         → ui.sellar() + flujo.actaAsciende(Ónfalo → NOTARÍA) [11 session.exit]
+ *   La denegación de leases ya no llega como Activity (fallo atómico: no sella
+ *   nada); el badge sale de `state.denegaciones`.
  *   onState            → paneles + barrio.setUnitState(estadoCuerpo(...))
+ *                        + ui.setBarrio(estado real del dominio de la ciudad)
+ *                        + ui.setPendientes(la frontera real/pendiente)
  *   restart → recupera → los cuerpos entran en 'recovering' y se reponen con
  *                        la cadencia de la relectura del ledger.
  *
@@ -324,6 +334,9 @@ async function arrancar() {
   let pasoCremallera = 0;
   let cerradaVista = null;
   let recuperando = false;
+  let actaEnPanel = false;         // el acta se entrega al panel una sola vez
+  let actaSubida = false;          // ...y sólo vuela una vez a la NOTARÍA
+  let denegVistas = 0;             // denegaciones ya insigniadas
 
   /* ── portada e interacción del acto I ─────────────────────────────────── */
 
@@ -512,6 +525,10 @@ async function arrancar() {
       onSay: (t) => { if (cer) cer.say(t); },
       onDescarga: () => (cer ? cer.transcriptNdjson() : ''),
       onRecuperar: () => (cer ? cer.restartRecover() : Promise.resolve()),
+      // Lo que se baja es la serialización DEL EMISOR (las dos mitades y el
+      // sobre del acta), nunca una reconstrucción del panel.
+      onCadena: (lado) => (cer ? cer.chainNdjson(lado) : ''),
+      onActa: () => (cer ? cer.actaJson() : null),
       // El eco de H lo pone domain.onH; el panel no debe duplicarlo.
       ecoLocal: false,
       // La verdad de los paneles es onState, no el fx suelto de cada Activity.
@@ -521,6 +538,9 @@ async function arrancar() {
 
     cer = createCeremonia({
       autoStart: false,                     // se arranca al pisar la plaza
+      // El barrio del descenso es uno solo: el dominio real camina hasta ESTE
+      // ancla, y es el mismo que la ciudad resalta y el que la cámara pisa.
+      barrioId: BARRIO_ID,
       onH: (t) => ui.logH(t),
       onM: (t) => ui.logM(t),
       onSys: (t, tipo) => sistema(t, tipo),
@@ -580,7 +600,22 @@ async function arrancar() {
     }
     ui.habilitarRecuperar(s.puedeRecuperar);
     if (s.recuperado) ui.badge('recuperado', true);
-    if (s.sello && s.sello !== 'sha-256') ui.badge('sello ' + s.sello, true);
+
+    // ── R2: lo que el dominio real declara, en pantalla ───────────────────
+    if (s.ciudad) ui.setBarrio(s.ciudad.estadoActual, s.ciudad.barrioId);
+    if (s.pendientes) ui.setPendientes(s.pendientes);
+    if (s.acta && !actaEnPanel) {
+      actaEnPanel = true;
+      // El sobre del emisor lleva el acta dentro; el panel la valida con
+      // `isActaDeBarrioShaped` real antes de pintarla.
+      ui.setActa(cer ? cer.actaJson() : s.acta);
+    }
+
+    // El fallo atómico ya no viaja como Activity: no sella nada. Se lee aquí.
+    if (s.denegaciones > denegVistas) {
+      denegVistas = s.denegaciones;
+      ui.badge('atomico', true);
+    }
 
     // ── ventana de recuperación: los cuerpos se apagan y vuelven con cadencia
     if (s.recuperando && !recuperando) {
@@ -607,8 +642,8 @@ async function arrancar() {
     // La relectura no emite Activities: la cremallera se re-trepa desde el paso.
     if (recuperando && flujo && s.paso > pasoCremallera) {
       for (let n = pasoCremallera + 1; n <= s.paso; n++) {
-        flujo.cremallera(n, 'oro');
-        flujo.cremallera(n, 'verdigris');
+        flujo.cremallera(n, 'H');
+        flujo.cremallera(n, 'M');
       }
       pasoCremallera = s.paso;
       escalarCremallera();
@@ -643,58 +678,82 @@ async function arrancar() {
     cremEscalada = true;
   }
 
+  /** Una gota del cielo al Ónfalo: una pieza sellada, una gota. */
+  function gotaAlOnfalo() {
+    flujo.gota(
+      origen.clone().add(new THREE.Vector3(0, 19, 0)),
+      barrio.onfaloAnchor(),
+      { color: PALETA.tinta, duracion: 2.0, particulas: 26, desvio: 0.6 }
+    );
+  }
+
+  /** Un cristal por línea materializada, alternando canal. */
+  function cristalDeLinea() {
+    const lado = cristales.length % 2 ? 1 : -1;
+    const p = origen.clone().add(new THREE.Vector3(3.2 * lado, 0.06, 4.8));
+    const m = flujo.cristalLinea(p, { alto: 2.15, radio: 0.42, color: PALETA.verdigris });
+    if (m) cristales.push(m);
+  }
+
+  /** Repite un efecto `veces` con un compás entre repeticiones (o de golpe). */
+  function repetir(veces, compas, hacer) {
+    const n = pinza(Math.round(Number(veces) || 1), 1, 6);
+    hacer(0);
+    if (n === 1) return;
+    for (let i = 1; i < n; i++) {
+      if (REDUCIDO) hacer(i);
+      else setTimeout(() => { if (flujo && barrio) hacer(i); }, i * compas * 1000);
+    }
+  }
+
   function efectos3D(a) {
     if (!flujo || !barrio) return;
 
-    // Toda Activity sube un peldaño: oro si fue real, verdigrís si fue mock.
-    const paso = (a.fx && a.fx.step) || pasoVisto || 1;
-    flujo.cremallera(paso, a.mode === 'real' ? 'oro' : 'verdigris');
+    // Cada acto llega dos veces: H sube el raíl oro, M el verdigrís. La
+    // cremallera de dos raíles ES la pareja causal, no una decoración.
+    const paso = a.step || (a.fx && a.fx.step) || pasoVisto || 1;
+    flujo.cremallera(paso, a.side === 'M' ? 'M' : 'H');
     escalarCremallera();
 
-    switch (a.verb) {
-      case 'lease.grant': {
+    // Sólo la mitad H trae pista de escena: así ningún efecto sale doble.
+    if (!a.escena) return;
+
+    switch (a.escena) {
+      case 'llave': {
+        // Los leases se conceden: la llave baja sobre la unidad arrendada.
         const id = idDeNota(a.note) || 'bartleby';
         if (!despierto) { despierto = true; barrio.wake(); }
         flujo.llaveDesciende(barrio.unitAnchor(id), { altura: 22, duracion: 1.9 });
         break;
       }
 
-      case 'document.ingest':
-        // Onfalo se llena desde arriba: una pieza, una gota.
-        flujo.gota(
-          origen.clone().add(new THREE.Vector3(0, 19, 0)),
-          barrio.onfaloAnchor(),
-          { color: PALETA.tinta, duracion: 2.0, particulas: 26, desvio: 0.6 }
-        );
+      case 'gota-onfalo':
+        // `escenaVeces` = piezas del Ónfalo realmente leídas.
+        repetir(a.escenaVeces, 0.55, gotaAlOnfalo);
         break;
 
-      case 'document.analyze':
+      case 'gota-analisis':
         flujo.gota('onfalo', idDeNota(a.note) || 'bartleby',
           { color: PALETA.verdigris, duracion: 1.55 });
         break;
 
-      case 'line.materialize': {
-        const lado = cristales.length % 2 ? 1 : -1;
-        const p = origen.clone().add(new THREE.Vector3(3.2 * lado, 0.06, 4.8));
-        const m = flujo.cristalLinea(p, { alto: 2.15, radio: 0.42, color: PALETA.verdigris });
-        if (m) cristales.push(m);
-        break;
-      }
-
-      case 'lease.deny':
-        ui.badge('atomico', true);
+      case 'cristal':
+        // `escenaVeces` = líneas materializadas (dos, en barrio-lore-v1).
+        repetir(a.escenaVeces, 0.7, cristalDeLinea);
         break;
 
-      case 'unit.stop':
+      case 'cadena':
+        ui.badge('cadena', true);
+        break;
+
+      case 'disolver':
         // Se detienen las unidades: las líneas materializadas se recogen.
         disolverCristales();
         break;
 
-      case 'chain.verify':
-        ui.badge('cadena', true);
-        break;
-
-      case 'room.close': {
+      case 'acta': {
+        if (actaSubida) break;
+        actaSubida = true;
         ui.sellar();
         const desde = barrio.onfaloAnchor().add(new THREE.Vector3(0, 0.5, 0));
         const notaria = ciudad.notariaAnchor();

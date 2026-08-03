@@ -80,6 +80,16 @@
   }
   #banda b { font-weight: 600; color: var(--violeta); }
   #banda span { color: var(--tenue); letter-spacing: .1em; text-transform: none; }
+  /* la frontera real/pendiente se publica: un clic la enseña entera */
+  #banda a {
+    pointer-events: auto;
+    color: var(--verdigris);
+    text-decoration: none;
+    letter-spacing: .1em;
+    text-transform: none;
+    border-bottom: 1px solid rgba(133, 186, 169, .38);
+  }
+  #banda a:hover, #banda a:focus-visible { color: var(--oro); border-bottom-color: var(--oro); }
 
   /* velo de carga — se desvanece con el evento «hm:listo» */
   #cargando {
@@ -155,6 +165,44 @@
 </style>
 <link rel="stylesheet" href="/css/demo.css">
 
+<!--
+  Import map — cada entrada verificada contra node_modules antes de escribirse.
+
+  · @zeus/ciudad/<sub>  → /zeus-ciudad/<sub>.mjs
+    package.json de @zeus/ciudad declara exports «./domain», «./scene»,
+    «./contract», «./jugadores»… todos apuntando a src/<nombre>.mjs. El
+    montaje /zeus-ciudad/ ES ese src/, así que el sufijo «.mjs» va explícito
+    (un import map no puede añadir extensión por su cuenta).
+
+  · @zeus/protocol → /zeus-protocol/src/index.mjs
+    su package.json declara «main»: "src/index.mjs" y exports «.»: lo mismo.
+    Grafo verificado browser-safe: kinds, event-meta, roles, gates, acl,
+    peer-card y game-state-delta no importan ningún «node:». Los dos módulos
+    del paquete que SÍ lo hacen (node-src-dir.mjs y peer-card-seat.mjs) son
+    subpaths aparte y index.mjs no los re-exporta.
+
+  · node:crypto → /shim/node-crypto.mjs
+    NO es adorno. @zeus/ciudad/domain importa ./acta.mjs y acta.mjs hace
+    `import { createHash } from 'node:crypto'`. Los imports se resuelven al
+    cargar el grafo, así que sin esta entrada el navegador NO carga el dominio
+    real de ciudad — que es el corazón del R2. El shim es SHA-256 (FIPS 180-4):
+    misma huella, no una parecida; se autoverifica al cargar y todo lo que
+    produce es re-verificable contra el node:crypto de verdad vía POST /api/acta
+    y POST /api/verificar. Ver la cabecera del propio fichero.
+
+  · node:child_process → /shim/node-child-process.mjs
+    La segunda arista node del mismo grafo, encontrada recorriéndolo entero:
+    domain.mjs → edificios.mjs → salud.mjs → `import { spawn }`. edificios.mjs
+    solo consume de salud.mjs tres constantes congeladas, y el único spawn()
+    vive en el ejecutor de probes, fuera del reducer. El tapón NO implementa
+    nada: deja cargar el grafo y lanza con motivo si alguien intentara lanzar
+    un proceso desde una pestaña. Los probes de salud son `pendiente`
+    declarado, no simulado.
+
+  Las dos entradas «node:» son la frontera honesta de la demo, no un atajo:
+  una calcula lo mismo que node y la otra confiesa que no puede. /salud las
+  publica ambas.
+-->
 <script type="importmap">
 {
   "imports": {
@@ -167,12 +215,37 @@
     "@zeus/view-kit": "/view-kit/index.mjs",
     "@zeus/view-kit/": "/view-kit/",
     "@zeus/game-engine": "/game-engine/index.mjs",
-    "@zeus/game-engine/": "/game-engine/"
+    "@zeus/game-engine/": "/game-engine/",
+
+    "@zeus/ciudad": "/zeus-ciudad/contract.mjs",
+    "@zeus/ciudad/": "/zeus-ciudad/",
+    "@zeus/ciudad/contract": "/zeus-ciudad/contract.mjs",
+    "@zeus/ciudad/domain": "/zeus-ciudad/domain.mjs",
+    "@zeus/ciudad/scene": "/zeus-ciudad/scene.mjs",
+    "@zeus/ciudad/jugadores": "/zeus-ciudad/jugadores.mjs",
+    "@zeus/ciudad/presencia": "/zeus-ciudad/presencia.mjs",
+    "@zeus/ciudad/edificios": "/zeus-ciudad/edificios.mjs",
+    "@zeus/ciudad/acta": "/zeus-ciudad/acta.mjs",
+
+    "@zeus/protocol": "/zeus-protocol/src/index.mjs",
+    "@zeus/protocol/": "/zeus-protocol/src/",
+    "@zeus/protocol/contract": "/zeus-protocol/src/contract.mjs",
+    "@zeus/protocol/roles": "/zeus-protocol/src/roles.mjs",
+    "@zeus/protocol/gates": "/zeus-protocol/src/gates.mjs",
+    "@zeus/protocol/acl": "/zeus-protocol/src/acl.mjs",
+    "@zeus/protocol/peer-card": "/zeus-protocol/src/peer-card.mjs",
+
+    "node:crypto": "/shim/node-crypto.mjs",
+    "crypto": "/shim/node-crypto.mjs",
+    "node:child_process": "/shim/node-child-process.mjs",
+    "child_process": "/shim/node-child-process.mjs"
   }
 }
 </script>
 
 <link rel="modulepreload" href="/vendor/three/three.module.js">
+<link rel="modulepreload" href="/zeus-protocol/src/index.mjs">
+<link rel="modulepreload" href="/zeus-ciudad/domain.mjs">
 </head>
 
 <body>
@@ -182,7 +255,8 @@
 
   <div id="banda" role="note">
     <b>Simulacro</b>
-    <span>ceremonia H·M reproducible — lo real y lo simulado van marcados</span>
+    <span>ceremonia H·M reproducible — lo real y lo pendiente van marcados</span>
+    <a href="/salud" target="_blank" rel="noopener">ver la frontera →</a>
   </div>
 
   <div id="cargando">

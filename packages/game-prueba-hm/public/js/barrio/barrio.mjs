@@ -1,11 +1,30 @@
 /**
- * barrio.mjs — módulo W-BARRIO · demo «Prueba-H-M» (El Descenso)
+ * barrio.mjs — módulo W-BARRIO-REAL · demo «Prueba-H-M» (El Descenso) · R2
  * ---------------------------------------------------------------------------
  * Dibuja el barrio del descenso: una herradura de 10 locales con letrero
  * alrededor de la fuente Ónfalo, y un monigote por unidad cuyo cuerpo lee el
  * tipestate de la unidad.
  *
- * Contrato (ARQUITECTURA-DEMO.md):
+ * R2 — «que la demo enseñe Scriptorium». Los cuerpos ya NO son geometría
+ * inventada aquí: son el mecanismo REAL de los kits, importado por import map
+ * (el server monta /kit/ → @zeus/ui-3d-kit/src y /view-kit/ → @zeus/view-kit/src):
+ *
+ *   · `loadPuppet`  (@zeus/ui-3d-kit/puppet/puppet.mjs)  — marioneta skinned
+ *     con el contrato de animación Alephillo: setBase('idle'|'walk'|'sit'|…) con
+ *     crossfade de 0.2 s y playAdditive(gesto) con su fallback documentado
+ *     (los emotes de RobotExpressive NO son additive-safe → crossfade temporal).
+ *   · `DEFAULT_CLIP_MAPS` (@zeus/ui-3d-kit/puppet/clip-map.mjs) — mapa de clips
+ *     real para RobotExpressive.glb; aquí solo se COMPLETA con dos entradas
+ *     (ver MAPA_CLIPS) usando la opción real `loadPuppet(url, { clipMap })`.
+ *   · `createStickPuppet` (@zeus/view-kit/stick-puppet.mjs) — el fallback que
+ *     manda el brief: monigote procedural con el MISMO duck-type que loadPuppet.
+ *   · `createAnimationController` (@zeus/ui-3d-kit/core/animation-controller.mjs)
+ *     — motor de tweens del kit; sustituye al tween casero de R1.
+ *   · `BARRIO_ESTADOS` (@zeus/ciudad/contract.mjs) — vocabulario REAL de salud
+ *     del barrio ('vivo'|'latente'|'muerto'|'roto'); setUnitState lo acepta
+ *     además del tipestate de R1, porque en R2 lo emite el dominio real.
+ *
+ * Contrato público (NO cambia respecto a R1):
  *   export async function createBarrio({ scene, THREE, origin })
  *   → { group, setUnitState(unitId, estado, causa?), unitAnchor(unitId): Vector3,
  *       wake(), sleep(), dispose() }
@@ -16,24 +35,32 @@
  *   onfaloAnchor()    — corona de la fuente, para las gotas de flujo.mjs.
  *   unidades          — array con los ids en orden de herradura.
  *   estadoUnidad(id)  — { estado, causa } actual.
+ *   procedencia       — {cuerpos, real[], pendiente[]}: la frontera real/pendiente
+ *                       de ESTE módulo, para que la demo pueda enseñarla.
  *
- * Tipestate → cuerpo:
- *   declarada  · gris estático (pose congelada, sin color)
- *   arrendada  · halo emissive (la llave de H ya bajó; el cuerpo sigue quieto)
- *   lista      · Idle
- *   corriendo  · clip de oficio (Walking / Punch / Wave según la unidad)
- *   halted+orden · Sitting
- *   halted+fallo · Death — y NADA más cambia: la unidad queda sellada y
- *                  ignora cualquier setUnitState posterior salvo 'recovering'.
- *   recovering · fade-in (y levanta el sellado del fallo)
+ * Tipestate → cuerpo (vía el contrato puppet, no vía clips sueltos):
+ *   declarada  · setBase('ALP_LOC_stop') + gris (la pose existe, el color no)
+ *   arrendada  · setBase('ALP_LOC_stop') + halo (la llave de H ya bajó)
+ *   lista      · setBase('idle')
+ *   corriendo  · setBase('walk') + playAdditive(gesto de oficio) con cadencia
+ *   halted+orden · setBase('sit')
+ *   halted+fallo · setBase('HM_TERM_muerte') y SELLADO: el mixer del puppet se
+ *                  frena hasta congelarse en el último fotograma de «Death»
+ *                  (duración real medida del GLB: 0.9583 s). Nada más cambia:
+ *                  la unidad ignora cualquier setUnitState salvo 'recovering'.
+ *   recovering · fade-in y setBase('idle') (levanta el sellado)
  *
- * Reglas honradas: ES modules de navegador, cero deps nuevas, cero build,
- * solo colores de paleta, easing en toda animación, `prefers-reduced-motion`.
+ * Reglas honradas: ES modules de navegador, cero build, solo colores de paleta,
+ * easing en toda animación, `prefers-reduced-motion`.
  */
 
 import * as TRES_POR_DEFECTO from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { clone as clonarConEsqueleto } from 'three/addons/utils/SkeletonUtils.js';
+
+// ── Mecanismo real de Scriptorium (import map: /kit/, /view-kit/) ───────────
+import { loadPuppet } from '@zeus/ui-3d-kit/puppet/puppet.mjs';
+import { DEFAULT_CLIP_MAPS } from '@zeus/ui-3d-kit/puppet/clip-map.mjs';
+import { createAnimationController } from '@zeus/ui-3d-kit/core/animation-controller.mjs';
+import { createStickPuppet } from '@zeus/view-kit/stick-puppet.mjs';
 
 // ── Paleta (única fuente de color; nada fuera de aquí) ──────────────────────
 
@@ -57,10 +84,72 @@ const CSS = {
   fallo: '#DB7A5D',
 };
 
-// ── Geometría del barrio ────────────────────────────────────────────────────
+// ── Cuerpos: GLB real del kit + mapa de clips real ──────────────────────────
 
+/** Servido por el montaje /models/ → @zeus/game-engine/assets/models/. */
 const RUTA_GLB = '/models/RobotExpressive.glb';
 const ESPERA_GLB_MS = 12000;
+
+/** Mapa de clips REAL del kit para este GLB (clip-map.mjs). */
+const MAPA_KIT = DEFAULT_CLIP_MAPS['RobotExpressive.glb'] || null;
+
+/**
+ * Mapa de clips que se le pasa a `loadPuppet` por su opción real `clipMap`.
+ * Solo COMPLETA el del kit con dos entradas que el tipestate necesita:
+ *
+ *   ALP_LOC_stop   — nombre canónico REAL del catálogo Alephillo
+ *                    (ALEPHILLO_SPEC_BASE de clip-map.mjs) que el mapa de
+ *                    RobotExpressive aún no cubría; se le da su clip obvio.
+ *   HM_TERM_muerte — clave LOCAL de la demo: el catálogo Alephillo no tiene
+ *                    ranura para «pose terminal por fallo». Va marcada
+ *                    `fallback: true` + `note`, como manda la convención del
+ *                    propio clip-map, para que no se confunda con spec.
+ */
+const MAPA_CLIPS = MAPA_KIT
+  ? {
+    ...MAPA_KIT,
+    base: {
+      ...MAPA_KIT.base,
+      ALP_LOC_stop: { clip: 'Standing' },
+      HM_TERM_muerte: {
+        clip: 'Death',
+        fallback: true,
+        note: 'clave local de la demo H·M: el catálogo ALP_* no tiene pose terminal por fallo',
+      },
+    },
+    additive: { ...MAPA_KIT.additive },
+  }
+  : null;
+
+/** Duración real del clip «Death» medida sobre el GLB del kit (segundos). */
+const DURACION_MUERTE = 0.9583;
+
+/** Poses base del contrato puppet por tipestate (GLB) y por stick. */
+const POSE_GLB = {
+  declarada: 'ALP_LOC_stop',
+  arrendada: 'ALP_LOC_stop',
+  lista: 'idle',
+  corriendo: 'walk',
+  haltedOrden: 'sit',
+  haltedFallo: 'HM_TERM_muerte',
+  recovering: 'idle',
+};
+
+/** STICK_POSES reales de view-kit: idle | walk | ride | swim | sit | menu. */
+const POSE_STICK = {
+  declarada: 'menu',
+  arrendada: 'menu',
+  lista: 'idle',
+  corriendo: 'walk',
+  haltedOrden: 'sit',
+  haltedFallo: 'sit',
+  recovering: 'idle',
+};
+
+/** Cadencia del gesto de oficio mientras la unidad corre (segundos). */
+const GESTO_CADA = 5.4;
+
+// ── Geometría del barrio ────────────────────────────────────────────────────
 
 const R_HERRADURA = 11.5;
 const R_MONIGOTES = 8.9;
@@ -75,27 +164,28 @@ const R_FUENTE = 2.5;
 const ALTURA_ONFALO = 1.15;
 const Y_AGUA = 0.46;
 
-const CRUCE = 0.34; // segundos de crossfade entre clips
 const TRANSICION = 0.5; // segundos de las transiciones de material/halo
 const FADE_IN = 0.95; // segundos del fade-in de 'recovering'
 
 /**
- * Las diez unidades de la herradura, en orden. `oficio` es el clip que se
- * reproduce en 'corriendo'; `nombre`/`tarea` van al letrero.
+ * Las diez unidades de la herradura, en orden. `gesto` es el emote que la
+ * unidad repite mientras está 'corriendo': `glb` usa los nombres aditivos
+ * REALES del clip-map de RobotExpressive, `stick` los de STICK_EMOTES de
+ * view-kit ('wave'|'nod'|'shake'|'thumbsUp'). `nombre`/`tarea` van al letrero.
  * El acento cromático dibuja la bilateralidad oro (H) / verdigrís (M) del
  * barrio; vector-mock se sale con violeta porque el simulacro no se esconde.
  */
 const UNIDADES = [
-  { id: 'portal', nombre: 'Portal', tarea: 'recepción', oficio: 'Wave', acento: 'oro' },
-  { id: 'loreador', nombre: 'Loreador', tarea: 'memoria del lugar', oficio: 'Walking', acento: 'oro' },
-  { id: 'bartleby', nombre: 'Bartleby', tarea: 'copia y objeción', oficio: 'Punch', acento: 'oro' },
-  { id: 'archivero', nombre: 'Archivero', tarea: 'custodia', oficio: 'Walking', acento: 'oro' },
-  { id: 'cristalizador', nombre: 'Cristalizador', tarea: 'fija la línea', oficio: 'Punch', acento: 'oro' },
-  { id: 'vector-mock', nombre: 'Vector', tarea: 'índice · SIMULACRO', oficio: 'Wave', acento: 'violeta' },
-  { id: 'grafista', nombre: 'Grafista', tarea: 'traza el grafo', oficio: 'Walking', acento: 'verdigris' },
-  { id: 'demiurgo', nombre: 'Demiurgo', tarea: 'compone', oficio: 'Punch', acento: 'verdigris' },
-  { id: 'dramaturgo', nombre: 'Dramaturgo', tarea: 'pone voz', oficio: 'Wave', acento: 'verdigris' },
-  { id: 'pipeline', nombre: 'Tubería', tarea: 'encadena pasos', oficio: 'Walking', acento: 'verdigris' },
+  { id: 'portal', nombre: 'Portal', tarea: 'recepción', gesto: { glb: 'wave', stick: 'wave' }, acento: 'oro' },
+  { id: 'loreador', nombre: 'Loreador', tarea: 'memoria del lugar', gesto: { glb: 'nod_quick', stick: 'nod' }, acento: 'oro' },
+  { id: 'bartleby', nombre: 'Bartleby', tarea: 'copia y objeción', gesto: { glb: 'shake_head', stick: 'shake' }, acento: 'oro' },
+  { id: 'archivero', nombre: 'Archivero', tarea: 'custodia', gesto: { glb: 'thumbsUp', stick: 'thumbsUp' }, acento: 'oro' },
+  { id: 'cristalizador', nombre: 'Cristalizador', tarea: 'fija la línea', gesto: { glb: 'finger_up', stick: 'thumbsUp' }, acento: 'oro' },
+  { id: 'vector-mock', nombre: 'Vector', tarea: 'índice · SIMULACRO', gesto: { glb: 'shrug', stick: 'shake' }, acento: 'violeta' },
+  { id: 'grafista', nombre: 'Grafista', tarea: 'traza el grafo', gesto: { glb: 'nod_quick', stick: 'nod' }, acento: 'verdigris' },
+  { id: 'demiurgo', nombre: 'Demiurgo', tarea: 'compone', gesto: { glb: 'dance', stick: 'wave' }, acento: 'verdigris' },
+  { id: 'dramaturgo', nombre: 'Dramaturgo', tarea: 'pone voz', gesto: { glb: 'wave_soft', stick: 'wave' }, acento: 'verdigris' },
+  { id: 'pipeline', nombre: 'Tubería', tarea: 'encadena pasos', gesto: { glb: 'jump', stick: 'nod' }, acento: 'verdigris' },
 ];
 
 const ALIAS_ESTADO = {
@@ -112,10 +202,21 @@ const ALIAS_CAUSA = {
   fallo: 'fallo', fail: 'fallo', failure: 'fallo', error: 'fallo', corto: 'fallo',
 };
 
+/**
+ * Lectura del vocabulario REAL `BARRIO_ESTADOS` de @zeus/ciudad/contract.mjs
+ * ('vivo'|'latente'|'muerto'|'roto') sobre el tipestate del cuerpo. El mapa es
+ * de la demo — la constante es del paquete, y se valida contra ella al arrancar.
+ */
+const SALUD_A_TIPESTATE = Object.freeze({
+  vivo: { estado: 'corriendo', causa: null },
+  latente: { estado: 'lista', causa: null },
+  muerto: { estado: 'halted', causa: 'orden' },
+  roto: { estado: 'halted', causa: 'fallo' },
+});
+
 // ── Utilidades puras ────────────────────────────────────────────────────────
 
 const sujetar = (v, a, b) => (v < a ? a : v > b ? b : v);
-const easeInOutCubic = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
 
 function menosMovimiento() {
@@ -190,9 +291,6 @@ export async function createBarrio({ scene, THREE, origin } = {}) {
   const T = THREE || TRES_POR_DEFECTO;
   const quieto = menosMovimiento();
   const dur = (s) => (quieto ? 0 : s);
-  // El crossfade nunca vale 0: AnimationAction construye su interpolante con
-  // [ahora, ahora+duración] y una duración nula lo degenera.
-  const cruce = () => (quieto ? 0.001 : CRUCE);
 
   const GRIS = new T.Color(PALETA.sepia).lerp(new T.Color(PALETA.tinta), 0.34);
   const PIEDRA = new T.Color(PALETA.sepia).lerp(new T.Color(PALETA.tinta), 0.16);
@@ -206,45 +304,57 @@ export async function createBarrio({ scene, THREE, origin } = {}) {
   const unidades = new Map();
   const emisivosAmbiente = [];
   const lucesAmbiente = [];
-  const tweens = [];
-  let despiertoK = quieto ? 1 : 0.1;
+
+  /** Motor de tweens REAL del kit (core/animation-controller.mjs). */
+  const motor = createAnimationController();
+
+  /** Los tweens del kit animan PROPIEDADES de objetos: aquí vive el despertar. */
+  const barrioK = { despierto: quieto ? 1 : 0.1 };
+
   let reloj = 0;
   let vivo = true;
   let rafId = 0;
   let ultimoMs = 0;
   let ultimaExterna = -Infinity; // ms del último update(dt) del integrador
 
+  /** La frontera real/pendiente de este módulo: es producto, se devuelve. */
+  const procedencia = {
+    cuerpos: 'pendiente',
+    real: [
+      '@zeus/ui-3d-kit/puppet/clip-map.mjs · DEFAULT_CLIP_MAPS',
+      '@zeus/ui-3d-kit/core/animation-controller.mjs · createAnimationController',
+    ],
+    pendiente: [],
+  };
+
   const ahora = () =>
     typeof performance !== 'undefined' && performance && typeof performance.now === 'function'
       ? performance.now()
       : Date.now();
 
-  // ── Tweens ────────────────────────────────────────────────────────────────
+  // ── Tweens (sobre el motor real del kit) ──────────────────────────────────
 
-  function tween({ clave, desde, hasta, dur: d, ease = easeInOutCubic, onUpdate, onDone }) {
-    if (clave) {
-      for (let i = tweens.length - 1; i >= 0; i--) if (tweens[i].clave === clave) tweens.splice(i, 1);
-    }
+  /**
+   * Anima `objeto[prop]` hasta `hasta` en `d` segundos. `clave` identifica la
+   * animación en el controlador: crear otra con la misma clave la sustituye
+   * (misma semántica que el tween de R1). Con d ≤ 0 se aplica en seco.
+   *
+   * @param {{clave:string, objeto:object, prop:string, hasta:number,
+   *          dur:number, ease?:string, onDone?:Function}} o
+   */
+  function tween(o) {
+    const { clave, objeto, prop, hasta, dur: d, ease = 'easeInOut', onDone } = o;
     if (!(d > 0)) {
-      if (onUpdate) onUpdate(hasta);
+      motor.removeAnimation(clave);
+      objeto[prop] = hasta;
       if (onDone) onDone();
       return;
     }
-    tweens.push({ clave, desde, hasta, dur: d, ease, onUpdate, onDone, t: 0 });
-  }
-
-  function avanzarTweens(dt) {
-    for (let i = tweens.length - 1; i >= 0; i--) {
-      const tw = tweens[i];
-      tw.t += dt;
-      const k = sujetar(tw.t / tw.dur, 0, 1);
-      const v = tw.desde + (tw.hasta - tw.desde) * tw.ease(k);
-      if (tw.onUpdate) tw.onUpdate(v);
-      if (k >= 1) {
-        tweens.splice(i, 1);
-        if (tw.onDone) tw.onDone();
-      }
-    }
+    motor.createAnimation(
+      clave,
+      [{ object: objeto, property: prop, endValue: hasta }],
+      { duration: d, easing: ease, onComplete: onDone }
+    );
   }
 
   // ── Materiales de escenografía ────────────────────────────────────────────
@@ -487,215 +597,74 @@ export async function createBarrio({ scene, THREE, origin } = {}) {
     return local;
   }
 
-  // ── Cuerpo GLB ────────────────────────────────────────────────────────────
+  // ── Cuerpos: marioneta real del kit ───────────────────────────────────────
 
-  let fuenteGlb = null; // { escena, clips, escala }
-
-  async function cargarGlb() {
+  /**
+   * Pide una marioneta skinned al kit. Devuelve el puppet real o null si el
+   * GLB no está disponible (el llamante cae al stick de view-kit).
+   */
+  let avisadoGlb = false;
+  async function pedirPuppetGlb() {
+    if (!MAPA_CLIPS) return null;
+    // Las diez peticiones salen en la misma vuelta: el FileLoader de three
+    // deduplica la descarga (loading[url]); el parseo sí es por instancia, y es
+    // justo lo que le da a cada unidad su esqueleto y sus materiales propios.
+    const promesa = loadPuppet(RUTA_GLB, { clipMap: MAPA_CLIPS, castShadow: true });
     try {
-      const cargador = new GLTFLoader();
-      const gltf = await conPlazo(cargador.loadAsync(RUTA_GLB), ESPERA_GLB_MS);
-      if (!gltf || !gltf.scene) throw new Error('GLB sin escena');
-      const caja = new T.Box3().setFromObject(gltf.scene);
-      const alto = Math.max(caja.max.y - caja.min.y, 0.001);
-      fuenteGlb = {
-        escena: gltf.scene,
-        clips: gltf.animations || [],
-        escala: ALTURA_MONIGOTE / alto,
-      };
-      return true;
+      return await conPlazo(promesa, ESPERA_GLB_MS);
     } catch (err) {
-      // Fallback digno: nadie se queda sin cuerpo.
-      if (typeof console !== 'undefined' && console.warn) {
-        console.warn('[barrio] RobotExpressive no disponible, se usa el monigote de cápsulas:', err && err.message);
+      // Si solo se agotó el plazo, el puppet puede llegar tarde: que no se quede
+      // colgando ni sin liberar.
+      promesa.then((p) => p && p.dispose && p.dispose()).catch(() => {});
+      if (!avisadoGlb && typeof console !== 'undefined' && console.warn) {
+        avisadoGlb = true;
+        console.warn(
+          '[barrio] loadPuppet no pudo con RobotExpressive.glb, se usa el'
+          + ' stick-puppet de view-kit:', err && err.message
+        );
       }
-      fuenteGlb = null;
-      return false;
+      return null;
     }
   }
 
-  function crearCuerpoGlb(u) {
-    const raiz = clonarConEsqueleto(fuenteGlb.escena);
-    raiz.scale.setScalar(fuenteGlb.escala);
+  /** Normaliza la altura del cuerpo al canon del barrio (1.8 u). */
+  function ajustarAltura(objeto) {
+    const caja = new T.Box3().setFromObject(objeto);
+    const alto = caja.max.y - caja.min.y;
+    if (Number.isFinite(alto) && alto > 0.001) objeto.scale.setScalar(ALTURA_MONIGOTE / alto);
+  }
 
-    const materiales = [];
-    raiz.traverse((o) => {
+  /**
+   * Recoge los materiales del cuerpo para que `aplicarAspecto` pueda leer el
+   * tipestate sobre ellos. `loadPuppet` parsea el GLB por instancia, así que
+   * cada unidad tiene sus propios materiales: no hace falta clonarlos.
+   */
+  function recogerMateriales(u) {
+    const mats = [];
+    u.puppet.object.traverse((o) => {
       if (!o.isMesh && !o.isSkinnedMesh) return;
       o.castShadow = true;
       o.receiveShadow = true;
       o.frustumCulled = false; // el skinning desborda la caja de bind
       const lista = Array.isArray(o.material) ? o.material : [o.material];
-      const clonados = lista.map((m) => {
-        const c = m.clone();
-        c.userData.colorBase = c.color ? c.color.clone() : new T.Color(PALETA.tinta);
-        c.userData.transparenteBase = c.transparent === true;
-        if (!c.emissive) c.emissive = new T.Color(0, 0, 0);
-        materiales.push(c);
-        return c;
-      });
-      o.material = Array.isArray(o.material) ? clonados : clonados[0];
-    });
-
-    const mixer = new T.AnimationMixer(raiz);
-    const acciones = Object.create(null);
-    for (const clip of fuenteGlb.clips) acciones[clip.name] = mixer.clipAction(clip);
-
-    u.raiz = raiz;
-    u.materiales = materiales;
-    u.mixer = mixer;
-    u.acciones = acciones;
-    u.clipActual = null;
-    return raiz;
-  }
-
-  /** Patrón fadeToAction del ejemplo oficial de RobotExpressive. */
-  function ponerClip(u, nombre, { unaVez = false, escalaTiempo = 1 } = {}) {
-    if (!u.acciones) return;
-    const nueva = u.acciones[nombre] || u.acciones.Idle;
-    if (!nueva) return;
-    const previa = u.clipActual ? u.acciones[u.clipActual] : null;
-    if (previa && previa !== nueva) previa.fadeOut(cruce());
-    if (previa === nueva) {
-      nueva.setEffectiveTimeScale(escalaTiempo);
-      return;
-    }
-    nueva.reset();
-    nueva.setEffectiveTimeScale(escalaTiempo);
-    nueva.setEffectiveWeight(1);
-    if (unaVez) {
-      nueva.setLoop(T.LoopOnce, 1);
-      nueva.clampWhenFinished = true;
-    } else {
-      nueva.setLoop(T.LoopRepeat, Infinity);
-      nueva.clampWhenFinished = false;
-    }
-    nueva.fadeIn(cruce()).play();
-    u.clipActual = nueva === u.acciones[nombre] ? nombre : 'Idle';
-  }
-
-  // ── Cuerpo de repuesto: cápsula articulada ────────────────────────────────
-
-  function crearCuerpoCapsula(u, acento) {
-    const raiz = new T.Group();
-    const mat = new T.MeshStandardMaterial({
-      color: PIEDRA_CLARA.clone(),
-      roughness: 0.62,
-      metalness: 0.08,
-      emissive: acento.clone(),
-      emissiveIntensity: 0,
-    });
-    mat.userData.colorBase = mat.color.clone();
-    mat.userData.transparenteBase = false;
-
-    const cuerpo = new T.Group();
-    raiz.add(cuerpo);
-    const caderas = new T.Group();
-    caderas.position.y = 0.88;
-    cuerpo.add(caderas);
-
-    const malla = (geo, y) => {
-      const m = new T.Mesh(geo, mat);
-      m.position.y = y;
-      m.castShadow = true;
-      return m;
-    };
-
-    caderas.add(malla(new T.CapsuleGeometry(0.26, 0.5, 6, 16), 0.3));
-    caderas.add(malla(new T.SphereGeometry(0.2, 20, 14), 0.8));
-
-    const articular = (x, y) => {
-      const pivote = new T.Group();
-      pivote.position.set(x, y, 0);
-      caderas.add(pivote);
-      return pivote;
-    };
-    const hombroI = articular(-0.34, 0.58);
-    const hombroD = articular(0.34, 0.58);
-    hombroI.add(malla(new T.CapsuleGeometry(0.088, 0.4, 5, 12), -0.29));
-    hombroD.add(malla(new T.CapsuleGeometry(0.088, 0.4, 5, 12), -0.29));
-
-    const caderaI = articular(-0.16, 0);
-    const caderaD = articular(0.16, 0);
-    caderaI.add(malla(new T.CapsuleGeometry(0.108, 0.58, 5, 12), -0.4));
-    caderaD.add(malla(new T.CapsuleGeometry(0.108, 0.58, 5, 12), -0.4));
-
-    u.raiz = raiz;
-    u.materiales = [mat];
-    u.mixer = null;
-    u.acciones = null;
-    u.huesos = { cuerpo, caderas, hombroI, hombroD, caderaI, caderaD };
-    return raiz;
-  }
-
-  /** Pose objetivo de la cápsula para el tipestate y el instante actuales. */
-  function poseCapsula(u, t) {
-    const p = { cuerpoX: 0, cuerpoY: 0, hombroIX: 0, hombroDX: 0, hombroDZ: 0, caderaIX: 0, caderaDX: 0 };
-    const estado = u.estado;
-    const q = quieto ? 0 : 1;
-
-    if (estado === 'halted' && u.causa === 'fallo') {
-      p.cuerpoX = -1.32;
-      p.cuerpoY = -0.08;
-      p.hombroIX = 0.5;
-      p.hombroDX = 0.5;
-      return p;
-    }
-    if (estado === 'halted') {
-      p.caderaIX = -1.38;
-      p.caderaDX = -1.38;
-      p.cuerpoY = -0.36;
-      p.hombroIX = 0.28;
-      p.hombroDX = 0.28;
-      return p;
-    }
-    if (estado === 'lista' || estado === 'recovering') {
-      p.cuerpoY = Math.sin(t * 1.6) * 0.016 * q;
-      p.hombroIX = Math.sin(t * 1.6) * 0.05 * q;
-      p.hombroDX = -p.hombroIX;
-      return p;
-    }
-    if (estado === 'corriendo') {
-      if (u.meta.oficio === 'Walking') {
-        const f = t * 5.2;
-        p.hombroIX = Math.sin(f) * 0.52 * q;
-        p.hombroDX = -p.hombroIX;
-        p.caderaIX = -Math.sin(f) * 0.46 * q;
-        p.caderaDX = -p.caderaIX;
-        p.cuerpoY = Math.abs(Math.sin(f)) * 0.03 * q;
-      } else if (u.meta.oficio === 'Punch') {
-        const ciclo = (t * 1.5) % 1;
-        const golpe = ciclo < 0.35 ? easeOutCubic(ciclo / 0.35) : 1 - easeInOutCubic((ciclo - 0.35) / 0.65);
-        p.hombroDX = -1.62 * golpe * q;
-        p.hombroIX = 0.22 * golpe * q;
-        p.cuerpoY = -0.02 * golpe * q;
-      } else {
-        // Saludo: el brazo levantado es pose, no movimiento — se mantiene
-        // aunque el usuario pida menos animación; solo cesa el vaivén.
-        p.hombroDZ = 2.0;
-        p.hombroDX = Math.sin(t * 5.6) * 0.34 * q;
-        p.hombroIX = Math.sin(t * 1.5) * 0.05 * q;
+      for (const m of lista) {
+        if (!m || mats.indexOf(m) !== -1) continue;
+        m.userData.colorBase = m.color ? m.color.clone() : new T.Color(PALETA.tinta);
+        m.userData.transparenteBase = m.transparent === true;
+        mats.push(m);
       }
-      return p;
-    }
-    // declarada / arrendada: de pie, quieta.
-    return p;
+    });
+    u.materiales = mats;
   }
 
-  function animarCapsula(u, dt, t) {
-    const h = u.huesos;
-    if (!h) return;
-    const p = poseCapsula(u, t);
-    const suave = 1 - Math.exp(-dt * 6.5); // easing exponencial, estable con dt
-    const hacia = (nodo, eje, objetivo) => {
-      nodo.rotation[eje] += (objetivo - nodo.rotation[eje]) * suave;
-    };
-    hacia(h.cuerpo, 'x', p.cuerpoX);
-    h.cuerpo.position.y += (p.cuerpoY - h.cuerpo.position.y) * suave;
-    hacia(h.hombroI, 'x', p.hombroIX);
-    hacia(h.hombroD, 'x', p.hombroDX);
-    hacia(h.hombroD, 'z', p.hombroDZ);
-    hacia(h.caderaI, 'x', p.caderaIX);
-    hacia(h.caderaD, 'x', p.caderaDX);
+  /** Pose base del contrato puppet para la clave de aspecto en curso. */
+  function ponerPose(u, clave) {
+    if (!u.puppet) return;
+    // Con `prefers-reduced-motion` la locomoción en el sitio sobra: se respira.
+    const clave2 = quieto && clave === 'corriendo' ? 'lista' : clave;
+    const pose = u.tipo === 'glb' ? POSE_GLB[clave2] : POSE_STICK[clave2];
+    if (!pose || pose === u.pose) return;
+    if (u.puppet.setBase(pose) !== false) u.pose = pose;
   }
 
   // ── Halos y luz de simulacro ──────────────────────────────────────────────
@@ -727,7 +696,7 @@ export async function createBarrio({ scene, THREE, origin } = {}) {
 
   // ── Montaje de las unidades ───────────────────────────────────────────────
 
-  function construirUnidad(meta, theta) {
+  function construirUnidad(meta, theta, puppetGlb) {
     const acento = color(meta.acento);
     const grupo = new T.Group();
     grupo.name = `unidad:${meta.id}`;
@@ -741,14 +710,15 @@ export async function createBarrio({ scene, THREE, origin } = {}) {
       estado: 'declarada',
       causa: null,
       sellada: false,
-      raiz: null,
+      selloRestante: null, // segundos de mixer que le quedan al clip terminal
+      puppet: null,
+      tipo: 'stick',
+      pose: null,
+      gestoT: 0,
       materiales: [],
-      mixer: null,
-      acciones: null,
-      huesos: null,
-      clipActual: null,
       acentoActual: acento.clone(),
       acentoBase: acento.clone(),
+      acentoK: 0, // progreso del cambio de acento (lo escribe el motor del kit)
       grisK: 0,
       emisivoK: 0,
       haloK: 0,
@@ -758,8 +728,19 @@ export async function createBarrio({ scene, THREE, origin } = {}) {
       halo: null,
     };
 
-    const cuerpo = fuenteGlb ? crearCuerpoGlb(u) : crearCuerpoCapsula(u, acento);
-    grupo.add(cuerpo);
+    if (puppetGlb) {
+      u.puppet = puppetGlb;
+      u.tipo = 'glb';
+    } else {
+      // Fallback del brief: el monigote procedural REAL de view-kit. Se le pasa
+      // el acento de la paleta (colorForActorId del kit da HSL fuera de paleta).
+      u.puppet = createStickPuppet({ color: acento.clone() });
+      u.tipo = 'stick';
+    }
+
+    ajustarAltura(u.puppet.object);
+    recogerMateriales(u);
+    grupo.add(u.puppet.object);
 
     u.halo = crearHalo(acento);
     grupo.add(u.halo);
@@ -782,7 +763,12 @@ export async function createBarrio({ scene, THREE, origin } = {}) {
   function aplicarAspecto(u) {
     for (const m of u.materiales) {
       const base = m.userData.colorBase;
-      if (base && m.color) m.color.copy(base).lerp(GRIS, u.grisK);
+      if (base && m.color) {
+        m.color.copy(base).lerp(GRIS, u.grisK);
+        // El stick de view-kit usa MeshBasicMaterial (sin emissive): el estado
+        // se lee tiñendo el color hacia el acento.
+        if (!m.emissive) m.color.lerp(u.acentoActual, sujetar(u.emisivoK * 2.2, 0, 1));
+      }
       if (m.emissive) {
         m.emissive.copy(u.acentoActual);
         m.emissiveIntensity = u.emisivoK;
@@ -797,45 +783,43 @@ export async function createBarrio({ scene, THREE, origin } = {}) {
     }
   }
 
-  /** Cambia el color del acento apagando y reencendiendo el emissive. */
+  /** Punto del recorrido en el que el acento cambia de color (apagado total). */
+  const CORTE_ACENTO = 0.45;
+
+  /**
+   * Cambia el color del acento apagando y reencendiendo el emissive.
+   *
+   * Va en UNA sola animación con `onUpdate`, y no en dos encadenadas por
+   * `onComplete`: el controlador del kit borra la animación DESPUÉS de llamar a
+   * su onComplete (`animationsToRemove` se vacía al final de update), así que
+   * una segunda fase creada con la misma clave desde dentro del onComplete
+   * moriría en el acto. Comprobado contra el paquete real.
+   */
   function cambiarAcento(u, nuevo, intensidad, d) {
     const igual = u.acentoActual.getHex() === nuevo.getHex();
     if (igual || !(d > 0)) {
       u.acentoActual.copy(nuevo);
-      tween({
-        clave: `${u.id}:emisivo`,
-        desde: u.emisivoK,
-        hasta: intensidad,
-        dur: d,
-        onUpdate: (v) => {
-          u.emisivoK = v;
-        },
-      });
+      tween({ clave: `${u.id}:emisivo`, objeto: u, prop: 'emisivoK', hasta: intensidad, dur: d });
       return;
     }
-    tween({
-      clave: `${u.id}:emisivo`,
-      desde: u.emisivoK,
-      hasta: 0,
-      dur: d * 0.45,
-      ease: easeOutCubic,
-      onUpdate: (v) => {
-        u.emisivoK = v;
-      },
-      onDone: () => {
-        u.acentoActual.copy(nuevo);
-        tween({
-          clave: `${u.id}:emisivo`,
-          desde: 0,
-          hasta: intensidad,
-          dur: d * 0.55,
-          ease: easeOutCubic,
-          onUpdate: (v) => {
-            u.emisivoK = v;
-          },
-        });
-      },
-    });
+    const desde = u.emisivoK;
+    u.acentoK = 0;
+    motor.createAnimation(
+      `${u.id}:emisivo`,
+      [{ object: u, property: 'acentoK', startValue: 0, endValue: 1 }],
+      {
+        duration: d,
+        easing: 'linear',
+        onUpdate: (p) => {
+          if (p < CORTE_ACENTO) {
+            u.emisivoK = desde * (1 - easeOutCubic(p / CORTE_ACENTO));
+            return;
+          }
+          u.acentoActual.copy(nuevo);
+          u.emisivoK = intensidad * easeOutCubic((p - CORTE_ACENTO) / (1 - CORTE_ACENTO));
+        },
+      }
+    );
   }
 
   const ASPECTO = {
@@ -860,115 +844,92 @@ export async function createBarrio({ scene, THREE, origin } = {}) {
     // vector-mock nunca finge: su acento siempre es violeta.
     const acento = u.meta.acento === 'violeta' ? color('violeta') : color(a.acento);
 
-    tween({
-      clave: `${u.id}:gris`,
-      desde: u.grisK,
-      hasta: a.gris,
-      dur: d,
-      onUpdate: (v) => {
-        u.grisK = v;
-      },
-    });
+    tween({ clave: `${u.id}:gris`, objeto: u, prop: 'grisK', hasta: a.gris, dur: d });
     cambiarAcento(u, acento, a.emisivo, d);
-    tween({
-      clave: `${u.id}:halo`,
-      desde: u.haloK,
-      hasta: a.halo,
-      dur: d,
-      ease: easeOutCubic,
-      onUpdate: (v) => {
-        u.haloK = v;
-      },
-    });
-    tween({
-      clave: `${u.id}:luz`,
-      desde: u.luzK,
-      hasta: a.luz,
-      dur: d,
-      onUpdate: (v) => {
-        u.luzK = v;
-      },
-    });
+    tween({ clave: `${u.id}:halo`, objeto: u, prop: 'haloK', hasta: a.halo, dur: d, ease: 'easeOut' });
+    tween({ clave: `${u.id}:luz`, objeto: u, prop: 'luzK', hasta: a.luz, dur: d });
 
     // Opacidad: solo 'recovering' entra desvanecido.
     if (estado === 'recovering') {
       u.opacidad = quieto ? 1 : 0;
       tween({
         clave: `${u.id}:opacidad`,
-        desde: u.opacidad,
+        objeto: u,
+        prop: 'opacidad',
         hasta: 1,
         dur: dur(FADE_IN),
-        ease: easeOutCubic,
-        onUpdate: (v) => {
-          u.opacidad = v;
-        },
+        ease: 'easeOut',
       });
     } else {
-      tween({
-        clave: `${u.id}:opacidad`,
-        desde: u.opacidad,
-        hasta: 1,
-        dur: d,
-        onUpdate: (v) => {
-          u.opacidad = v;
-        },
-      });
+      tween({ clave: `${u.id}:opacidad`, objeto: u, prop: 'opacidad', hasta: 1, dur: d });
     }
 
-    // Clip (solo cuerpo GLB; la cápsula se anima por pose).
-    if (u.acciones) {
-      switch (clave) {
-        case 'declarada':
-        case 'arrendada':
-          ponerClip(u, 'Standing', { escalaTiempo: 0 });
-          break;
-        case 'lista':
-        case 'recovering':
-          ponerClip(u, 'Idle');
-          break;
-        case 'corriendo':
-          ponerClip(u, u.meta.oficio);
-          break;
-        case 'haltedOrden':
-          ponerClip(u, 'Sitting', { unaVez: true });
-          break;
-        case 'haltedFallo':
-          ponerClip(u, 'Death', { unaVez: true });
-          break;
-        default:
-          ponerClip(u, 'Idle');
-      }
+    // Cuerpo: pose base del contrato puppet + sellado del clip terminal.
+    ponerPose(u, clave);
+    if (clave === 'haltedFallo' && u.tipo === 'glb') {
+      // El mixer avanzará solo lo que dura «Death» y se congelará ahí.
+      u.selloRestante = DURACION_MUERTE;
+    } else {
+      u.selloRestante = null;
     }
+    if (clave === 'corriendo') u.gestoT = GESTO_CADA * 0.6;
 
     aplicarAspecto(u);
   }
 
   // ── Bucle ─────────────────────────────────────────────────────────────────
 
+  /**
+   * Avanza el cuerpo de una unidad. El sellado por fallo NO usa un clip
+   * distinto: frena el propio mixer del puppet hasta pararlo en el último
+   * fotograma de «Death», que es lo que significa «sellada».
+   */
+  function avanzarCuerpo(u, paso) {
+    if (!u.puppet) return;
+
+    if (u.selloRestante !== null) {
+      if (u.selloRestante <= 0) return; // congelada
+      const k = sujetar(u.selloRestante / (DURACION_MUERTE * 0.3), 0, 1);
+      const p = Math.min(u.selloRestante, paso * (0.1 + 0.9 * easeOutCubic(k)));
+      u.selloRestante -= p;
+      u.puppet.update(p);
+      return;
+    }
+
+    u.puppet.update(paso);
+
+    // Gesto de oficio: playAdditive real (crossfade documentado del kit).
+    if (quieto || u.estado !== 'corriendo' || !u.meta.gesto) return;
+    u.gestoT += paso;
+    if (u.gestoT < GESTO_CADA) return;
+    u.gestoT = 0;
+    const nombre = u.tipo === 'glb' ? u.meta.gesto.glb : u.meta.gesto.stick;
+    if (nombre) u.puppet.playAdditive(nombre);
+  }
+
   function actualizar(dt) {
     if (!vivo) return;
     const paso = sujetar(dt || 0, 0, 0.1);
     reloj += paso;
-    avanzarTweens(paso);
+    motor.update(); // el controlador del kit lleva su propio reloj
 
     if (!quieto) ondularAgua(reloj);
 
-    const brilloAmb = 0.1 + 0.9 * despiertoK;
+    const brilloAmb = 0.1 + 0.9 * barrioK.despierto;
     for (const e of emisivosAmbiente) e.material.emissiveIntensity = e.base * brilloAmb;
-    for (const l of lucesAmbiente) l.luz.intensity = l.base * (0.06 + 0.94 * despiertoK);
+    for (const l of lucesAmbiente) l.luz.intensity = l.base * (0.06 + 0.94 * barrioK.despierto);
 
     for (const u of unidades.values()) {
-      if (u.mixer && despiertoK > 0.02) u.mixer.update(paso);
-      else if (u.huesos) animarCapsula(u, paso, reloj);
+      if (barrioK.despierto > 0.02 || u.selloRestante !== null) avanzarCuerpo(u, paso);
 
       aplicarAspecto(u);
 
       const pulso = !quieto && u.estado === 'corriendo' ? 1 + 0.13 * Math.sin(reloj * 2.6) : 1;
       for (const anillo of u.halo.children) {
-        anillo.material.opacity = anillo.userData.opacidadBase * u.haloK * despiertoK * pulso;
+        anillo.material.opacity = anillo.userData.opacidadBase * u.haloK * barrioK.despierto * pulso;
         anillo.visible = anillo.material.opacity > 0.004;
       }
-      if (u.luz) u.luz.intensity = (0.6 + 3.4 * u.luzK) * despiertoK;
+      if (u.luz) u.luz.intensity = (0.6 + 3.4 * u.luzK) * barrioK.despierto;
     }
   }
 
@@ -1007,26 +968,112 @@ export async function createBarrio({ scene, THREE, origin } = {}) {
   lucesAmbiente.push({ luz: contra, base: 0.3 });
   group.add(contra);
 
-  await cargarGlb();
+  if (!MAPA_CLIPS) {
+    procedencia.pendiente.push(
+      'clip-map del kit sin entrada «RobotExpressive.glb» (versión de @zeus/ui-3d-kit'
+      + ' distinta de 0.1.4): los cuerpos caen al stick-puppet de view-kit'
+    );
+  } else {
+    // Fronteras estructurales del mecanismo real, no fallos de esta demo.
+    procedencia.pendiente.push(
+      'capa aditiva REAL (AnimationUtils.makeClipAdditive): todos los emotes de'
+      + ' RobotExpressive.glb están marcados additiveSafe:false en el clip-map del'
+      + ' kit, así que playAdditive usa su fallback documentado (crossfade base →'
+      + ' gesto → base). Habrá aditiva de verdad cuando llegue el rig ALP_*.'
+    );
+    procedencia.pendiente.push(
+      'pose terminal en el contrato puppet: el catálogo ALP_* no tiene ranura para'
+      + ' «sellada por fallo» ni loadPuppet expone clampWhenFinished; el sellado se'
+      + ' hace frenando el mixer del propio puppet hasta el último fotograma de Death.'
+    );
+    procedencia.pendiente.push(
+      '@zeus/view-kit/actors-layer.mjs · createActorsLayer: compone estos mismos dos'
+      + ' mecanismos, pero se maneja por snapshot de actores (position/pose/emote) y'
+      + ' no expone los puppets, así que el tipestate no podría teñir sus materiales.'
+    );
+  }
+
+  // Vocabulario REAL de salud del barrio ('vivo'|'latente'|'muerto'|'roto').
+  // El import es dinámico a propósito: el montaje /zeus-ciudad/ y su entrada de
+  // import map los pone W-SERVER-REAL, y si un día no estuvieran, el barrio se
+  // dibuja igual y lo DECLARA en `procedencia.pendiente` — nunca copia aquí la
+  // constante del paquete.
+  let BARRIO_ESTADOS = null;
+  try {
+    ({ BARRIO_ESTADOS } = await import('@zeus/ciudad/contract'));
+    const faltan = BARRIO_ESTADOS.filter((e) => !(e in SALUD_A_TIPESTATE));
+    const sobran = Object.keys(SALUD_A_TIPESTATE).filter((e) => !BARRIO_ESTADOS.includes(e));
+    if ((faltan.length || sobran.length) && typeof console !== 'undefined' && console.warn) {
+      console.warn('[barrio] BARRIO_ESTADOS real ha cambiado', { faltan, sobran });
+    }
+    procedencia.real.push('@zeus/ciudad/contract.mjs · BARRIO_ESTADOS');
+  } catch (err) {
+    procedencia.pendiente.push(
+      'BARRIO_ESTADOS de @zeus/ciudad/contract.mjs no llegó al navegador ('
+      + ((err && err.message) || err) + '): setUnitState acepta el vocabulario'
+      + ' de salud sin poder validarlo contra el paquete'
+    );
+    if (typeof console !== 'undefined' && console.warn) {
+      console.warn('[barrio] sin @zeus/ciudad/contract.mjs:', err && err.message);
+    }
+  }
+
+  // Los diez cuerpos, en paralelo.
+  const puppets = MAPA_CLIPS
+    ? await Promise.all(UNIDADES.map(() => pedirPuppetGlb()))
+    : UNIDADES.map(() => null);
 
   UNIDADES.forEach((meta, i) => {
     const theta = INICIO_HERRADURA + (ARCO_HERRADURA * i) / (UNIDADES.length - 1);
     construirLocal(meta, theta);
-    construirUnidad(meta, theta);
+    construirUnidad(meta, theta, puppets[i]);
   });
 
+  const conGlb = puppets.filter(Boolean).length;
+  procedencia.cuerpos = conGlb === UNIDADES.length ? 'glb' : conGlb === 0 ? 'stick' : 'mixto';
+  if (conGlb > 0) {
+    procedencia.real.push(`@zeus/ui-3d-kit/puppet/puppet.mjs · loadPuppet ×${conGlb}`);
+  }
+  if (conGlb < UNIDADES.length) {
+    procedencia.real.push(
+      `@zeus/view-kit/stick-puppet.mjs · createStickPuppet ×${UNIDADES.length - conGlb}`
+    );
+    procedencia.pendiente.push(
+      `${UNIDADES.length - conGlb}/${UNIDADES.length} cuerpos sin GLB: van con el`
+      + ' stick-puppet de view-kit (STICK_POSES no tiene pose terminal de fallo:'
+      + ' el sellado se lee por color, no por cuerpo)'
+    );
+  }
+
   if (scene && typeof scene.add === 'function') scene.add(group);
+  motor.start();
   actualizar(0);
   if (typeof requestAnimationFrame === 'function') rafId = requestAnimationFrame(bucle);
 
   // ── API ───────────────────────────────────────────────────────────────────
 
+  /**
+   * @param {string} unitId
+   * @param {string} estado tipestate de R1 o BARRIO_ESTADOS real de @zeus/ciudad
+   * @param {string} [causa] 'orden' | 'fallo' (solo con 'halted')
+   */
   function setUnitState(unitId, estado, causa) {
     const u = unidades.get(unitId);
     if (!u) return;
-    const e = ALIAS_ESTADO[String(estado || '').toLowerCase()];
+
+    const crudo = String(estado == null ? '' : estado).toLowerCase();
+    // El vocabulario de salud solo vale si el paquete real lo declara: si
+    // BARRIO_ESTADOS llegó, manda él; si no llegó, se acepta el mapa local y
+    // queda dicho en `procedencia.pendiente`.
+    const esSalud = BARRIO_ESTADOS ? BARRIO_ESTADOS.includes(crudo) : crudo in SALUD_A_TIPESTATE;
+    const salud = esSalud ? SALUD_A_TIPESTATE[crudo] : null;
+    const e = salud ? salud.estado : ALIAS_ESTADO[crudo];
     if (!e) return;
-    const c = e === 'halted' ? ALIAS_CAUSA[String(causa || 'orden').toLowerCase()] || 'orden' : null;
+    const c = e !== 'halted'
+      ? null
+      : salud
+        ? salud.causa
+        : ALIAS_CAUSA[String(causa || 'orden').toLowerCase()] || 'orden';
 
     // Muerta por fallo: se queda como está. Solo 'recovering' rompe el sello.
     if (u.sellada && e !== 'recovering') return;
@@ -1054,16 +1101,13 @@ export async function createBarrio({ scene, THREE, origin } = {}) {
     return new Promise((resolver) => {
       tween({
         clave: 'barrio:despierto',
-        desde: despiertoK,
+        objeto: barrioK,
+        prop: 'despierto',
         hasta,
         dur: dur(1.5),
-        ease: easeInOutCubic,
-        onUpdate: (v) => {
-          despiertoK = v;
-        },
+        ease: 'easeInOut',
         onDone: resolver,
       });
-      if (!(dur(1.5) > 0)) resolver();
     });
   }
 
@@ -1079,13 +1123,14 @@ export async function createBarrio({ scene, THREE, origin } = {}) {
     vivo = false;
     if (rafId && typeof cancelAnimationFrame === 'function') cancelAnimationFrame(rafId);
     rafId = 0;
-    tweens.length = 0;
+    motor.dispose();
 
+    // Cada marioneta se despide con su propio dispose (contrato del kit):
+    // para el mixer, suelta el root y libera geometrías/materiales.
     for (const u of unidades.values()) {
-      if (u.mixer) {
-        u.mixer.stopAllAction();
-        if (u.raiz) u.mixer.uncacheRoot(u.raiz);
-      }
+      if (u.puppet && typeof u.puppet.dispose === 'function') u.puppet.dispose();
+      u.puppet = null;
+      u.materiales = [];
     }
     unidades.clear();
 
@@ -1104,8 +1149,6 @@ export async function createBarrio({ scene, THREE, origin } = {}) {
       });
     };
     liberar(group);
-    if (fuenteGlb && fuenteGlb.escena) liberar(fuenteGlb.escena);
-    fuenteGlb = null;
 
     if (group.parent) group.parent.remove(group);
     group.clear();
@@ -1130,6 +1173,7 @@ export async function createBarrio({ scene, THREE, origin } = {}) {
     onfaloAnchor,
     estadoUnidad,
     unidades: UNIDADES.map((m) => m.id),
+    procedencia,
   };
 }
 

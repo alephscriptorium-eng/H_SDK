@@ -1,26 +1,76 @@
 /**
- * ciudad.mjs — módulo W-CIUDAD · demo «Prueba-H-M» (El Descenso)
+ * ciudad.mjs — módulo W-CIUDAD-REAL · demo «Prueba-H-M» (El Descenso) · R2
  * ---------------------------------------------------------------------------
- * Dibuja la ciudad holónica: 24 barrios como node-mesh sobre mesetas por
- * distrito y anillos por holón, la red de calles derivada de los handoffs, la
- * NOTARÍA como landmark elevado en la zona del holón 07 y una niebla de altura
- * que hunde los holones-cantera en la bruma.
+ * R2: la ciudad deja de ser una proyección inventada y pasa a dibujarse SOBRE
+ * mecanismo real de Scriptorium. Tres cosas cambian y una se conserva:
  *
- * TODO se deriva de `assets/mapa/mapa.json`: el sector angular de cada holón
- * sale del número de barrios, la elevación de cada meseta del volumen de
- * handoffs de su distrito, la altura y el brillo de cada torre del estado y de
- * `grafo.handoffEdges`, y las avenidas hacia la NOTARÍA de esos mismos handoffs.
- * Ojo: `handoffEdges` es un CONTADOR, no una lista de aristas; la red de calles
- * se traza como paseos + radiales dentro de cada distrito y avenidas de handoff
- * barrio→NOTARÍA con grosor proporcional al contador.
+ *   1 · PROYECCIÓN REAL. `mapa.json` se adapta a un **gamemap** con la forma
+ *       exacta de `@zeus/startpack-ciudad/seeds/gamemap.json` (nodos/enlaces/
+ *       anclas; ids idénticos: `plaza`, `zigurat`, `calle-mcp-vivos`,
+ *       `ancla-document-machine-sdk`…) y se proyecta con el
+ *       **`sceneFromGamemap` real** de `@zeus/ciudad/scene`. El resultado
+ *       (`api.escena`) es lo que consume el dominio de W-CEREMONIA.
+ *   2 · GEOMETRÍA REAL. Las piezas de escenario son las del kit publicado
+ *       `@zeus/ui-3d-kit`: `createNodeMesh` por nodo, `createAnchorMarker` por
+ *       ancla, `createLinkCorridorBetween` por enlace (troceado con el
+ *       `sampleLink`/`linkDistance` reales de `@zeus/game-engine`), y
+ *       `createTrajectoryManager` para el tráfico de handoffs hacia la NOTARÍA.
+ *       Del kit se conserva la GEOMETRÍA; sólo se re-tiñe el color a la paleta
+ *       cerrada de la demo (`tematizar`), que es el tema R1 puesto encima.
+ *   3 · VOCABULARIO REAL. Los estados de barrio se validan contra
+ *       `BARRIO_ESTADOS` de `@zeus/ciudad/contract`, y el nodo de spawn es el
+ *       `SPAWN_NODE_ID` real ('plaza').
+ *   4 · SE CONSERVA el urbanismo R1 que deriva del dato: mesetas por distrito,
+ *       anillos al tresbolillo, avenidas de handoff barrio→NOTARÍA, bruma de
+ *       altura y la NOTARÍA como landmark. Ahora son la CAPA ESTÉTICA sobre la
+ *       escena real, no la escena.
  *
- * Contrato (ARQUITECTURA-DEMO.md):
+ * Frontera real/pendiente (se publica en `api.frontera`, es producto):
+ *   · `createSceneManager` del kit NO se usa: monta su propio renderer, cámara,
+ *     OrbitControls y bucle rAF, y en esta demo el integrador (`main.mjs`) ya
+ *     los posee y le entrega a este módulo una `scene` ajena. Adoptarlo rompería
+ *     la firma `createCiudad({ scene })` y duplicaría el bucle.
+ *   · `createAnimationController` del kit tampoco: lleva reloj propio
+ *     (`update()` sin dt) y la demo impone un único reloj `ciudad.update(dt)`.
+ *   · `@zeus/ciudad/scene` se carga por import DINÁMICO (no estático) porque su
+ *     montaje `/zeus-ciudad/` y su clave de import map los publica otro dueño
+ *     (W-SERVER-REAL). Comprobado en canal: `GET /zeus-ciudad/scene.mjs` → 200 y
+ *     el import map trae `@zeus/ciudad/` y `@zeus/ciudad/scene`. Si algún día no
+ *     estuviera, `api.escena` queda `null` y el motivo se publica en
+ *     `api.frontera.pendiente` — NO se reimplementa `sceneFromGamemap`.
+ *
+ * TODO lo geométrico sigue derivándose de `assets/mapa/mapa.json`: el sector
+ * angular de cada holón sale del número de barrios, la elevación de cada meseta
+ * del volumen de handoffs de su distrito, la altura y el brillo de cada torre
+ * del estado y de `grafo.handoffEdges`, y las avenidas hacia la NOTARÍA de esos
+ * mismos handoffs. Ojo: `handoffEdges` es un CONTADOR, no una lista de aristas.
+ *
+ * Contrato (ARQUITECTURA-DEMO.md · no cambia en R2):
  *   export async function createCiudad({ scene, mapa, THREE })
  *   → { group, barrioAnchor(barrioId), focusCity(), dispose() }
  *
- * Reglas: ES modules de navegador, cero deps, cero build, paleta cerrada,
- * easing en toda animación y `prefers-reduced-motion` respetado.
+ * Reglas: ES modules de navegador, cero build, paleta cerrada, easing en toda
+ * animación y `prefers-reduced-motion` respetado.
  */
+
+// ── kit real (verificado contra node_modules Y contra el servidor) ───────────
+// node_modules/@zeus/ui-3d-kit/src/…  → montaje /kit/  → import map «@zeus/ui-3d-kit/».
+// Los cuatro módulos declaran «Browser-safe: three resolves via import map» y
+// sólo importan `three` (+ `three/addons/loaders/GLTFLoader.js` en anchor-marker,
+// que el import map manda a /vendor/three/examples/jsm/). Comprobado 200 en el
+// servidor de la demo: /kit/stage/{node-mesh,anchor-marker,link-corridor}.mjs,
+// /kit/core/trajectory-manager.mjs, /game-engine/index.mjs y el GLTFLoader.
+//
+// Nota de instancia: estos módulos resuelven `three` por el import map, o sea la
+// MISMA instancia que carga main.mjs. Si alguien inyectase por `createCiudad({THREE})`
+// un namespace distinto, la geometría del kit seguiría siendo la del import map;
+// en esta demo main.mjs pasa el mismo `three`, así que no hay dos instancias.
+import { createNodeMesh } from '@zeus/ui-3d-kit/stage/node-mesh.mjs';
+import { createAnchorMarker } from '@zeus/ui-3d-kit/stage/anchor-marker.mjs';
+import { createLinkCorridorBetween } from '@zeus/ui-3d-kit/stage/link-corridor.mjs';
+import { createTrajectoryManager } from '@zeus/ui-3d-kit/core/trajectory-manager.mjs';
+// Matemática de enlaces del motor real (pura, sin three, sin builtins de node).
+import { sampleLink, linkDistance } from '@zeus/game-engine';
 
 const TAU = Math.PI * 2;
 
@@ -66,6 +116,43 @@ const GAP_DISTRITO  = 0.045;
 const RADIO_CIUDAD  = 31;
 const DUR_REVELADO  = 2.6;   // segundos
 const ALTURA_BRUMA  = 80;
+
+/**
+ * Lectura visual de cada estado de barrio. Las CLAVES son el vocabulario real
+ * `BARRIO_ESTADOS` de `@zeus/ciudad/contract` (['vivo','latente','muerto','roto'])
+ * — R1 sólo conocía tres; 'roto' entra en R2 aunque el mapa actual no lo use,
+ * para que la tabla cubra el vocabulario entero y nada quede sin dibujar.
+ */
+export const ESTADOS_VISUAL = Object.freeze({
+  vivo:    { alturaK: 1.00, radioK: 1.00, emissive: 0.26,  opacidad: 1.00, apagado: 0.00 },
+  latente: { alturaK: 0.72, radioK: 0.90, emissive: 0.12,  opacidad: 0.88, apagado: 0.34 },
+  muerto:  { alturaK: 0.44, radioK: 0.82, emissive: 0.035, opacidad: 0.55, apagado: 0.66 },
+  roto:    { alturaK: 0.52, radioK: 0.94, emissive: 0.09,  opacidad: 0.62, apagado: 0.52 }
+});
+
+/**
+ * Constantes de color del kit `@zeus/ui-3d-kit` (leídas de su fuente: los tres
+ * módulos de `stage/` comparten «same cyberpunk-grid palette»). Se listan aquí
+ * para poder RE-TEÑIR su geometría a la paleta cerrada de la demo sin tocar el
+ * paquete: es tema encima, no fork.
+ */
+const HEX_KIT = Object.freeze({
+  MATRIZ:  0x00ff41,  // MATRIX_GREEN — tramas, wireframes, línea central
+  CIAN:    0x00d4ff,  // CYAN — acentos y emissive del asiento
+  VACIO:   0x050508,  // VOID — suelos
+  ASIENTO: 0x101418   // gris del asiento procedural de anchor-marker
+});
+
+/** Nombre canónico del `dry` de cada calle: literal de los seeds reales
+ *  `@zeus/startpack-ciudad/seeds/gamemap.json` (calle-funcional, calle-tecnico,
+ *  calle-plugins, calle-mcp-vivos, calle-infra). */
+const DRY_CALLE = Object.freeze({
+  editores:      'funcional',
+  'red-stream':  'tecnico',
+  'runtime-mcp': 'plugins',
+  'lore-voz':    'mcp-vivos',
+  'infra-ui':    'infra'
+});
 
 // ── utilidades ──────────────────────────────────────────────────────────────
 
@@ -288,6 +375,271 @@ export function calcularTrazado(mapa) {
   return { holones, sectores, mesetas, barrios, notaria, maxAristas, maxAristasDistrito };
 }
 
+// ── adaptación mapa.json → gamemap real ─────────────────────────────────────
+
+/** Punto polar → cartesiano, sin three (misma convención que `punto()`). */
+const punto3 = (radio, ang, y = 0) => ({
+  x: radio * Math.cos(ang), y, z: -radio * Math.sin(ang)
+});
+
+/** Cuánto se separa el asiento (ancla) del eje de su torre, en radio. */
+const DESVIO_ANCLA = 1.15;
+
+/** Delta angular más corto (para que las calles no den la vuelta a la ciudad). */
+function anguloCorto(a, b) {
+  let d = (b - a) % TAU;
+  if (d > Math.PI) d -= TAU;
+  if (d < -Math.PI) d += TAU;
+  return d;
+}
+
+/** Rumbo en grados (convención del motor: 0 = +Z) desde `a` mirando a `b`. */
+function rumboHacia(a, b) {
+  const dx = b.x - a.x;
+  const dz = b.z - a.z;
+  if (dx === 0 && dz === 0) return 0;
+  return (Math.atan2(dx, dz) * 180) / Math.PI;
+}
+
+/** Calle en polar: interpola radio/ángulo/altura para que siga el urbanismo. */
+function calleWaypoints(a, b, n = 2) {
+  const pts = [];
+  const dAng = anguloCorto(a.ang, b.ang);
+  for (let i = 0; i <= n; i++) {
+    const t = i / n;
+    pts.push(punto3(
+      a.radio + (b.radio - a.radio) * t,
+      a.ang + dAng * t,
+      a.y + (b.y - a.y) * t
+    ));
+  }
+  return pts;
+}
+
+/**
+ * `mapa.json` (holones/distritos/barrios) → **gamemap** con la forma exacta que
+ * consume `sceneFromGamemap` de `@zeus/ciudad/scene`.
+ *
+ * La forma se copió de los seeds REALES —
+ * `node_modules/@zeus/startpack-ciudad/seeds/gamemap.json`, leído en disco — y
+ * la topología coincide barrio a barrio: los ids de distrito del mapa
+ * (`zigurat`, `editores`, `red-stream`, `runtime-mcp`, `lore-voz`, `infra-ui`)
+ * son los mismos ids de nodo del startpack, y las anclas salen con el mismo
+ * patrón `ancla-<barrioId>`. Lo único propio de la demo son las POSICIONES:
+ * vienen del urbanismo R1 (`calcularTrazado`), que las deriva del dato.
+ *
+ * Diferencias declaradas frente al startpack (el mapa de la demo dice más):
+ *   · `estado` de cada ancla sale de `mapa.barrios[].estado` (vivo/latente/muerto).
+ *   · cada ancla lleva `handoffEdges`, que el startpack no tiene.
+ *   · los holones sin distrito (05 cantera, 06 constelación) entran como nodos
+ *     con `razonSinBarrio`: el cero también es dato.
+ *
+ * @param {object} mapa   mapa.json ya parseado
+ * @param {object} [trazado] resultado de `calcularTrazado(mapa)` (se reutiliza)
+ * @returns {{id:string, sceneId:string, displayName:string, nodos:object,
+ *            enlaces:object, anclas:object, gobierno:object, zones:Array,
+ *            defaultAnchorByNode:object}}
+ */
+export function gamemapDesdeMapa(mapa, trazado = calcularTrazado(mapa)) {
+  const nodos = {};
+  const enlaces = {};
+  const anclas = {};
+  const zones = [];
+  const defaultAnchorByNode = {};
+
+  // 1 · plaza de gobierno = la terraza del holón 07 (método), donde vive la
+  //     NOTARÍA. Su id es el SPAWN_NODE_ID real del contrato: 'plaza'.
+  const not = trazado.notaria;
+  const plazaPolar = { radio: not.radio, ang: not.ang, y: not.elevacion };
+  nodos.plaza = {
+    id: 'plaza',
+    displayName: 'Plaza de la NOTARÍA',
+    role: 'gobierna',
+    kind: 'gobierno',
+    entrada: { ...punto3(not.radio, not.ang, not.elevacion), facing: 0 },
+    holonId: not.holon ? not.holon.id : null,
+    mesetaId: not.holon ? `holon-${not.holon.id}` : null,
+    anclas: [],
+    enlaces: []
+  };
+
+  // 2 · un nodo por distrito, en el hub (paseo interior) de su meseta.
+  const polarDe = new Map([['plaza', plazaPolar]]);
+  for (const m of trazado.mesetas) {
+    if (m.vacia) continue;
+    const polar = m.hub
+      ? { radio: m.hub.radio, ang: m.hub.ang, y: m.elevacion }
+      : { radio: (m.rIn + m.rOut) / 2, ang: m.medio, y: m.elevacion };
+    polarDe.set(m.id, polar);
+    const esZigurat = m.id === 'zigurat';
+    nodos[m.id] = {
+      id: m.id,
+      displayName: m.nombre,
+      role: esZigurat ? 'opera' : 'ejecuta',
+      kind: esZigurat ? 'gobierno-zona' : 'zona',
+      entrada: { ...punto3(polar.radio, polar.ang, polar.y), facing: 0 },
+      holonId: m.holonId,
+      mesetaId: m.id,
+      handoffEdges: m.aristas,
+      anclas: [],
+      enlaces: []
+    };
+    zones.push({
+      id: m.id,
+      displayName: m.nombre,
+      role: nodos[m.id].role,
+      nodeId: m.id,
+      barrios: [...m.barrios]
+    });
+  }
+
+  // 3 · holones sin distrito: existen y se dicen (cantera / constelación).
+  for (const m of trazado.mesetas) {
+    if (!m.vacia) continue;
+    if (m.holonId === (not.holon && not.holon.id)) continue; // ése es la plaza
+    const holon = trazado.holones.find((h) => h.id === m.holonId);
+    const polar = { radio: (m.rIn + m.rOut) / 2, ang: m.medio, y: m.elevacion };
+    polarDe.set(m.id, polar);
+    nodos[m.id] = {
+      id: m.id,
+      displayName: m.nombre,
+      role: 'ejecuta',
+      kind: holon ? String(holon.runtimeKind) : 'zona',
+      entrada: { ...punto3(polar.radio, polar.ang, polar.y), facing: 0 },
+      holonId: m.holonId,
+      mesetaId: m.id,
+      sinBarrios: true,
+      razonSinBarrio: (holon && holon.razonSinBarrio) || null,
+      anclas: [],
+      enlaces: []
+    };
+  }
+
+  // 4 · un ancla por barrio, con la posición que le dio el urbanismo.
+  const notariaXYZ = punto3(not.radio, not.ang, not.elevacion);
+  for (const b of trazado.barrios.values()) {
+    if (b.radio === undefined) continue; // barrio sin distrito posicionado
+    const nodoId = b.distrito;
+    const nodo = nodos[nodoId];
+    if (!nodo) continue;
+    const id = `ancla-${b.id}`;
+    // El ancla es el ASIENTO junto al edificio, desplazado hacia fuera para no
+    // quedar dentro de la torre. Mismo criterio que los seeds reales, donde
+    // `ancla-vscode-extension` está en x=14 y la entrada del nodo zigurat en x=12.
+    const pos = punto3(b.radio + DESVIO_ANCLA, b.angulo, b.elevacion);
+    anclas[id] = {
+      id,
+      parent: nodoId,
+      displayName: b.nombre,
+      barrioId: b.id,
+      slug: b.slug,
+      estado: b.estado,
+      position: pos,          // asiento junto al edificio, no dentro
+      posicionEdificio: punto3(b.radio, b.angulo, b.elevacion),
+      // Cada barrio mira a la NOTARÍA: la ceremonia sube por ahí.
+      facing: Math.round(rumboHacia(pos, notariaXYZ) * 100) / 100,
+      slot: 'sit',
+      kind: 'gamething.barrio',
+      holonId: b.holonId,
+      handoffEdges: b.aristas
+    };
+    nodo.anclas.push(id);
+    if (!defaultAnchorByNode[nodoId]) defaultAnchorByNode[nodoId] = id;
+  }
+
+  // 5 · calles: plaza → zigurat y zigurat → cada distrito, con los ids y los
+  //     `dry` literales del startpack real. Sendas de servicio a los holones
+  //     sin barrios, colgando de la plaza.
+  const unir = (id, from, to, dry, rotulo) => {
+    const a = polarDe.get(from);
+    const c = polarDe.get(to);
+    if (!a || !c) return;
+    const waypoints = calleWaypoints(a, c, 2);
+    enlaces[id] = {
+      id,
+      displayName: rotulo || `Calle ${dry}`,
+      dry,
+      from,
+      to,
+      bidirectional: true,
+      walkSpeed: 1.4,
+      waypoints
+    };
+    if (nodos[from]) nodos[from].enlaces.push(id);
+    if (nodos[to]) nodos[to].enlaces.push(id);
+  };
+
+  if (nodos.zigurat) unir('calle-plaza-zigurat', 'plaza', 'zigurat', 'gobierno');
+  for (const id of Object.keys(nodos)) {
+    if (id === 'plaza' || id === 'zigurat') continue;
+    if (nodos[id].sinBarrios) {
+      unir(`senda-${id}`, 'plaza', id, nodos[id].kind, `Senda a ${nodos[id].displayName}`);
+      continue;
+    }
+    const dry = DRY_CALLE[id] || id;
+    unir(`calle-${dry}`, nodos.zigurat ? 'zigurat' : 'plaza', id, dry);
+  }
+
+  return {
+    id: 'prueba-hm-ciudad',
+    sceneId: String(mapa.kind || 'ciudad') + '-' + String(mapa.version || 'v0'),
+    version: mapa.version ?? 0,
+    displayName: 'Ciudad de holones · Prueba de H·M',
+    gobierno: { gobierna: 'plaza', opera: 'zigurat', ejecutan: 'barrios' },
+    zones,
+    nodos,
+    enlaces,
+    anclas,
+    defaultAnchorByNode
+  };
+}
+
+// ── carga del mecanismo real de @zeus/ciudad (montaje de W-SERVER-REAL) ──────
+
+/**
+ * Trae `sceneFromGamemap` / `nodesReachable` / `BARRIO_ESTADOS` / `SPAWN_NODE_ID`
+ * REALES de `@zeus/ciudad`. Es import dinámico —y no estático— por una razón
+ * declarada: el montaje `/zeus-ciudad/` y su entrada en el import map los
+ * publica W-SERVER-REAL; si aún no están en canal, la ciudad debe seguir
+ * dibujándose y decir que la proyección falta, NO reimplementarla.
+ *
+ * `scene.mjs` importa `./contract.mjs`, que a su vez importa `@zeus/protocol`
+ * (verificado browser-safe: su índice sólo encadena contract/roles/gates/acl/
+ * peer-card/game-state-delta; `peer-card-seat.mjs`, el único con `node:crypto`,
+ * NO entra por el índice). Por eso el import map necesita también `@zeus/protocol`.
+ */
+const CANDIDATOS = Object.freeze({
+  scene: ['@zeus/ciudad/scene.mjs', '@zeus/ciudad/scene', '/zeus-ciudad/scene.mjs'],
+  contract: ['@zeus/ciudad/contract.mjs', '@zeus/ciudad/contract', '/zeus-ciudad/contract.mjs']
+});
+
+async function primeroQueCargue(especificadores, requiere) {
+  const fallos = [];
+  for (const esp of especificadores) {
+    try {
+      const mod = await import(/* @vite-ignore */ esp);
+      if (requiere.every((k) => mod[k] !== undefined)) return { mod, esp };
+      fallos.push(`${esp}: sin ${requiere.filter((k) => mod[k] === undefined).join('/')}`);
+    } catch (e) {
+      fallos.push(`${esp}: ${(e && e.message) || e}`);
+    }
+  }
+  return { mod: null, esp: null, fallos };
+}
+
+/**
+ * @returns {Promise<{scene:object|null, sceneEsp:string|null, contract:object|null,
+ *                    contractEsp:string|null, motivos:Record<string,string>}>}
+ */
+export async function cargarCiudadReal() {
+  const motivos = {};
+  const s = await primeroQueCargue(CANDIDATOS.scene, ['sceneFromGamemap', 'nodesReachable']);
+  if (!s.mod) motivos.scene = `no resoluble desde el navegador → ${(s.fallos || []).join(' · ')}`;
+  const c = await primeroQueCargue(CANDIDATOS.contract, ['BARRIO_ESTADOS', 'SPAWN_NODE_ID']);
+  if (!c.mod) motivos.contract = `no resoluble desde el navegador → ${(c.fallos || []).join(' · ')}`;
+  return { scene: s.mod, sceneEsp: s.esp, contract: c.mod, contractEsp: c.esp, motivos };
+}
+
 // ── módulo ──────────────────────────────────────────────────────────────────
 
 /**
@@ -306,6 +658,73 @@ export async function createCiudad({ scene, mapa, THREE, opciones = {} } = {}) {
   const trazado = calcularTrazado(datos);
   const idDestacado = opciones.destacado || ID_DESTACADO;
 
+  /* ── proyección real ─────────────────────────────────────────────────────
+     El gamemap es dato propio (adaptado del mapa); la ESCENA es la proyección
+     que hace `sceneFromGamemap` real. Si el paquete no está en canal, `escena`
+     queda null y se dice: aquí no se falsifica una proyección.               */
+  const gamemap = gamemapDesdeMapa(datos, trazado);
+  const real = await cargarCiudadReal();
+
+  const frontera = { real: [], pendiente: [] };
+  const anotarReal = (t) => frontera.real.push(t);
+  const anotarPend = (que, motivo) => frontera.pendiente.push({ que, motivo });
+
+  anotarReal('@zeus/ui-3d-kit · createNodeMesh (stage/node-mesh.mjs) — un disco por nodo');
+  anotarReal('@zeus/ui-3d-kit · createAnchorMarker (stage/anchor-marker.mjs) — un asiento por ancla');
+  anotarReal('@zeus/ui-3d-kit · createLinkCorridorBetween (stage/link-corridor.mjs) — un corredor por tramo');
+  anotarReal('@zeus/ui-3d-kit · createTrajectoryManager (core/trajectory-manager.mjs) — tráfico de handoffs');
+  anotarReal('@zeus/game-engine · sampleLink + linkDistance — troceado por longitud de arco real');
+  anotarPend(
+    '@zeus/ui-3d-kit · createSceneManager',
+    'monta renderer, cámara, OrbitControls y bucle rAF propios; en esta demo main.mjs ya los posee y entrega una `scene` ajena — adoptarlo rompe la firma createCiudad({scene}) y duplica el bucle'
+  );
+  anotarPend(
+    '@zeus/ui-3d-kit · createAnimationController',
+    'su update() no acepta dt (usa THREE.Clock interno) y la demo impone un único reloj ciudad.update(dt); además no expone retardo por animación, que es lo que necesita el revelado escalonado'
+  );
+
+  let escena = null;
+  if (real.scene) {
+    escena = real.scene.sceneFromGamemap(gamemap);
+    anotarReal(`@zeus/ciudad/scene · sceneFromGamemap (${real.sceneEsp}) — ${Object.keys(escena.barrios).length} barrios proyectados, spawn '${escena.spawnNodeId}'`);
+  } else {
+    anotarPend('@zeus/ciudad/scene · sceneFromGamemap + nodesReachable', real.motivos.scene);
+    console.warn('[ciudad] proyección real no disponible; se dibuja el gamemap crudo, y `escena` queda null.', real.motivos.scene);
+  }
+
+  // Vocabulario de estados: se valida contra el real, no contra el nuestro.
+  let estadosCanonicos = null;
+  if (real.contract) {
+    estadosCanonicos = real.contract.BARRIO_ESTADOS;
+    anotarReal(`@zeus/ciudad/contract · BARRIO_ESTADOS + SPAWN_NODE_ID (${real.contractEsp})`);
+    const desconocidos = [...new Set(
+      [...trazado.barrios.values()].map((b) => b.estado).filter((e) => !estadosCanonicos.includes(e))
+    )];
+    if (desconocidos.length) {
+      console.warn(`[ciudad] estados fuera de BARRIO_ESTADOS reales: ${desconocidos.join(', ')}`);
+      anotarPend('estados del mapa', `fuera de BARRIO_ESTADOS: ${desconocidos.join(', ')}`);
+    }
+    const spawn = real.contract.SPAWN_NODE_ID;
+    if (!gamemap.nodos[spawn]) {
+      anotarPend('nodo de spawn', `SPAWN_NODE_ID='${spawn}' no existe en el gamemap adaptado`);
+    }
+  } else {
+    anotarPend('@zeus/ciudad/contract · BARRIO_ESTADOS + SPAWN_NODE_ID', real.motivos.contract);
+  }
+
+  // Alcanzabilidad real: ¿se puede caminar de la plaza al barrio del descenso?
+  const alcanzable = (barrioId) => {
+    if (!real.scene) return null;                      // no se finge un true
+    const ancla = gamemap.anclas[`ancla-${barrioId}`];
+    if (!ancla) return false;
+    return real.scene.nodesReachable(gamemap.enlaces, gamemap.gobierno.gobierna, ancla.parent);
+  };
+  if (real.scene) {
+    const ok = alcanzable(idDestacado);
+    anotarReal(`@zeus/ciudad/scene · nodesReachable — plaza→${idDestacado}: ${ok ? 'sí' : 'NO'}`);
+    if (!ok) console.warn(`[ciudad] el barrio ${idDestacado} no es alcanzable desde la plaza`);
+  }
+
   const menosMovimiento = typeof matchMedia === 'function'
     && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -320,6 +739,7 @@ export async function createCiudad({ scene, mapa, THREE, opciones = {} } = {}) {
   const animables = [];     // {retardo, duracion, aplicar(p)} para el revelado
   const latidos = [];       // {tic(t, dt)} para la animación continua
   const anclas = new Map(); // id → {base, cima, grupo, malla}
+  const marcasKit = new Map(); // barrioId → grupo del createAnchorMarker real
 
   // ── atmósfera: niebla de altura ──────────────────────────────────────────
   const fogPrevio = scene ? scene.fog : null;
@@ -426,11 +846,8 @@ export async function createCiudad({ scene, mapa, THREE, opciones = {} } = {}) {
   // ── barrios: node-mesh por barrio, color por distrito ────────────────────
   const capaBarrios = new T.Group();
   capaBarrios.name = 'ciudad-barrios';
-  const ESTADOS = {
-    vivo:    { alturaK: 1.00, radioK: 1.00, emissive: 0.26, opacidad: 1.00, apagado: 0.00 },
-    latente: { alturaK: 0.72, radioK: 0.90, emissive: 0.12, opacidad: 0.88, apagado: 0.34 },
-    muerto:  { alturaK: 0.44, radioK: 0.82, emissive: 0.035, opacidad: 0.55, apagado: 0.66 }
-  };
+  // Tabla hoisted a módulo: sus claves son BARRIO_ESTADOS reales (incl. 'roto').
+  const ESTADOS = ESTADOS_VISUAL;
 
   let indiceBarrio = 0;
   for (const b of trazado.barrios.values()) {
@@ -505,6 +922,138 @@ export async function createCiudad({ scene, mapa, THREE, opciones = {} } = {}) {
     indiceBarrio++;
   }
   group.add(capaBarrios);
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     ESCENA REAL — geometría de @zeus/ui-3d-kit sobre el gamemap adaptado
+     Cada pieza del kit se cuelga de la meseta de su nodo, de modo que sube con
+     ella en el revelado y muere con ella en dispose(). Del kit se conserva la
+     geometría entera; sólo se re-tiñe el color (ver `tematizar`).
+     ══════════════════════════════════════════════════════════════════════════ */
+
+  const mesetaPorId = new Map(trazado.mesetas.map((m) => [m.id, m]));
+  const matKit = [];                       // {m, objetivo} para el fundido
+  const vistosKit = new Set();             // materiales compartidos: una vez
+  const recogerKit = (raiz) => {
+    raiz.traverse((o) => {
+      const mats = Array.isArray(o.material) ? o.material : (o.material ? [o.material] : []);
+      for (const m of mats) {
+        if (vistosKit.has(m)) continue;
+        vistosKit.add(m);
+        matKit.push({ m, objetivo: m.opacity ?? 1 });
+        m.opacity = 0;
+      }
+    });
+  };
+
+  // ── un createNodeMesh REAL por nodo del gamemap ──────────────────────────
+  const capaNodos = new T.Group();
+  capaNodos.name = 'ciudad-nodos';
+  for (const nodo of Object.values(gamemap.nodos)) {
+    const m = mesetaPorId.get(nodo.mesetaId);
+    const anfitrion = (m && m.malla) || capaNodos;
+    const color = m && !m.vacia ? m.color : PALETA.oro;
+    // El radio del disco sale del dato: cuántas anclas cuelgan del nodo.
+    const cuantas = (nodo.anclas || []).length;
+    const radio = nodo.id === 'plaza' ? 2.7 : pinza(1.15 + 0.2 * cuantas, 1.15, 3.1);
+
+    const disco = createNodeMesh({ radius: radio, color, segments: 40, name: `nodo:${nodo.id}` });
+    tematizar(disco, {
+      acento: color,
+      trama: tinte(color, PALETA.tinta, 0.25),
+      fondo: tinte(PALETA.sepia, color, 0.16),
+      alfa: nodo.sinBarrios ? 0.42 : 0.9
+    });
+    disco.userData = {
+      tipo: 'nodo', id: nodo.id, kind: nodo.kind, role: nodo.role,
+      holonId: nodo.holonId, anclas: cuantas, razonSinBarrio: nodo.razonSinBarrio || null
+    };
+    // Coordenadas locales de la meseta: su cara superior es y = 0.
+    disco.position.set(nodo.entrada.x, m && m.malla ? 0.045 : nodo.entrada.y + 0.045, nodo.entrada.z);
+    recogerKit(disco);
+    anfitrion.add(disco);
+  }
+  group.add(capaNodos);
+
+  // ── un createAnchorMarker REAL por ancla (los 24 barrios) ────────────────
+  const capaAnclas = new T.Group();
+  capaAnclas.name = 'ciudad-anclas';
+  for (const ancla of Object.values(gamemap.anclas)) {
+    const b = trazado.barrios.get(ancla.barrioId);
+    const m = b && b.distritoRef;
+    const anfitrion = (m && m.malla) || capaAnclas;
+    const est = ESTADOS[ancla.estado] || ESTADOS.latente;
+    const color = (b && b.color) || PALETA.tinta;
+
+    const marca = createAnchorMarker({
+      // `position`/`facing` son los del ancla: el kit los aplica tal cual.
+      position: {
+        x: ancla.position.x,
+        y: m && m.malla ? 0.02 : ancla.position.y + 0.02,
+        z: ancla.position.z
+      },
+      facing: ancla.facing,
+      color,
+      name: ancla.id
+    });
+    marca.scale.setScalar(0.62 + 0.22 * est.alturaK);
+    tematizar(marca, {
+      acento: tinte(color, PALETA.tinta, 0.2),
+      trama: color,
+      fondo: tinte(PALETA.sepia, color, 0.22),
+      alfa: est.opacidad * 0.9
+    });
+    marca.userData = {
+      tipo: 'ancla', id: ancla.id, barrio: ancla.barrioId,
+      estado: ancla.estado, parent: ancla.parent, handoffEdges: ancla.handoffEdges
+    };
+    recogerKit(marca);
+    anfitrion.add(marca);
+    marcasKit.set(ancla.barrioId, marca);
+  }
+  group.add(capaAnclas);
+
+  // ── un createLinkCorridorBetween REAL por tramo de calle ─────────────────
+  // El troceado NO es a ojo: `linkDistance` da la longitud real de la polilínea
+  // y `sampleLink` devuelve el punto a un progreso dado con parametrización por
+  // longitud de arco. Ambas son del motor publicado, no reimplementadas.
+  const capaEnlaces = new T.Group();
+  capaEnlaces.name = 'ciudad-enlaces';
+  for (const enlace of Object.values(gamemap.enlaces)) {
+    const wp = enlace.waypoints || [];
+    if (wp.length < 2) continue;
+    const destino = mesetaPorId.get(enlace.to);
+    const color = destino && !destino.vacia ? destino.color : PALETA.tinta;
+    const largo = linkDistance(wp);
+    const tramos = pinza(Math.round(largo / 5.5), 1, 6);
+    const gasto = enlace.dry === 'gobierno' ? 1 : 0.78;
+
+    for (let i = 0; i < tramos; i++) {
+      const a = sampleLink(wp, i / tramos);
+      const c = sampleLink(wp, (i + 1) / tramos);
+      const corredor = createLinkCorridorBetween(a, c, {
+        width: 1.55 * gasto, height: 1.2 * gasto, segments: 5
+      });
+      corredor.name = `${enlace.id}#${i}`;
+      corredor.userData = { tipo: 'enlace', id: enlace.id, dry: enlace.dry, tramo: i, largo };
+      tematizar(corredor, {
+        acento: tinte(color, PALETA.oro, 0.3),
+        trama: tinte(color, PALETA.tinta, 0.15),
+        fondo: tinte(PALETA.sepia, color, 0.2),
+        alfa: 0.5 * gasto
+      });
+      recogerKit(corredor);
+      capaEnlaces.add(corredor);
+    }
+  }
+  group.add(capaEnlaces);
+
+  animables.push({
+    retardo: 0.44, duracion: 0.56,
+    aplicar: (p) => {
+      const e = facil.salida(p);
+      for (const { m, objetivo } of matKit) m.opacity = objetivo * e;
+    }
+  });
 
   // ── calles: paseos, radiales y anillos (todo dentro de cada distrito) ────
   const trazos = { pos: [], col: [] };
@@ -602,6 +1151,62 @@ export async function createCiudad({ scene, mapa, THREE, opciones = {} } = {}) {
     });
   }
   group.add(capaAvenidas);
+
+  // ── tráfico de handoffs: createTrajectoryManager REAL del kit ────────────
+  // Sustituye a la «mota» que R1 movía a mano sobre la curva. Los CANALES del
+  // manager son los distritos del mapa y sus colores, la paleta cerrada; la
+  // cadencia de cada emisor sale de `grafo.handoffEdges`, no de un reloj
+  // inventado: onfalo-asesor-sdk (99) manda una pieza cada pocos segundos y
+  // copilot-engine (2) casi nunca. El cero no emite: no hay tráfico fingido.
+  const trayectorias = createTrajectoryManager({
+    particleRadius: 0.17,
+    curvature: 3.4,
+    channelColors: { ...COLOR_DISTRITO, notaria: PALETA.oro }
+  });
+  trayectorias.setScene(capaAvenidas);
+
+  const emisores = [];
+  for (const [id, ancla] of anclas) {
+    const b = ancla.barrio;
+    if (b.aristas <= 0) continue;
+    const rel = b.aristas / trazado.maxAristas;
+    const desde = ancla.cima.clone().add(new T.Vector3(0, 0.3, 0));
+    emisores.push({
+      id,
+      canal: b.distrito,
+      desde,
+      hasta: bocaNotaria(desde, 1.15),
+      periodo: 11 / (0.55 + 4.2 * rel),        // s entre piezas
+      velocidad: 1 / (2.6 + 1.7 * (1 - rel)),  // progreso/s → 2.6-4.3 s de vuelo
+      reloj: semilla(id) * 7,                  // fases desalineadas, sin azar
+      n: 0
+    });
+  }
+
+  let trafico = 0;   // lo abre el revelado; con reduced-motion nunca se abre
+  if (emisores.length) {
+    animables.push({
+      retardo: 0.78, duracion: 0.22,
+      aplicar: (p) => { trafico = facil.salida(p); }
+    });
+    latidos.push({
+      tic: (t, dt) => {
+        // La pose estática de `prefers-reduced-motion` tica los latidos una vez
+        // con dt=0: sin esta guarda soltaría partículas que ya nadie movería.
+        if (menosMovimiento || trafico <= 0 || dt <= 0) return;
+        for (const e of emisores) {
+          e.reloj += dt;
+          if (e.reloj < e.periodo) continue;
+          e.reloj = 0;
+          e.n += 1;
+          trayectorias.createMessageParticle(
+            `${e.id}#${e.n}`, e.desde, e.hasta, e.canal, e.velocidad
+          );
+        }
+        trayectorias.updateParticles(dt);
+      }
+    });
+  }
 
   // Distritos sin handoffs: una vía tenue hasta la NOTARÍA (el dato dice cero,
   // y el cero también se dibuja — pero apenas).
@@ -731,16 +1336,9 @@ export async function createCiudad({ scene, mapa, THREE, opciones = {} } = {}) {
     candil.position.copy(destacado.cima).add(new T.Vector3(0, 0.8, 0));
     capaDestacado.add(candil);
 
-    // Mota que asciende por la avenida del barrio: el handoff en curso.
-    const avenida = avenidas.find((a) => a.id === idDestacado);
-    let mota = null;
-    if (avenida) {
-      mota = new T.Mesh(
-        new T.SphereGeometry(0.16, 16, 12),
-        new T.MeshBasicMaterial({ color: tinte(PALETA.oro, PALETA.tinta, 0.4), transparent: true, opacity: 0, fog: false })
-      );
-      capaDestacado.add(mota);
-    }
+    // R1 movía aquí una «mota» a mano sobre la curva de la avenida. En R2 ese
+    // tráfico lo lleva el `createTrajectoryManager` real del kit (arriba), que
+    // además lo hace para TODOS los barrios con handoffs, no sólo el destacado.
 
     const emisionBase = destacado.material.emissiveIntensity;
     const colorFrio = destacado.material.color.clone();
@@ -755,12 +1353,6 @@ export async function createCiudad({ scene, mapa, THREE, opciones = {} } = {}) {
         halo.material.opacity = (0.16 + 0.20 * e) * presencia;
         halo.scale.setScalar(1 + 0.10 * e);
         candil.intensity = (5.5 + 5.5 * e) * presencia;
-        if (mota && avenida) {
-          const u = facil.seno((t * 0.16) % 1);
-          avenida.curva.getPointAt(pinza(u, 0, 1), mota.position);
-          mota.material.opacity = (0.35 + 0.5 * facil.latido(u)) * presencia;
-          mota.scale.setScalar(0.85 + 0.3 * e);
-        }
       }
     });
     animables.push({
@@ -978,9 +1570,12 @@ export async function createCiudad({ scene, mapa, THREE, opciones = {} } = {}) {
   function resaltarBarrio(barrioId, encendido = true) {
     const a = anclas.get(barrioId);
     if (!a) return false;
-    a.material.emissiveIntensity = encendido
-      ? (ESTADOS[a.barrio.estado] || ESTADOS.latente).emissive + 0.34
-      : (ESTADOS[a.barrio.estado] || ESTADOS.latente).emissive;
+    const est = ESTADOS[a.barrio.estado] || ESTADOS.latente;
+    a.material.emissiveIntensity = encendido ? est.emissive + 0.34 : est.emissive;
+    // El asiento real del kit se abre con la torre: es el mismo barrio, y es a
+    // ese ancla (`ancla-<id>`) a la que camina H en el dominio.
+    const marca = marcasKit.get(barrioId);
+    if (marca) marca.scale.setScalar((0.62 + 0.22 * est.alturaK) * (encendido ? 1.4 : 1));
     return true;
   }
 
@@ -990,6 +1585,13 @@ export async function createCiudad({ scene, mapa, THREE, opciones = {} } = {}) {
     raf = 0;
     animables.length = 0;
     latidos.length = 0;
+    // Antes de vaciar el árbol: el manager del kit retira sus partículas de
+    // capaAvenidas y libera su geometría y sus materiales compartidos.
+    try { trayectorias.dispose(); } catch { /* ya estaba */ }
+    emisores.length = 0;
+    matKit.length = 0;
+    vistosKit.clear();
+    marcasKit.clear();
     if (scene) {
       if (group.parent === scene) scene.remove(group);
       else if (group.parent) group.parent.remove(group);
@@ -999,6 +1601,20 @@ export async function createCiudad({ scene, mapa, THREE, opciones = {} } = {}) {
     for (const d of desechables) { try { d.dispose(); } catch { /* da igual */ } }
     desechables.length = 0;
     anclas.clear();
+  }
+
+  /** Posición (mundo) del asiento real del barrio, según el ancla del gamemap. */
+  function anclaAnchor(barrioId) {
+    const a = gamemap.anclas[`ancla-${barrioId}`];
+    if (!a) return barrioAnchor(barrioId);
+    return new T.Vector3(a.position.x, a.position.y, a.position.z);
+  }
+
+  /** Posición (mundo) de la entrada de un nodo del gamemap (plaza, distritos). */
+  function nodoAnchor(nodoId) {
+    const n = gamemap.nodos[nodoId];
+    if (!n) return centro.clone();
+    return new T.Vector3(n.entrada.x, n.entrada.y, n.entrada.z);
   }
 
   return {
@@ -1019,11 +1635,78 @@ export async function createCiudad({ scene, mapa, THREE, opciones = {} } = {}) {
     radioCiudad,
     destacado: idDestacado,
     trazado,
-    paleta: PALETA
+    paleta: PALETA,
+
+    // ── R2: la escena real, para quien la necesite (W-CEREMONIA) ───────────
+    /** Gamemap adaptado del mapa (nodos/enlaces/anclas). Siempre presente. */
+    gamemap,
+    /**
+     * Proyección de `sceneFromGamemap` REAL de `@zeus/ciudad/scene`, o `null`
+     * si el paquete no está servido: entonces mira `frontera.pendiente`.
+     * Es lo que come `createCiudadDomainState`.
+     */
+    escena,
+    /** Nodo de spawn real ('plaza') y su posición en el mundo. */
+    spawn: escena ? escena.spawnNodeId : gamemap.gobierno.gobierna,
+    spawnAnchor: () => nodoAnchor(escena ? escena.spawnNodeId : gamemap.gobierno.gobierna),
+    nodoAnchor,
+    anclaAnchor,
+    anclaDe: (barrioId) => gamemap.anclas[`ancla-${barrioId}`] || null,
+    /** `nodesReachable` real; `null` si la proyección no está en canal. */
+    alcanzable,
+    /** Vocabulario real de estados, o `null` si el contrato no está servido. */
+    estadosCanonicos,
+    /** Frontera real/pendiente de este módulo. Es producto: se enseña. */
+    frontera
   };
 }
 
 // ── auxiliares ──────────────────────────────────────────────────────────────
+
+/**
+ * Re-tiñe un grupo del kit a la paleta cerrada de la demo. La GEOMETRÍA del kit
+ * se conserva entera —es la pieza real—; sólo se traduce su paleta cyberpunk
+ * (MATRIX_GREEN / CYAN / VOID, constantes leídas de su fuente) al sepia·oro·
+ * verdigrís de la demo. Es tema encima, no fork: el paquete queda intacto.
+ *
+ * Sólo se traducen esas constantes PROPIAS del kit. Lo que el kit haya pintado
+ * con su opción pública `color` —que somos nosotros quienes se la pasamos, ya
+ * en paleta— se respeta tal cual: ahí manda la API del paquete, no este tinte.
+ *
+ * También apaga sombras: a escala de ciudad, 24 asientos proyectando sombra no
+ * aportan y el foco de sombra de la demo está encuadrado en el barrio, no aquí.
+ *
+ * @param {object} raiz  grupo devuelto por el kit
+ * @param {{acento:number|object, trama?:number|object, fondo?:number|object, alfa?:number}} cfg
+ */
+function tematizar(raiz, cfg = {}) {
+  const { acento, trama = acento, fondo = PALETA.sepia, alfa = 1 } = cfg;
+  // El anchor-marker comparte un mismo material entre asiento y respaldo: sin
+  // deduplicar, `alfa` se aplicaría dos veces sobre la misma opacidad.
+  const vistos = new Set();
+  raiz.traverse((o) => {
+    if ('castShadow' in o) o.castShadow = false;
+    if ('receiveShadow' in o) o.receiveShadow = false;
+    const mats = Array.isArray(o.material) ? o.material : (o.material ? [o.material] : []);
+    for (const m of mats) {
+      if (vistos.has(m)) continue;
+      vistos.add(m);
+      if (m.color) {
+        const hex = m.color.getHex();
+        if (hex === HEX_KIT.MATRIZ) m.color.set(trama);
+        else if (hex === HEX_KIT.CIAN) m.color.set(acento);
+        else if (hex === HEX_KIT.VACIO || hex === HEX_KIT.ASIENTO) m.color.set(fondo);
+      }
+      if (m.emissive) {
+        m.emissive.set(acento);
+        m.emissiveIntensity = Math.min(m.emissiveIntensity ?? 0.1, 0.34);
+      }
+      m.transparent = true;
+      m.opacity = (m.opacity ?? 1) * alfa;
+    }
+  });
+  return raiz;
+}
 
 async function resolverMapa(mapa) {
   if (mapa && typeof mapa === 'object' && Array.isArray(mapa.barrios)) return mapa;

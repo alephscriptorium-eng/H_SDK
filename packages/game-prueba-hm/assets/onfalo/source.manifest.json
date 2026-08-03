@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "onfalo-import-once",
+  "mode": "import-once",
+  "logicalRepo": "onfalo-asesor-sdk",
+  "logicalPath": "PROYECTOS/BARTLEBY/corpus/editoriales",
+  "simulacro": {
+    "futureMachine": true,
+    "declared": "Future Machine no corre hoy; snapshot Onfalo es fixture playground (spike WP-HUB-112).",
+    "runtime": "playground-mock"
+  },
+  "pieceCount": 2,
+  "pieces": [
+    {
+      "id": "2024-05-01_primero-de-mayo",
+      "relativePath": "pieces/2024-05-01_primero-de-mayo.md",
+      "sourceRelativePath": "2024-05-01_primero-de-mayo.md",
+      "mediaType": "text/markdown",
+      "size": 26228,
+      "sha256": "a186993d4420792d94a261ed68a801793af033a5fe32f0b00be224c780c9796a"
+    },
+    {
+      "id": "2026-05-01_auge-de-la-educacion-emocional",
+      "relativePath": "pieces/2026-05-01_auge-de-la-educacion-emocional.md",
+      "sourceRelativePath": "2026-05-01_auge-de-la-educacion-emocional.md",
+      "mediaType": "text/markdown",
+      "size": 12388,
+      "sha256": "86f3cb6deb8d01cef4546a81fc650fff0913291aeb7ad3dfa504d9a7c02186f0"
+    }
+  ],
+  "seal": {
+    "alg": "sha256",
+    "value": "703d901532faa1ce82b33e2930c4bd6a16a6f4694850ff89daa0d95071e4be22"
+  }
+}
