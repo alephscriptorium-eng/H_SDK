@@ -16,8 +16,10 @@ import {
 } from './asiento-m.ts';
 import { crearPuertoAnalisisE, MOTIVO_ANALISIS_E } from './analisis-e.ts';
 import {
+  cacheDirLineaEfimero,
   crearPuertoMaterializacionLinea,
-  MOTIVO_LINEA,
+  draftMinimoDesdeAnalisis,
+  MOTIVO_LINEA_INPUT,
 } from './linea.ts';
 import {
   crearPuertoEvidenciaCanonica,
@@ -29,6 +31,7 @@ import {
   intentWake,
   intentWalk,
 } from './wire-ciudad.ts';
+import { materializeRecorrido } from '@zeus/linea-kit/viaje';
 
 const ACTOR = actorId('actor-prueba');
 
@@ -37,6 +40,11 @@ const PIEZA: PiezaOnfalo = {
   mediaType: 'text/markdown',
   size: 1,
   sha256: 'abc',
+};
+
+const ANALISIS = {
+  analisisId: 'a1',
+  pieza: PIEZA.id,
 };
 
 describe('hostil-omite · Ciudad state/ledger', () => {
@@ -206,16 +214,35 @@ describe('hostil-omite · pending_external no finge ok', () => {
     if (!r.ok) expect(r.error).toBe(MOTIVO_ANALISIS_E);
   });
 
-  test('linea', async () => {
-    const r = await crearPuertoMaterializacionLinea().materializar({
-      analisisId: 'a1',
-      pieza: PIEZA.id,
-    });
+  test('linea sin cacheDir|draft → deniega (no finge ok)', async () => {
+    const r = await crearPuertoMaterializacionLinea().materializar(ANALISIS);
     expect(r.ok).toBe(false);
-    if (!r.ok) expect(r.error).toBe(MOTIVO_LINEA);
+    if (!r.ok) expect(r.error).toBe(MOTIVO_LINEA_INPUT);
   });
 
-  test('evidencia', async () => {
+  test('linea draft inválido → deniega', async () => {
+    const r = await crearPuertoMaterializacionLinea({
+      cacheDir: cacheDirLineaEfimero(),
+      draftDesdeAnalisis: () => ({ id: '', origin: '', destination: '' }),
+    }).materializar(ANALISIS);
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.error).toContain('draft inválido');
+  });
+
+  test('linea tipada · fixture mínima → ok (materializeRecorrido)', async () => {
+    const cacheDir = cacheDirLineaEfimero();
+    const puerto = crearPuertoMaterializacionLinea({
+      materializar: materializeRecorrido,
+      cacheDir,
+      draftDesdeAnalisis: draftMinimoDesdeAnalisis,
+    });
+    expect(puerto.acople()).toBe('conectado');
+    const r = await puerto.materializar(ANALISIS);
+    expect(r.ok).toBe(true);
+    if (r.ok) expect(r.valor.lineaId).toBe('linea-a1');
+  });
+
+  test('evidencia (acta-kit tipado ≠ HUB canónico)', async () => {
     const r = await crearPuertoEvidenciaCanonica().verificar({ lineaId: 'l1' });
     expect(r.ok).toBe(false);
     if (!r.ok) expect(r.error).toBe(MOTIVO_EVIDENCIA);

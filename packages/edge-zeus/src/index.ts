@@ -52,8 +52,16 @@ export {
   MOTIVO_ANALISIS_E,
 } from './analisis-e.ts';
 export {
+  cacheDirLineaEfimero,
   crearPuertoMaterializacionLinea,
+  draftMinimoDesdeAnalisis,
   MOTIVO_LINEA,
+  MOTIVO_LINEA_INPUT,
+} from './linea.ts';
+export type {
+  DraftDesdeAnalisis,
+  MaterializadorRecorrido,
+  OpcionesPuertoMaterializacionLinea,
 } from './linea.ts';
 export {
   crearPuertoEvidenciaCanonica,

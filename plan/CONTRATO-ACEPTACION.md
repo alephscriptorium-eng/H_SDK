@@ -2,15 +2,15 @@
 
 Documento de gobierno (RH-05 · `plan.md` step 5). **No copia shapes** entre
 repos. Ancla de estados: `plan/REPORTES/RH-04-MATRIZ-CONTRATOS.md`
-(2026-08-03T16:34:21.973Z, registry `https://npm.scriptorium.escrivivir.co`).
+(2026-08-03T17:15:35.787Z, registry `https://npm.scriptorium.escrivivir.co`).
 
 > **No declara producto.** Ausencias y superficies sin types tipados quedan
 > visibles; no se tapan con stubs en H.
 
-**Siguiente (post RH-15):** vertical H en `pending_external` E/línea/evidencia
-(tip H `9bfd7ff`). Lote 7 = handoff **RH-16** carril V
-(`plan/REPORTES/HANDOFF-RH-16-carril-V.md`). H no implementa V ni providers
-externos.
+**Siguiente (post RH-11b types Z):** linea-kit / feed-kit / acta-kit tipados
+pinneados; vertical H sigue en `pending_external` **E + evidencia HUB**
+(acta ≠ canónico). Tip H: ver `plan/REPORTES/RH-11b-types-z.md`. H no
+implementa V ni providers externos.
 
 ---
 
@@ -35,20 +35,20 @@ Estados permitidos (mapeo RH-04):
 | Delta runtime (wire, tick, snapshot, shutdown) | G (delta) | `@zeus/arg-runtime` **público tipado** | H (compone escena/feed; no copia launcher) | **VERDE** (`@zeus/arg-runtime@0.1.1`) |
 | Delta view (grifos, ríos, mar, gotas, cantera) | G (delta) | `@zeus/arg-view-kit` browser-safe tipado | **V** (render escena); H no embebe UI | **runtime_import_fail** (`@zeus/arg-view-kit@0.1.0`; types OK; Node sensor) |
 | Delta player MCP factory | G (delta) | `@zeus/arg-player-mcp` tipado sobre player-mcp-kit | H (asiento M configurado) | **VERDE** (`@zeus/arg-player-mcp@0.1.0`) |
-| Delta feeds / DocumentMachine surface | G (delta) | `@zeus/arg-feeds` tipado si aplica publicación | H (adapter; no sibling discovery) | **pending_external_contract** |
+| Delta feeds / DocumentMachine surface | G (delta) | `@zeus/arg-feeds` tipado si aplica publicación | H (adapter; no sibling discovery) | **pending_external_contract** (E404 / private) |
+| Feeds canal (Z) | Z (feeds) | `@zeus/feed-kit` tipado | H (canal; **no** sustituye arg-feeds) | **VERDE** (`@zeus/feed-kit@0.3.1`) |
 | Mockdatas Ciudad / volúmenes Lore | G (mockdatas) | `@zeus/mockdatas-ciudad` pinneado | H / fixtures de aceptación | **publicado-sin-types** (`@zeus/mockdatas-ciudad@0.1.0`) |
 | Artefacto Ónfalo (piezas, manifest, hashes) | H/G (artefacto) | `@zeus/onfalo-fixture` read-only pinneado | H (selección pieza); V (identidad/hash) | **pin H `0.1.1`** (RH-15); sensor candidate-scan RH-04 aún ROJO — re-medir con pin |
 | Candidato LORE-HM (lengua) | S/lengua (externo) | paquete tipado del owner (candidato `lore-hm-candidate@0.0.x` u homólogo PO) | H (análisis bajo lengua); no edita lengua | **pending_external_contract** |
 | Provider E (análisis) | E (externo) | API/paquete tipado del owner | H (puerto análisis); V muestra salida vía proyección H | **pending_external_contract** |
-| Línea / materialización | Z (línea) | `@zeus/linea-kit` **con types** (o gap elevado al owner) | H delega; no implementa `line.materialize` | **publicado-sin-types** (`@zeus/linea-kit@0.3.0`) |
+| Línea / materialización | Z (línea) | `@zeus/linea-kit` **con types**; API `materializeRecorrido` desde `@zeus/linea-kit/viaje` | H delega; no inventa `line.materialize` | **VERDE** (`@zeus/linea-kit@0.4.0`) |
 | Ceremonia / evidencia canónica HUB | HUB (externo) | kit tipado canónico (candidatos RH-04 E404) | H verifica; V muestra veredicto | **pending_external_contract** |
-| Acta kit (candidato parcial; no sustituye evidencia canónica) | Z/HUB | `@zeus/acta-kit` tipado si el owner lo eleva a contrato | H solo si el contrato canónico lo apunta | **publicado-sin-types** (`@zeus/acta-kit@0.1.1`) |
+| Acta kit (candidato parcial; no sustituye evidencia canónica) | Z/HUB | `@zeus/acta-kit` tipado | H **no** lo usa como evidencia HUB canónica | **VERDE tipado** (`@zeus/acta-kit@0.1.2`); evidencia canónica sigue **pending_external** |
 | Proyección experiencia H (estado / escena / evidencia) | **H** | resources MCP versionados **o** JSON Schema servido como resource (superficie propia H) | **V** (único UI) | **shapes `0.1.0` in-process** (`AlmacenResources`); transport MCP producto → RH-16/handoff V |
 
-Conteo sensor RH-04 (2026-08-03T16:34:21.973Z): **7 VERDE · 9 ROJO**.
-Anclas previas (4/12 histórico; 10/6 post-Actions 30831342542) supersedidas por
-este re-run. H vertical tip `9bfd7ff` consume pins registry; gaps E/línea/HUB
-siguen bloqueando `complete`.
+Conteo sensor RH-04 (2026-08-03T17:15:35.787Z): **10 VERDE · 7 ROJO**.
+Gaps que bloquean `complete`: **E + evidencia HUB** (linea tipada ya
+consumible; acta tipada ≠ HUB; arg-feeds sigue E404).
 
 ---
 

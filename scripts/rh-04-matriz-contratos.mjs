@@ -32,7 +32,14 @@ const SURFACES = /** @type {Surface[]} */ ([
   { id: "arg-runtime", packageName: "@zeus/arg-runtime", owner: "G (delta)", notes: "si existe publicado" },
   { id: "arg-view-kit", packageName: "@zeus/arg-view-kit", owner: "G (delta)", notes: "si existe" },
   { id: "arg-player-mcp", packageName: "@zeus/arg-player-mcp", owner: "G (delta)" },
-  { id: "arg-feeds", packageName: "@zeus/arg-feeds", owner: "G (delta)", notes: "si aplica" },
+  { id: "arg-feeds", packageName: "@zeus/arg-feeds", owner: "G (delta)", notes: "si aplica; DocumentMachine surface" },
+  {
+    id: "feed-kit",
+    packageName: "@zeus/feed-kit",
+    pin: "0.3.1",
+    owner: "Z (feeds canal)",
+    notes: "canal tipado; no sustituye arg-feeds",
+  },
   { id: "mockdatas-ciudad", packageName: "@zeus/mockdatas-ciudad", owner: "G (mockdatas)" },
   {
     id: "artefacto-onfalo",
@@ -58,9 +65,9 @@ const SURFACES = /** @type {Surface[]} */ ([
   {
     id: "linea-kit",
     packageName: "@zeus/linea-kit",
-    pin: "0.3.0",
+    pin: "0.4.0",
     owner: "Z (línea/materialización)",
-    notes: "re-verificar types en manifest instalado",
+    notes: "API canónica materializeRecorrido @ @zeus/linea-kit/viaje",
   },
   {
     id: "ceremonia-evidencia-hub",
@@ -78,9 +85,9 @@ const SURFACES = /** @type {Surface[]} */ ([
   {
     id: "acta-kit-candidato",
     packageName: "@zeus/acta-kit",
-    pin: "0.1.1",
+    pin: "0.1.2",
     owner: "Z/HUB (candidato parcial)",
-    notes: "publicado; no sustituye evidencia canónica tipada",
+    notes: "tipado; no sustituye evidencia canónica HUB",
   },
 ]);
 

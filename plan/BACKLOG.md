@@ -89,9 +89,10 @@ DOWNSTREAM_PATTERNS='["S/*"]'
 - **Despachable desde H/G ahora:** nada de producto H/G pendiente en lote 6.
   Gobierno: RH-16 ✅ aceptado (obra en V; no re-implementar en H).
 - **Carril V:** siguiente es RH-17 (vista) cuando haya GO de lote; no encolar 🔶 hasta GO.
-- **Bloqueado por owners externos:** LORE-HM · provider E · linea-kit tipado ·
-  evidencia HUB (RH-11). H no rellena. Transport MCP producto H→V sigue
-  `<pendiente>` (no inventar connected/complete).
+- **Bloqueado por owners externos:** LORE-HM · provider E · evidencia HUB
+  canónica (RH-11; linea-kit@0.4.0 / acta-kit@0.1.2 / feed-kit@0.3.1 tipados —
+  `pending_release_types` cerrado; acta ≠ HUB). H no rellena. Transport MCP
+  producto H→V sigue `<pendiente>` (no inventar connected/complete).
 - **No tocar:** checkpoint G `wp/g-prueba-hm-adaptacion@35cbded`.
 
 ## Anti-alcance (del plan)

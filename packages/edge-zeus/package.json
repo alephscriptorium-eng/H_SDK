@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@zeus/ciudad": "^0.1.1",
+    "@zeus/linea-kit": "0.4.0",
     "@zeus/player-mcp-kit": "^0.1.4"
   }
 }

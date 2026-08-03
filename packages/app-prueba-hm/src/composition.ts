@@ -20,12 +20,14 @@ import {
   MOTIVO_LINEA,
   abrirAsientoM,
   acopleDesdeSaludM,
+  cacheDirLineaEfimero,
   crearPuertoAnalisisE,
   crearPuertoEntradaCiudad,
   crearPuertoEvidenciaCanonica,
   crearPuertoMaterializacionLinea,
   crearPuertoProyeccion,
   crearPuertoSesionDelta,
+  draftMinimoDesdeAnalisis,
   intentWake,
   intentWalk,
   saludMConectada,
@@ -127,7 +129,11 @@ export async function arrancarComposition(
     motivoAusencia: opciones.motivoAusenciaDelta,
   });
   const puertoAnalisis = crearPuertoAnalisisE();
-  const puertoLinea = crearPuertoMaterializacionLinea();
+  // linea-kit@0.4.0 tipado: listo si E entrega AnálisisRef; sin E → no se ejercita.
+  const puertoLinea = crearPuertoMaterializacionLinea({
+    cacheDir: cacheDirLineaEfimero(),
+    draftDesdeAnalisis: draftMinimoDesdeAnalisis,
+  });
   const puertoEvidencia = crearPuertoEvidenciaCanonica();
   const puertoProyeccion = crearPuertoProyeccion({
     sumidero: {

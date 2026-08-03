@@ -12,15 +12,16 @@ Cualquier ausencia permanece `pending_external_contract` (o `publicado-sin-types
 
 ## Resumen por superficie
 
-| superficie | owner (destinatario) | estado registry 2026-08-03T14:17Z | veredicto | gap a elevar |
+| superficie | owner (destinatario) | estado registry (RH-11b 2026-08-03) | veredicto | gap a elevar |
 | --- | --- | --- | --- | --- |
 | candidato LORE-HM | S / lengua (externo); DECISIONES ① GO `lore-hm-candidate@0.0.x` | E404 en `lore-hm-candidate`, `lore-hm`, `@logos/lore-hm`, `@alephscript/lore-hm-candidate` (exit 1) | `pending_external_contract` | publicar candidato tipado en registry (nombre por defecto `lore-hm-candidate@0.0.x`; no `@logos/*` antes de puerta promoción) |
 | provider E | E (externo) | E404 en `@zeus/provider-e`, `@zeus/analisis-e`, `provider-e` (exit 1) | `pending_external_contract` | publicar provider/análisis tipado consumible por H |
-| ceremonia / evidencia canónica | HUB (externo) | E404 en `@zeus/evidence-kit`, `@zeus/evidencia-kit`, `@zeus/hub-evidence`, `@zeus/ceremony-kit`, `@zeus/notaria-kit` (exit 1) | `pending_external_contract` | publicar ceremonia/evidencia canónica tipada |
-| acta-kit (candidato parcial, no sustituye) | Z / HUB | `@zeus/acta-kit@0.1.1` presente; `types`/`typings` ausentes; 0 `.d.ts` en install | `publicado-sin-types` (parcial; **no** cierra evidencia canónica) | tipar si se propone como puente; no cuenta como evidencia canónica tipada |
-| materialización / linea-kit | Z (línea / materialización) | `@zeus/linea-kit@0.3.0` presente; `types`/`typings` ausentes; 0 `.d.ts`; export `./materialize` **ausente**; runtime tiene `materializeRecorrido` en `./viaje` (sin types) | `publicado-sin-types` + gap de operación tipada | declarar/exportar operación de materialización tipada (`line.materialize` o equivalente exportado) + `.d.ts` en manifest |
+| ceremonia / evidencia canónica | HUB (externo) | E404 en kits canónicos; `acta-kit@0.1.2` tipado **≠** canónico | `pending_external_contract` | publicar ceremonia/evidencia canónica tipada (no basta acta-kit) |
+| acta-kit (candidato parcial, no sustituye) | Z / HUB | `@zeus/acta-kit@0.1.2` tipado (7 `.d.ts`) | **tipado OK**; `pending_release_types` **cerrado**; **no** cierra evidencia canónica | — (no elevar types; elevación HUB canónica aparte) |
+| materialización / linea-kit | Z (línea / materialización) | `@zeus/linea-kit@0.4.0` tipado (50 `.d.ts`); API `materializeRecorrido` en `./viaje` | **VERDE tipado**; `pending_release_types` **cerrado**; H consume | — |
+| feeds canal / feed-kit | Z (feeds) | `@zeus/feed-kit@0.3.1` tipado | **VERDE tipado**; `pending_release_types` **cerrado** | — (arg-feeds G sigue E404 si aplica) |
 
-Ninguna de las cuatro superficies del BRIEF está **OK tipado** hoy.
+Superficies BRIEF aún abiertas: **LORE-HM · provider E · evidencia HUB canónica** (2/4 tipados cerrados: linea + acta tipado parcial; feed-kit canal aparte).
 
 ## Detalle · candidato LORE-HM
 
@@ -40,21 +41,17 @@ Ninguna de las cuatro superficies del BRIEF está **OK tipado** hoy.
 ## Detalle · ceremonia / evidencia
 
 - **Owner:** HUB (externo).
-- **Cita RH-04:** candidatos canónicos E404; `@zeus/acta-kit@0.1.1` ROJO / `publicado-sin-types`.
-- **Re-chequeo:** E404 en kits canónicos; `acta-kit@0.1.1` sin `types`/`typings` ni `.d.ts` en disco tras install limpio.
-- **Veredicto superficie canónica:** `pending_external_contract`.
-- **Nota:** `acta-kit` no cierra el gap de evidencia canónica tipada.
+- **Cita RH-04 / RH-11b:** candidatos canónicos E404; `@zeus/acta-kit@0.1.2` tipado pero **no** canónico.
+- **Veredicto superficie canónica:** `pending_external_contract` (sigue).
+- **Nota:** `pending_release_types` de acta-kit **cerrado**; no sustituye evidencia HUB.
 
 ## Detalle · materialización / linea-kit
 
 - **Owner:** Z (línea / materialización).
-- **Cita RH-04:** `@zeus/linea-kit@0.3.0` → ROJO / `publicado-sin-types`.
-- **Re-chequeo install limpio:**
-  - `version=0.3.0`; `types=null`; `typings=null`; `d_ts=none`.
-  - Export map (10 keys): `.`, `./curation`, `./resolve`, `./force-activation`, `./validate`, `./loader`, `./tools`, `./starterkits`, `./viaje`, `./schemas/*`.
-  - `hasOwnProperty(exports, './materialize')` → `false`.
-  - En runtime (sin types): `materializeRecorrido` exportado desde `./viaje` — **no** equivale a operación tipada `line.materialize` consumible por H.
-- **Veredicto:** gap elevado al owner Z — tipado + superficie de materialización exportada/documentada. H **no** rellena el gap.
+- **RH-11b:** `@zeus/linea-kit@0.4.0` → types `./types/index.d.ts`; API canónica
+  `materializeRecorrido` desde `@zeus/linea-kit/viaje` (no existe `line.materialize`).
+- **Veredicto:** **OK tipado**; H cablea puerto inyectable fail-closed. Gap
+  `pending_release_types` **cerrado**.
 
 ## Elevaciones
 
