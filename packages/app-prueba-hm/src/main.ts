@@ -8,10 +8,8 @@
  * error/pending_external; nunca declara `complete` por replay silencioso.
  */
 
-import {
-  arrancarComposition,
-  depsDemoPorDefecto,
-} from './composition.ts';
+import { arrancarComposition } from './composition.ts';
+import { depsDemoPorDefecto } from './deps-vertical.ts';
 import {
   URI_ESCENA,
   URI_ESTADO,

@@ -9,9 +9,9 @@ import {
   aplicar,
   crearMaquina,
   esOk,
-  piezaId,
   type ActorId,
   type MaquinaExperiencia,
+  type PiezaOnfalo,
   type Resultado,
 } from '@h-sdk/core';
 import {
@@ -40,6 +40,7 @@ import {
   RESOURCE_VERSION,
   type PayloadEstado,
 } from './resources.ts';
+import { seleccionarPiezaOnfaloSellada } from './onfalo-pieza.ts';
 
 /** Confirmación de reach (lore) + wake (barrio) observada del owner. */
 export interface ConfirmacionReachWake {
@@ -61,6 +62,13 @@ export interface OpcionesComposition {
   /** Null ⇒ M no asentado; delta no abre (fail-closed). */
   readonly factoryM: FactoryArgPlayerMcp | null;
   readonly motivoAusenciaDelta?: string;
+  /**
+   * Selección de pieza Ónfalo. Default: `@zeus/onfalo-fixture` sellado.
+   * Inyectable en tests.
+   */
+  readonly seleccionarPieza?: () =>
+    | { ok: true; pieza: PiezaOnfalo; identity?: string }
+    | { ok: false; error: string };
 }
 
 export interface CompositionHandle {
@@ -287,14 +295,36 @@ export async function arrancarComposition(
   });
   publicarEstado(resources, maquina, acopleDe());
 
-  // 5 · E / línea / evidencia: pending_external visible (RH-11); no complete
-  const piezaPendiente = {
-    id: piezaId('pieza-pendiente-external'),
-    mediaType: 'application/octet-stream',
-    size: 0,
-    sha256: '',
-  };
-  const analisis = await puertoAnalisis.analizar(piezaPendiente);
+  // 5 · Pieza Ónfalo sellada (paquete registry) → onfalo_selected
+  const sel =
+    (opciones.seleccionarPieza ?? seleccionarPiezaOnfaloSellada)();
+  if (!sel.ok) {
+    const r = aplicar(maquina, { tipo: 'fallo', motivo: sel.error });
+    if (esOk(r)) maquina = r.valor;
+    resources.escribirEvidencia({
+      resourceVersion: RESOURCE_VERSION,
+      verificado: false,
+      evidenciaId: null,
+      pending_external: MOTIVO_EVIDENCIA,
+      motivo: sel.error,
+    });
+    publicarEstado(resources, maquina, acopleDe(), [sel.error]);
+    await publicarProyeccion(puertoProyeccion, maquina);
+    return handle(maquina, resources);
+  }
+
+  {
+    const r = aplicar(maquina, {
+      tipo: 'onfalo_seleccionado',
+      pieza: sel.pieza.id,
+    });
+    if (!esOk(r)) return falloIlegal(maquina, resources, r, acopleDe);
+    maquina = r.valor;
+  }
+  publicarEstado(resources, maquina, acopleDe());
+
+  // 6 · E / línea / evidencia: pending_external visible (RH-11); no complete
+  const analisis = await puertoAnalisis.analizar(sel.pieza);
   const pendientes = [MOTIVO_ANALISIS_E, MOTIVO_LINEA, MOTIVO_EVIDENCIA];
   if (!esOk(analisis)) {
     pendientes[0] = analisis.error;
@@ -307,9 +337,8 @@ export async function arrancarComposition(
       if (!esOk(evid)) {
         pendientes[2] = evid.error;
       } else if (evid.valor.verificado) {
-        // Vertical real = RH-15; aquí no se declara complete aunque el puerto mienta.
         pendientes[0] =
-          'pending_external_contract: complete diferido a RH-15 (no fingir)';
+          'pending_external_contract: complete bloqueado (owners externos)';
       }
     }
   }
@@ -334,7 +363,7 @@ export async function arrancarComposition(
 
   if (maquina.estado === 'complete') {
     throw new Error(
-      'composition: estado complete prohibido en RH-14 (sería demo mentirosa)',
+      'composition: estado complete prohibido (sería demo mentirosa)',
     );
   }
 
@@ -377,21 +406,3 @@ function falloIlegal(
   return handle(m, resources);
 }
 
-/** Deps por defecto: fail-closed sin room viva (demo honesta, no replay). */
-export function depsDemoPorDefecto(): OpcionesComposition {
-  return {
-    emisor: { emitir: async () => undefined },
-    observarCiudad: () => ({}),
-    observarReachWake: () => ({
-      loreAlcanzado: false,
-      barrioDespertado: false,
-    }),
-    anclaLore: { anchorId: 'lore-document-machine' },
-    wake: { tool: 'document-machine', barrioId: 'barrio-lore' },
-    abridorDelta: null,
-    saludM: () => ({}),
-    factoryM: null,
-    motivoAusenciaDelta:
-      'abridor_ausente: @zeus/arg-runtime|arg-domain',
-  };
-}

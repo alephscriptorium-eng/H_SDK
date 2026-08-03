@@ -6,10 +6,8 @@
 import { describe, expect, test } from 'bun:test';
 import { join } from 'node:path';
 import { REACHABILITY_ANCHORS } from './main.ts';
-import {
-  arrancarComposition,
-  depsDemoPorDefecto,
-} from './composition.ts';
+import { arrancarComposition } from './composition.ts';
+import { depsDemoPorDefecto } from './deps-vertical.ts';
 import { URI_ESTADO } from './resources.ts';
 
 const SRC = import.meta.dir;
@@ -54,9 +52,11 @@ describe('reachability · entrypoint cablea core + edges', () => {
     }
   });
 
-  test('demo por defecto no declara complete ni replay silencioso', async () => {
+  test('demo vertical: onfalo + pending_external E; nunca complete', async () => {
     const handle = await arrancarComposition(depsDemoPorDefecto());
     expect(handle.maquina.estado).not.toBe('complete');
+    expect(handle.maquina.estado).toBe('pending_external_contract');
+    expect(handle.maquina.pieza).toBeTruthy();
     const estado = handle.readResource(URI_ESTADO);
     expect(estado).toBeDefined();
     const body = JSON.parse(estado!.text) as {
@@ -64,10 +64,10 @@ describe('reachability · entrypoint cablea core + edges', () => {
       pending_external: string[];
     };
     expect(body.estado).not.toBe('complete');
-    // Fail-closed: sin Ciudad viva → error (no fingir connected/complete)
-    expect(['error', 'pending_external_contract', 'idle']).toContain(
-      body.estado,
-    );
+    expect(body.estado).toBe('pending_external_contract');
+    expect(
+      body.pending_external.some((p) => p.includes('pending_external')),
+    ).toBe(true);
   });
 });
 

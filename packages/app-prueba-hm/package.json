@@ -14,6 +14,11 @@
   },
   "dependencies": {
     "@h-sdk/core": "workspace:*",
-    "@h-sdk/edge-zeus": "workspace:*"
+    "@h-sdk/edge-zeus": "workspace:*",
+    "@zeus/arg-domain": "0.1.0",
+    "@zeus/arg-runtime": "0.1.1",
+    "@zeus/arg-player-mcp": "0.1.0",
+    "@zeus/onfalo-fixture": "0.1.1",
+    "@zeus/mockdatas-ciudad": "0.1.0"
   }
 }

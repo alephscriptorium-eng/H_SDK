@@ -42,7 +42,7 @@ DOWNSTREAM_PATTERNS='["S/*"]'
 | **RH-12** | P0 | ✅ 2026-08-03 · merge 36551c9 · maquina+9 tests · EntradaCadena/PuertoActa=0 · contrarrevisión PASS · Rehacer packages/core | typecheck verde; transiciones unit-tested; grep sin EntradaCadena/PuertoActa en core | RH-05 | II |
 | **RH-13** | P0 | ✅ 2026-08-03 · merge 28762d0 · 20 tests hostil-omite · wire Ciudad real · pending_external fail-closed · contrarrevisión PASS tras fix | adapters tipados consumen registry; smoke confirma state/ledger y lastStateTs; sin payloads destino/mensaje paralelos | RH-09, RH-10, RH-11, RH-12 | I, II, hostil-omite |
 | **RH-14** | P0 | ✅ 2026-08-03 · merge 10d14e8 · app-prueba-hm · demo Bun/TS · 8 tests reachability · contrarrevisión PASS | bun typecheck + test reachability importan core y edges; demo raiz no apunta a server.mjs | RH-12, RH-13 | I, II |
-| **RH-15** | P0 | Vertical minimo real: join Ciudad walk ancla Lore wake barrio delta con escena Lore M por MCP pieza Onfalo provider E linea canonica evidencia; dependencia ausente detiene y queda visible; sin demo replay | flujo observado con confirmaciones; fallo explicito si falta contrato; cero modo replay | RH-10, RH-11, RH-14 | IV, hostil-omite |
+| **RH-15** | P0 | 🔶 2026-08-03 · GO custodio · Vertical minimo real: join Ciudad walk ancla Lore wake barrio delta con escena Lore M por MCP pieza Onfalo provider E linea canonica evidencia; dependencia ausente detiene y queda visible; sin demo replay | flujo observado con confirmaciones; fallo explicito si falta contrato; cero modo replay | RH-10, RH-11, RH-14 | IV, hostil-omite |
 
 ## Lane g · territorio g-sdk
 

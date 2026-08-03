@@ -16,7 +16,7 @@
     "typecheck:core": "bun x tsc -p packages/core --noEmit",
     "typecheck:edge-zeus": "bun x tsc -p packages/edge-zeus --noEmit",
     "typecheck:app": "bun x tsc -p packages/app-prueba-hm --noEmit",
-    "test:reachability": "bun test packages/app-prueba-hm/src/reachability.test.ts packages/app-prueba-hm/src/composition.test.ts",
+    "test:reachability": "bun test packages/app-prueba-hm/src/reachability.test.ts packages/app-prueba-hm/src/composition.test.ts packages/app-prueba-hm/src/vertical.test.ts",
     "skills:sync": "alephscript-skills-sync --runtime claude",
     "demo": "bun run packages/app-prueba-hm/src/main.ts"
   },
@@ -26,8 +26,13 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@zeus/arg-domain": "0.1.0",
+    "@zeus/arg-player-mcp": "0.1.0",
+    "@zeus/arg-runtime": "0.1.1",
     "@zeus/ciudad": "^0.1.1",
     "@zeus/game-engine": "^0.1.4",
+    "@zeus/mockdatas-ciudad": "0.1.0",
+    "@zeus/onfalo-fixture": "0.1.1",
     "@zeus/protocol": "^0.4.1",
     "@zeus/startpack-ciudad": "^0.1.1",
     "@zeus/ui-3d-kit": "^0.1.4",
