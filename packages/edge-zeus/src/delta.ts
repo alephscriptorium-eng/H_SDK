@@ -3,7 +3,8 @@
  * `@zeus/arg-runtime`). Acople conectado exige salud M (connected+lastStateTs)
  * además de confirmación Ciudad previa.
  *
- * Packs tip: pending_registry_publish (RH-09 tarball / g-sdk@1fad30e).
+ * Packs tipados en registry: `@zeus/arg-domain@0.1.0` + `@zeus/arg-runtime@0.1.0`
+ * (Actions publish RH delta packs).
  */
 
 import { err, ok } from '@h-sdk/core';
@@ -32,7 +33,7 @@ export interface OpcionesPuertoSesionDelta {
   /** Salud M actual; omitir lastStateTs/connected ⇒ no acople conectado. */
   readonly saludM: () => SaludM;
   /**
-   * Motivo cuando abridor es null (p.ej. pending_registry_publish /
+   * Motivo cuando abridor es null (p.ej. wire no inyectado /
    * pending_external_contract).
    */
   readonly motivoAusencia?: string;
@@ -44,7 +45,7 @@ export function crearPuertoSesionDelta(
   const {
     abridor,
     saludM,
-    motivoAusencia = 'pending_registry_publish: @zeus/arg-runtime|arg-domain',
+    motivoAusencia = 'abridor_ausente: @zeus/arg-runtime|arg-domain',
   } = opciones;
 
   const acople = (): Acople => {

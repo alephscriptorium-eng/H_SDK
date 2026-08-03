@@ -49,10 +49,10 @@ DOWNSTREAM_PATTERNS='["S/*"]'
 | WP | P | BRIEF | CA | deps | ejes |
 | -- | - | ----- | -- | ---- | ---- |
 | **RH-06** | P0 | ✅ 2026-08-03 · G wp/rh-ejecucion@9293b3e (via merge RH-06) · arg-domain 76/76 · fixture ciudad-v0 · En rama G limpia reaplicar parametrizacion generica de escena | test:delta + paridad delta-v0 + escena inyectada verde; ciudad-v0 fuera de verdad G | RH-02, RH-04 | I |
-| **RH-07** | P0 | ✅ 2026-08-03 · G wp/rh-ejecucion@a078548 · arg-domain+arg-runtime tipados pack OK · pending_registry_publish · contrarrevisión PASS | tarball arg-domain y arg-runtime con types; consumidor limpio importa sin sibling H | RH-06 | I |
-| **RH-08** | P1 | ✅ 2026-08-03 · G wp/rh-ejecucion@7532d8c · view-kit+player-mcp tipados · pending_registry_publish · contrarrevisión PASS · conflicto test:delta resuelto en merge | tarballs view-kit y player-mcp tipados; apps privadas; sin contenido Lore en view-kit | RH-06 | I |
-| **RH-09** | P0 | ✅ 2026-08-03 · G wp/rh-ejecucion@1fad30e · gate 4 tarballs VERDE · document-machine opt-in limpio · pending_registry_publish · contrarrevisión PASS | gate G abre solo tras install+typecheck aislado; grep tarball sin h-sdk ni ledger local | RH-07, RH-08 | II, I, ceguera |
-| **RH-10** | P1 | ✅ 2026-08-03 · G merge en wp/rh-ejecucion · @zeus/onfalo-fixture pack+sello PASS · pending_registry_publish · contrarrevisión PASS · Publicar/pinnear Onfalo + mockdatas | packages pinneados instalables; verificacion de sello con manifest del paquete | ninguna | I |
+| **RH-07** | P0 | ✅ 2026-08-03 · tip pack local + **publicado** Actions run [30831342542](https://github.com/alephscriptorium-eng/Z_SDK-games-library/actions/runs/30831342542) · `@zeus/arg-domain@0.1.0` + `@zeus/arg-runtime@0.1.0` tipados en registry | tarball + registry con types; consumidor limpio importa sin sibling H | RH-06 | I |
+| **RH-08** | P1 | ✅ 2026-08-03 · tip pack local + **publicado** Actions 30831342542 · `@zeus/arg-view-kit@0.1.0` + `@zeus/arg-player-mcp@0.1.0` tipados en registry · conflicto test:delta resuelto en merge | tarballs + registry tipados; apps privadas; sin contenido Lore en view-kit | RH-06 | I |
+| **RH-09** | P0 | ✅ 2026-08-03 · gate 4 tarballs VERDE · document-machine opt-in limpio · **publish registry VERDE** Actions 30831342542 (ref `wp/rh-ejecucion`) | gate G + npm view@0.1.0 tipado sin sibling H | RH-07, RH-08 | II, I, ceguera |
+| **RH-10** | P1 | ✅ 2026-08-03 · `@zeus/onfalo-fixture@0.1.0` + `@zeus/mockdatas-ciudad@0.1.0` **publicados** Actions 30831342542 · sello PASS | packages pinneados instalables desde registry; sello con manifest del paquete | ninguna | I |
 
 ## Lane ext · owners externos (no territorio h/g)
 

@@ -25,13 +25,13 @@ Estados permitidos (mapeo RH-04):
 | Authority composition (kit) | Z (authority) | `@zeus/authority-kit` tipado | G (`arg-runtime`); H no reimplementa | **VERDE** (`@zeus/authority-kit@0.4.2`) |
 | Rooms / transporte | Z (rooms) | `@zeus/rooms` tipado | H / G / M según wire publicado | **VERDE** (`@zeus/rooms@0.1.2`) |
 | Asiento M (player MCP) | Z (player-mcp) | `@zeus/player-mcp-kit` tipado | H (factory M); G (`arg-player-mcp`) | **VERDE** (`@zeus/player-mcp-kit@0.1.4`) |
-| Delta domain (escena, estado, intents, feeds, snapshots) | G (delta) | `@zeus/arg-domain` **público tipado** | H (sesión delta); V (tipos visuales vía view-kit) | **pending_external_contract** |
-| Delta runtime (wire, tick, snapshot, shutdown) | G (delta) | `@zeus/arg-runtime` **público tipado** | H (compone escena/feed; no copia launcher) | **pending_external_contract** |
-| Delta view (grifos, ríos, mar, gotas, cantera) | G (delta) | `@zeus/arg-view-kit` browser-safe tipado | **V** (render escena); H no embebe UI | **pending_external_contract** |
-| Delta player MCP factory | G (delta) | `@zeus/arg-player-mcp` tipado sobre player-mcp-kit | H (asiento M configurado) | **pending_external_contract** |
+| Delta domain (escena, estado, intents, feeds, snapshots) | G (delta) | `@zeus/arg-domain` **público tipado** | H (sesión delta); V (tipos visuales vía view-kit) | **VERDE** (`@zeus/arg-domain@0.1.0`) |
+| Delta runtime (wire, tick, snapshot, shutdown) | G (delta) | `@zeus/arg-runtime` **público tipado** | H (compone escena/feed; no copia launcher) | **VERDE** (`@zeus/arg-runtime@0.1.0`) |
+| Delta view (grifos, ríos, mar, gotas, cantera) | G (delta) | `@zeus/arg-view-kit` browser-safe tipado | **V** (render escena); H no embebe UI | **VERDE** (`@zeus/arg-view-kit@0.1.0`) |
+| Delta player MCP factory | G (delta) | `@zeus/arg-player-mcp` tipado sobre player-mcp-kit | H (asiento M configurado) | **VERDE** (`@zeus/arg-player-mcp@0.1.0`) |
 | Delta feeds / DocumentMachine surface | G (delta) | `@zeus/arg-feeds` tipado si aplica publicación | H (adapter; no sibling discovery) | **pending_external_contract** |
-| Mockdatas Ciudad / volúmenes Lore | G (mockdatas) | `@zeus/mockdatas-ciudad` pinneado | H / fixtures de aceptación | **pending_external_contract** |
-| Artefacto Ónfalo (piezas, manifest, hashes) | H/G (artefacto; owner de publicación `<pendiente>` hasta pin) | paquete/artefacto read-only pinneado (candidatos medidos en RH-04) | H (selección pieza); V (identidad/hash) | **pending_external_contract** |
+| Mockdatas Ciudad / volúmenes Lore | G (mockdatas) | `@zeus/mockdatas-ciudad` pinneado | H / fixtures de aceptación | **VERDE** (`@zeus/mockdatas-ciudad@0.1.0`) |
+| Artefacto Ónfalo (piezas, manifest, hashes) | H/G (artefacto) | `@zeus/onfalo-fixture` read-only pinneado | H (selección pieza); V (identidad/hash) | **VERDE** (`@zeus/onfalo-fixture@0.1.0`) |
 | Candidato LORE-HM (lengua) | S/lengua (externo) | paquete tipado del owner (candidato `lore-hm-candidate@0.0.x` u homólogo PO) | H (análisis bajo lengua); no edita lengua | **pending_external_contract** |
 | Provider E (análisis) | E (externo) | API/paquete tipado del owner | H (puerto análisis); V muestra salida vía proyección H | **pending_external_contract** |
 | Línea / materialización | Z (línea) | `@zeus/linea-kit` **con types** (o gap elevado al owner) | H delega; no implementa `line.materialize` | **publicado-sin-types** (`@zeus/linea-kit@0.3.0`) |
@@ -39,9 +39,9 @@ Estados permitidos (mapeo RH-04):
 | Acta kit (candidato parcial; no sustituye evidencia canónica) | Z/HUB | `@zeus/acta-kit` tipado si el owner lo eleva a contrato | H solo si el contrato canónico lo apunta | **publicado-sin-types** (`@zeus/acta-kit@0.1.1`) |
 | Proyección experiencia H (estado / escena / evidencia) | **H** | resources MCP versionados **o** JSON Schema servido como resource (superficie propia H) | **V** (único UI) | `<pendiente>` publicación H (post RH-14; no medido en RH-04) |
 
-Conteo anclado a RH-04 (matriz §Resumen): **4 VERDE · 12 ROJO** (10
-`pending_external_contract` + 2 `publicado-sin-types`). Ninguna superficie
-ROJA aparece aquí como OK/VERDE.
+Conteo post-publish Actions (run 30831342542, 2026-08-03): **10 VERDE · 6 ROJO**
+(4 `pending_external_contract` + 2 `publicado-sin-types`). Ancla RH-04 histórica:
+4 VERDE / 12 ROJO — supersedida por este publish para los 6 packs G delta/fixtures.
 
 ---
 

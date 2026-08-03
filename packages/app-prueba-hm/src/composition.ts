@@ -206,7 +206,7 @@ export async function arrancarComposition(
   // 3 · Asiento M (connected + lastStateTs)
   if (!opciones.factoryM) {
     const superficie =
-      'pending_registry_publish: @zeus/arg-player-mcp (factory M ausente)';
+      'factory_m_ausente: @zeus/arg-player-mcp';
     const r = aplicar(maquina, {
       tipo: 'contrato_ausente',
       superficie,
@@ -392,6 +392,6 @@ export function depsDemoPorDefecto(): OpcionesComposition {
     saludM: () => ({}),
     factoryM: null,
     motivoAusenciaDelta:
-      'pending_registry_publish: @zeus/arg-runtime|arg-domain',
+      'abridor_ausente: @zeus/arg-runtime|arg-domain',
   };
 }
