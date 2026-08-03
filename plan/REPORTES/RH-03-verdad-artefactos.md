@@ -92,4 +92,7 @@ Ningún bloqueo. Colisión con RH-02 evitada (secciones distintas). PARAR: sin m
 
 ## Revisión del orquestador
 
-_(la rellena el orquestador: aceptado ✅ / devuelto con lista numerada)_
+**✅ aceptado** 2026-08-03 · orquestador-H · merge `bc01b33`
+
+- CA: REPLAN §8 con tabla cinco flags; residual grep solo en contexto negativo/histórico; producto no declarado.
+- Riesgo normal → revisión ordinaria.

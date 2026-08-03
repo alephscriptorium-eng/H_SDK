@@ -105,4 +105,8 @@ Ninguno bloqueante. Acta en `C:/S_META` (fuera de git h-sdk); colisión de escri
 
 ## Revisión del orquestador
 
-_(la rellena el orquestador: aceptado ✅ / devuelto con lista numerada)_
+**✅ aceptado** 2026-08-03 · orquestador-H · merge `13e1f9e`
+
+- CA: `wp/rh-ejecucion` H=`e53694e` · G=`9f434b3` · V=`7eecfd4`; checkpoint G `35cbded` intacto; acta §7.
+- Riesgo normal → revisión ordinaria (sin contrarrevisión).
+- Nota: merges se atribuyeron a placeholder global; gov ✅ usa `orquestador-H` por `-c`.
