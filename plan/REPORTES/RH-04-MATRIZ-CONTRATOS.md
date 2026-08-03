@@ -1,6 +1,6 @@
 # RH-04 · MATRIZ CONTRATOS (install limpio)
 
-Generado: 2026-08-03T14:05:59.774Z
+Generado: 2026-08-03T14:11:41.822Z
 Registry: `https://npm.scriptorium.escrivivir.co`
 
 ## Método
@@ -44,14 +44,21 @@ node scripts/rh-04-matriz-contratos.mjs --json
 
 Install limpio: exit 0
 
+### Mutante DEVOLUCION #1 (types-en-exports sin `.d.ts` en disco)
+
+- id: `mutant-types-exports-no-disk`
+- input: `hasTypesInExports=true`, `dts_found=[]`, runtime OK
+- veredicto: **ROJO / sin d.ts** · pass=true
+- re-probe: `node scripts/rh-04-matriz-contratos.mjs --mutant`
+
 ## Matriz
 
 | paquete | version_exacta | export_map | d.ts | runtime_import | owner | veredicto | evidencia | notas |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| @zeus/ciudad | 0.1.1 | 11 keys: ., ./domain, ./contract, ./presencia, ./acta, ./jugadores, ./scene, ./misiones… | declared:./types/contract.d.ts; disk:./types/contract.d.ts | OK | G/Z (ciudad) | VERDE | npm view @zeus/ciudad@0.1.1 name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → version=0.1.1; types=./types/contract.d.ts \|\| cd C:\Users\aleph\AppData\Local\Temp\rh04-matriz-8k0zaF && npm install --ignore-scripts --no-package-lock  |  |
-| @zeus/authority-kit | 0.4.2 | 2 keys: ., ./create-authority | declared:./types/index.d.ts; disk:./types/index.d.ts | OK | Z (authority) | VERDE | npm view @zeus/authority-kit@0.4.2 name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → version=0.4.2; types=./types/index.d.ts \|\| cd C:\Users\aleph\AppData\Local\Temp\rh04-matriz-8k0zaF && npm install --ignore-scripts --no-package-l |  |
-| @zeus/rooms | 0.1.2 | 1 keys: . | declared:./types/index.d.ts; disk:./types/index.d.ts | OK | Z (rooms) | VERDE | npm view @zeus/rooms@0.1.2 name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → version=0.1.2; types=./types/index.d.ts \|\| cd C:\Users\aleph\AppData\Local\Temp\rh04-matriz-8k0zaF && npm install --ignore-scripts --no-package-lock  (de |  |
-| @zeus/player-mcp-kit | 0.1.4 | 1 keys: . | declared:./types/index.d.ts; disk:./types/index.d.ts | OK | Z (player-mcp) | VERDE | npm view @zeus/player-mcp-kit@0.1.4 name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → version=0.1.4; types=./types/index.d.ts \|\| cd C:\Users\aleph\AppData\Local\Temp\rh04-matriz-8k0zaF && npm install --ignore-scripts --no-package- |  |
+| @zeus/ciudad | 0.1.1 | 11 keys: ., ./domain, ./contract, ./presencia, ./acta, ./jugadores, ./scene, ./misiones… | declared:./types/contract.d.ts; disk:./types/contract.d.ts,./types/domain.d.ts,./types/presencia.d.ts,./types/acta.d.ts,./types/jugadores.d.ts,./types/scene.d.ts,./types/misiones.d.ts,./types/cronista.d.ts,./types/salud.d.ts,./types/edificios.d.ts; missing:none | OK | G/Z (ciudad) | VERDE | npm view @zeus/ciudad@0.1.1 name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → version=0.1.1; types=./types/contract.d.ts \|\| cd C:\Users\aleph\AppData\Local\Temp\rh04-matriz-nxrHeY && npm install --ignore-scripts --no-package-lock  |  |
+| @zeus/authority-kit | 0.4.2 | 2 keys: ., ./create-authority | declared:./types/index.d.ts; disk:./types/index.d.ts,./types/create-authority.d.ts; missing:none | OK | Z (authority) | VERDE | npm view @zeus/authority-kit@0.4.2 name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → version=0.4.2; types=./types/index.d.ts \|\| cd C:\Users\aleph\AppData\Local\Temp\rh04-matriz-nxrHeY && npm install --ignore-scripts --no-package-l |  |
+| @zeus/rooms | 0.1.2 | 1 keys: . | declared:./types/index.d.ts; disk:./types/index.d.ts; missing:none | OK | Z (rooms) | VERDE | npm view @zeus/rooms@0.1.2 name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → version=0.1.2; types=./types/index.d.ts \|\| cd C:\Users\aleph\AppData\Local\Temp\rh04-matriz-nxrHeY && npm install --ignore-scripts --no-package-lock  (de |  |
+| @zeus/player-mcp-kit | 0.1.4 | 1 keys: . | declared:./types/index.d.ts; disk:./types/index.d.ts; missing:none | OK | Z (player-mcp) | VERDE | npm view @zeus/player-mcp-kit@0.1.4 name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → version=0.1.4; types=./types/index.d.ts \|\| cd C:\Users\aleph\AppData\Local\Temp\rh04-matriz-nxrHeY && npm install --ignore-scripts --no-package- |  |
 | @zeus/arg-domain | — | — | — | N/A | G (delta) | ROJO / pending_external_contract | npm view @zeus/arg-domain name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → E404 (exit 1): {
   "error": {
     "code": "E404",
@@ -79,9 +86,9 @@ Install limpio: exit 0
 | (candidatos: @zeus/onfalo, @zeus/onfalo-fixture, @zeus/fixtures-onfalo, onfalo, onfalo-fixture) | — | — | — | N/A (no package) | H/G (artefacto) | ROJO / pending_external_contract | npm view @zeus/onfalo version --registry=https://npm.scriptorium.escrivivir.co → E404 \| npm view @zeus/onfalo-fixture version --registry=https://npm.scriptorium.escrivivir.co → E404 \| npm view @zeus/fixtures-onfalo version --registry=https://npm.scriptorium.escrivivir.co → E404 | artefacto Ónfalo pinneado |
 | (candidatos: lore-hm-candidate, lore-hm, @logos/lore-hm, @alephscript/lore-hm-candidate) | — | — | — | N/A (no package) | S/lengua (externo) | ROJO / pending_external_contract | npm view lore-hm-candidate version --registry=https://npm.scriptorium.escrivivir.co → E404 \| npm view lore-hm version --registry=https://npm.scriptorium.escrivivir.co → E404 \| npm view @logos/lore-hm version --registry=https://npm.scriptorium.escrivivir.co → E404 \| npm view @a | candidato LORE-HM |
 | (candidatos: @zeus/provider-e, @zeus/analisis-e, provider-e) | — | — | — | N/A (no package) | E (externo) | ROJO / pending_external_contract | npm view @zeus/provider-e version --registry=https://npm.scriptorium.escrivivir.co → E404 \| npm view @zeus/analisis-e version --registry=https://npm.scriptorium.escrivivir.co → E404 \| npm view provider-e version --registry=https://npm.scriptorium.escrivivir.co → E404 | provider E |
-| @zeus/linea-kit | 0.3.0 | 10 keys: ., ./curation, ./resolve, ./force-activation, ./validate, ./loader, ./tools, ./starterkits… | none | OK | Z (línea/materialización) | ROJO / publicado-sin-types | npm view @zeus/linea-kit@0.3.0 name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → version=0.3.0; types=— \|\| cd C:\Users\aleph\AppData\Local\Temp\rh04-matriz-8k0zaF && npm install --ignore-scripts --no-package-lock  (deps: @zeus/ciu | re-verificar types en manifest instalado |
+| @zeus/linea-kit | 0.3.0 | 10 keys: ., ./curation, ./resolve, ./force-activation, ./validate, ./loader, ./tools, ./starterkits… | none | OK | Z (línea/materialización) | ROJO / publicado-sin-types | npm view @zeus/linea-kit@0.3.0 name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → version=0.3.0; types=— \|\| cd C:\Users\aleph\AppData\Local\Temp\rh04-matriz-nxrHeY && npm install --ignore-scripts --no-package-lock  (deps: @zeus/ciu | re-verificar types en manifest instalado |
 | (candidatos: @zeus/evidence-kit, @zeus/evidencia-kit, @zeus/hub-evidence, @zeus/ceremony-kit, @zeus/notaria-kit) | — | — | — | N/A (no package) | HUB (externo) | ROJO / pending_external_contract | npm view @zeus/evidence-kit version --registry=https://npm.scriptorium.escrivivir.co → E404 \| npm view @zeus/evidencia-kit version --registry=https://npm.scriptorium.escrivivir.co → E404 \| npm view @zeus/hub-evidence version --registry=https://npm.scriptorium.escrivivir.co → E4 | ceremonia/evidencia canónica; acta-kit medido aparte como candidato parcial |
-| @zeus/acta-kit | 0.1.1 | 7 keys: ., ./tipos, ./emitir, ./validar, ./publicar, ./adoptar, ./huella | none | OK | Z/HUB (candidato parcial) | ROJO / publicado-sin-types | npm view @zeus/acta-kit@0.1.1 name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → version=0.1.1; types=— \|\| cd C:\Users\aleph\AppData\Local\Temp\rh04-matriz-8k0zaF && npm install --ignore-scripts --no-package-lock  (deps: @zeus/ciud | publicado; no sustituye evidencia canónica tipada |
+| @zeus/acta-kit | 0.1.1 | 7 keys: ., ./tipos, ./emitir, ./validar, ./publicar, ./adoptar, ./huella | none | OK | Z/HUB (candidato parcial) | ROJO / publicado-sin-types | npm view @zeus/acta-kit@0.1.1 name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → version=0.1.1; types=— \|\| cd C:\Users\aleph\AppData\Local\Temp\rh04-matriz-nxrHeY && npm install --ignore-scripts --no-package-lock  (deps: @zeus/ciud | publicado; no sustituye evidencia canónica tipada |
 
 ## Hipótesis del BRIEF vs observado
 
@@ -101,4 +108,4 @@ Install limpio: exit 0
 
 ## Criterio VERDE
 
-VERDE solo si: paquete en registry + versión exacta en install limpio + export_map + `types`/`typings` o types-en-exports en manifest instalado + runtime import OK + pollution 0. Un `.d.ts` ambiental en disco sin declaración en manifest **no** basta.
+VERDE solo si: paquete en registry + versión exacta en install limpio + export_map + types declarados (`types`/`typings` o types-en-exports) + **al menos un path de types declarado presente en disco** + runtime import OK + pollution 0. `hasTypesInExports=true` sin `.d.ts` en disco → **ROJO / sin d.ts** (no VERDE).

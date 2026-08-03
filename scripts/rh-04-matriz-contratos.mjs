@@ -87,6 +87,7 @@ const SURFACES = /** @type {Surface[]} */ ([
 const wantJson = process.argv.includes("--json");
 const wantMd = process.argv.includes("--md");
 const keepTemp = process.argv.includes("--keep-temp");
+const mutantOnly = process.argv.includes("--mutant");
 
 const IS_WIN = process.platform === "win32";
 
@@ -181,6 +182,25 @@ function summarizeExports(exportsField) {
   return { present: true, summary: String(exportsField), hasTypesInExports: false };
 }
 
+/** Collect types/typings path strings declared in package.json exports tree. */
+function collectDeclaredTypesPaths(exportsField) {
+  const out = [];
+  const walk = (v) => {
+    if (!v || typeof v !== "object") return;
+    for (const [k, val] of Object.entries(v)) {
+      if ((k === "types" || k === "typings") && typeof val === "string") out.push(val);
+      else walk(val);
+    }
+  };
+  walk(exportsField);
+  return out;
+}
+
+function normalizeRel(p) {
+  if (!p) return p;
+  return p.startsWith("./") ? p : `./${p}`;
+}
+
 function inspectInstalled(installRoot, packageName) {
   const pkgDir = join(installRoot, "node_modules", ...packageName.split("/"));
   const manifestPath = join(pkgDir, "package.json");
@@ -193,6 +213,7 @@ function inspectInstalled(installRoot, packageName) {
       exportsSummary: "—",
       hasTypesInExports: false,
       dtsFiles: [],
+      declaredTypesMissing: [],
       runtimeImport: { ok: false, detail: "package dir absent" },
       pollution: [],
       evidence: `ls ${pkgDir} → ABSENT`,
@@ -201,21 +222,21 @@ function inspectInstalled(installRoot, packageName) {
   const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
   const exp = summarizeExports(manifest.exports);
   const dtsFiles = [];
-  for (const rel of [
-    "types/index.d.ts",
-    "types/contract.d.ts",
-    "dist/index.d.ts",
-    "src/index.d.ts",
-    "index.d.ts",
-  ]) {
-    if (existsSync(join(pkgDir, rel))) dtsFiles.push(`./${rel}`);
-  }
-  // declared types path
+  const declaredTypesMissing = [];
   const typesField = manifest.types ?? null;
   const typingsField = manifest.typings ?? null;
-  if (typesField && existsSync(join(pkgDir, typesField))) {
-    if (!dtsFiles.includes(typesField.startsWith("./") ? typesField : `./${typesField}`)) {
-      dtsFiles.push(typesField.startsWith("./") ? typesField : `./${typesField}`);
+  const declared = [
+    ...collectDeclaredTypesPaths(manifest.exports),
+    ...(typesField ? [typesField] : []),
+    ...(typingsField ? [typingsField] : []),
+  ].map(normalizeRel);
+
+  for (const rel of declared) {
+    const abs = join(pkgDir, rel);
+    if (existsSync(abs)) {
+      if (!dtsFiles.includes(rel)) dtsFiles.push(rel);
+    } else if (!declaredTypesMissing.includes(rel)) {
+      declaredTypesMissing.push(rel);
     }
   }
 
@@ -258,40 +279,69 @@ function inspectInstalled(installRoot, packageName) {
     hasTypesInExports: exp.hasTypesInExports,
     exportsPresent: exp.present || Boolean(manifest.main || manifest.module),
     dtsFiles,
+    declaredTypesMissing,
     runtimeImport,
     pollution,
-    evidence: `cat node_modules/${packageName}/package.json → version=${manifest.version}; types=${typesField ?? "—"}; typings=${typingsField ?? "—"}`,
+    evidence: `cat node_modules/${packageName}/package.json → version=${manifest.version}; types=${typesField ?? "—"}; typings=${typingsField ?? "—"}; dts_on_disk=${dtsFiles.join(",") || "none"}; declared_missing=${declaredTypesMissing.join(",") || "none"}`,
   };
 }
 
+/**
+ * VERDE exige .d.ts en disco (paths declarados top-level o en exports).
+ * hasTypesInExports=true sin archivo en disco → ROJO (hostil-omite / anti falso-verde).
+ */
 function verdictFor(row) {
   if (row.registry === "E404" || row.version_exacta === "—") {
     return "ROJO / pending_external_contract";
   }
-  const hasDtsDecl =
-    Boolean(row.typesField) ||
-    Boolean(row.typingsField) ||
-    row.hasTypesInExports === true ||
-    (Array.isArray(row.dts_found) && row.dts_found.length > 0 && (row.typesField || row.hasTypesInExports));
-  // Require declared types in manifest OR types-in-exports; ambient .d.ts alone is not enough for VERDE
-  const typesOk =
+  const typesDeclared =
     Boolean(row.typesField) || Boolean(row.typingsField) || row.hasTypesInExports === true;
   const dtsOnDisk = Array.isArray(row.dts_found) && row.dts_found.length > 0;
   const exportOk = row.export_map && row.export_map !== "—" && row.export_map !== "absent";
   const runtimeOk = row.runtime_import === "OK";
   const clean = !row.pollution || row.pollution.length === 0;
 
-  if (typesOk && (dtsOnDisk || row.hasTypesInExports) && exportOk && runtimeOk && clean) {
+  // Hard gate: no VERDE without .d.ts on disk — even if exports claim types.
+  if (typesDeclared && dtsOnDisk && exportOk && runtimeOk && clean) {
     return "VERDE";
   }
-  if (!typesOk) {
+  if (!typesDeclared) {
     return "ROJO / publicado-sin-types";
+  }
+  if (!dtsOnDisk) {
+    return "ROJO / sin d.ts";
   }
   if (!runtimeOk) return "ROJO / runtime_import_fail";
   if (!clean) return "ROJO / pollution";
   if (!exportOk) return "ROJO / sin export_map";
-  if (!dtsOnDisk && !hasDtsDecl) return "ROJO / sin d.ts";
   return "ROJO";
+}
+
+/** Mutante DEVOLUCION #1: types-en-exports sin .d.ts en disco → debe ser ROJO. */
+function probeMutantDtsAbsent() {
+  const mutant = {
+    superficie: "mutant-types-exports-no-disk",
+    registry: "OK",
+    version_exacta: "0.0.0-mutant",
+    export_map: "1 keys: .",
+    typesField: null,
+    typingsField: null,
+    hasTypesInExports: true,
+    dts_found: [],
+    runtime_import: "OK",
+    pollution: [],
+  };
+  const v = verdictFor(mutant);
+  const pass = v === "ROJO / sin d.ts" || (typeof v === "string" && v.startsWith("ROJO"));
+  return {
+    id: "mutant-types-exports-no-disk",
+    description:
+      "hasTypesInExports=true, dts_found=[], runtime OK, export_map present → must NOT be VERDE",
+    input: mutant,
+    veredicto: v,
+    expected: "ROJO / sin d.ts (any ROJO*)",
+    pass,
+  };
 }
 
 function measureSurface(surface, installRoot, installable) {
@@ -489,14 +539,11 @@ async function main() {
     row.typingsField = info.typingsField;
     row.hasTypesInExports = info.hasTypesInExports;
     row.dts_found = info.dtsFiles;
+    row.declaredTypesMissing = info.declaredTypesMissing;
     row.d_ts =
-      info.typesField || info.typingsField
-        ? `declared:${info.typesField ?? info.typingsField}; disk:${info.dtsFiles.join(",") || "none"}`
-        : info.hasTypesInExports
-          ? `types-in-exports; disk:${info.dtsFiles.join(",") || "none"}`
-          : info.dtsFiles.length
-            ? `ambient-disk-only:${info.dtsFiles.join(",")}`
-            : "none";
+      info.typesField || info.typingsField || info.hasTypesInExports
+        ? `declared:${info.typesField ?? info.typingsField ?? "exports"}; disk:${info.dtsFiles.join(",") || "none"}; missing:${info.declaredTypesMissing.join(",") || "none"}`
+        : "none";
     row.runtime_import = info.runtimeImport.ok ? "OK" : `FAIL: ${info.runtimeImport.detail}`;
     row.pollution = info.pollution;
     row.evidencia = [
@@ -511,12 +558,14 @@ async function main() {
   }
 
   const pollution = grepRepoPollution();
+  const mutant = probeMutantDtsAbsent();
 
   const summary = {
     verdes: rows.filter((r) => r.veredicto === "VERDE").map((r) => r.superficie),
     rojos: rows.filter((r) => r.veredicto !== "VERDE").map((r) => `${r.superficie}:${r.veredicto}`),
     install: installEvidence,
     repo_pollution_S_LAB_file_link: pollution.rgHits.filter((l) => /S_LAB|file:|link:/i.test(l)),
+    mutant_probe: mutant,
     linea_kit_types: (() => {
       const r = rows.find((x) => x.superficie === "linea-kit");
       return r
@@ -560,9 +609,11 @@ async function main() {
   console.log(`ROJOS (${summary.rojos.length}):`);
   for (const r of summary.rojos) console.log(`  - ${r}`);
   console.log(`linea-kit types: ${JSON.stringify(summary.linea_kit_types)}`);
+  console.log(`mutant: ${mutant.veredicto} pass=${mutant.pass}`);
   console.log(`repo S_LAB|file:|link: hits: ${summary.repo_pollution_S_LAB_file_link.length}`);
   console.log("\n--- markdown ---\n");
   console.log(md);
+  if (!mutant.pass) process.exitCode = 2;
 }
 
 function renderMd(rows, summary, pollution) {
@@ -610,6 +661,16 @@ function renderMd(rows, summary, pollution) {
   lines.push("");
   lines.push(`Install limpio: exit ${summary.install.status}`);
   lines.push("");
+  lines.push("### Mutante DEVOLUCION #1 (types-en-exports sin `.d.ts` en disco)");
+  lines.push("");
+  if (summary.mutant_probe) {
+    const m = summary.mutant_probe;
+    lines.push(`- id: \`${m.id}\``);
+    lines.push(`- input: \`hasTypesInExports=true\`, \`dts_found=[]\`, runtime OK`);
+    lines.push(`- veredicto: **${m.veredicto}** · pass=${m.pass}`);
+    lines.push(`- re-probe: \`node scripts/rh-04-matriz-contratos.mjs --mutant\``);
+  }
+  lines.push("");
   lines.push("## Matriz");
   lines.push("");
   lines.push("| paquete | version_exacta | export_map | d.ts | runtime_import | owner | veredicto | evidencia | notas |");
@@ -642,12 +703,21 @@ function renderMd(rows, summary, pollution) {
   lines.push("");
   lines.push("## Criterio VERDE");
   lines.push("");
-  lines.push("VERDE solo si: paquete en registry + versión exacta en install limpio + export_map + `types`/`typings` o types-en-exports en manifest instalado + runtime import OK + pollution 0. Un `.d.ts` ambiental en disco sin declaración en manifest **no** basta.");
+  lines.push("VERDE solo si: paquete en registry + versión exacta en install limpio + export_map + types declarados (`types`/`typings` o types-en-exports) + **al menos un path de types declarado presente en disco** + runtime import OK + pollution 0. `hasTypesInExports=true` sin `.d.ts` en disco → **ROJO / sin d.ts** (no VERDE).");
   lines.push("");
   return lines.join("\n");
 }
 
-main().catch((e) => {
+async function entry() {
+  if (mutantOnly) {
+    const m = probeMutantDtsAbsent();
+    process.stdout.write(JSON.stringify(m, null, 2) + "\n");
+    process.exit(m.pass ? 0 : 2);
+  }
+  await main();
+}
+
+entry().catch((e) => {
   console.error(e);
   process.exit(1);
 });
