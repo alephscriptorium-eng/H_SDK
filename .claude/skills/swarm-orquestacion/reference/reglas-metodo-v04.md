@@ -83,6 +83,51 @@ Disciplina del eje de **gobierno**:
 **Regla:** el CHANGELOG de gobierno es un espejo del backlog cerrado, no un
 cuaderno personal ni el changelog de un paquete npm.
 
+## Práctica · Versión del README del paquete (anti-drift de release)
+
+Aplicación de C9 (no dos verdades que se pudren) sobre la **cara del
+tarball**. El `README.md` viaja en `package.json.files` → es documento
+publicado y debe cerrar con el semver que se publica. Incidente real
+(DC-30 / INT-V-07): un tarball salió con `package.json` en `0.11.0` y el
+README interno citando «actual `0.10.0`» — el consumidor leyó una versión
+que ya no era. `bump` tocó `package.json` y `CHANGELOG` pero **no** el
+README.
+
+Disciplina:
+
+- **La versión actual (de `package.json`) aparece en el README**, y
+  **ninguna versión anterior figura «como actual»**: ni en la referencia
+  de install/`npm view` (`@<pkg>@X.Y.Z`), ni en el nombre de tarball de
+  `npm pack` (`<pkg-sin-scope>-X.Y.Z.tgz`), ni en marcadores de prosa
+  («(actual `X.Y.Z`)», «el paquete **X.Y.Z**»). Una versión de
+  **solo-historia** (p. ej. «sobre el corte **0.9.0**») es legítima y no
+  se toca — solo se veta la anterior presentada como vigente.
+- **Gate opt-in / parametrizable:** `scripts/verificar-release.mjs`
+  (hermano de `verificar-changelog.mjs`). Deriva `name` + versión de
+  `package.json` (no hardcodea versiones); flags `--pkg`, `--readme`,
+  `--doc` (docs extra empaquetados; **no** pasar `CHANGELOG.md`, que es
+  version-keyed por diseño), `--marcador 'regex'` (marcadores propios,
+  grupo 1 = semver). **FALLA ruidoso** (exit 1) nombrando
+  fichero:línea + versión hallada + versión actual.
+- **Paso de release:** correrlo en el commit `chore(release)` **junto al
+  bump** y antes de `npm pack`/`npm publish` (y en CI), de forma que el
+  bump que no propaga la versión al README **rompa el corte** en vez de
+  publicarse. Es el hermano de presencia-de-versión del
+  `verificar-changelog` (presencia-de-sección).
+
+Checklist mínimo del corte publicable (`chore(release)`):
+
+```text
+[ ] package.json.version   → bump al semver del corte
+[ ] CHANGELOG (gobierno)    → sección de la versión + WP ✅  (verificar-changelog.mjs)
+[ ] README (files)          → cita la versión nueva; ninguna anterior como actual
+                             (verificar-release.mjs --pkg package.json --readme README.md)
+[ ] npm pack               → inspeccionar el tarball antes de publish
+```
+
+**Regla:** un `bump` que no llega al README es un corte roto; el gate lo
+detiene antes de que el tarball mienta al consumidor.
+
 ## Relación con v0.2 / v0.3
 
 `reglas-metodo-v02.md` (12 reglas) y `reglas-metodo-v03.md` (14 reglas +

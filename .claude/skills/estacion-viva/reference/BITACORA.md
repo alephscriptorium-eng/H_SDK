@@ -26,6 +26,26 @@ YYYY-MM-DDTHH:MM:SSZ | <autor> | <evento> | <payload-opcional>
 - Si el mundo no tiene editor MCP aún, el operador puede sembrar líneas
   a mano en la fixture; el contrato de regeneración no cambia.
 
+## Asiento de fundación (bitácora ausente)
+
+Cuando un mundo **nuevo** no tiene bitácora todavía, el boot no falla: la
+siembra con un único **asiento de fundación** (ver `BOOT.md` fase 2,
+«Degradación · bitácora ausente»). Forma mínima:
+
+```text
+# bitácora de estación (líneas)
+YYYY-MM-DDTHH:MM:SSZ | estacion | fundacion | perfil=<jugador|vigia>
+```
+
+- Es **una** línea append-only: la cabecera documentada + un evento
+  `fundacion` con `ts` UTC y autor = la propia estación (no un editor de
+  contenido de juego).
+- De ese asiento la fase 2 deriva el **estado inicial** (tick-cero: sin
+  acumulados). No añade líneas de más ni fabrica historia.
+- Las líneas **posteriores** ya pasan por el editor MCP del mundo (arriba,
+  «Autoría»); el asiento de fundación es la excepción de arranque, sembrada
+  por la estación para que la regeneración tenga una fuente no vacía.
+
 ## Regeneración sin drift
 
 1. Leer todas las líneas válidas de la bitácora (ignorar vacías y

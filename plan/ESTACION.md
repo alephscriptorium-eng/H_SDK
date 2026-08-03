@@ -60,11 +60,11 @@ calibración, primer acto y cerco.
 
 ### 3 · `mesa-sincronia` — el asiento de h en la mesa
 
-> ⚠ **Gap de vendor (medido 2026-08-03)**: `mesa-sincronia` existe en la
-> librería viva (`skills-library/skills/`) pero **no viene en el paquete
-> publicado 0.11.0** (el espejo materializó 7 skills, no 8). Reporte al owner
-> L; este handoff queda preparado y el espejo se completará con el próximo
-> release. Misma clase de hallazgo que el gap de types de `ciudad` (decisión ④).
+> ✅ **Gap resuelto en origen (2026-08-03)**: L cortó el release 0.12.0
+> (tag `v0.12.0`, workflow de publicación en verde) con `mesa-sincronia`
+> incluida; este mundo consume 0.12.0 y el espejo queda **8/8**. El gate de
+> changelog de L también destapó las filas WP-31/32/34 sin reflejar, ya
+> saldadas en el CHANGELOG con su estado real.
 
 - **Qué levanta**: identidad y firma del carril h, notas con plantilla,
   DRAFT/`BLOQUEA:`, timbre append-only, buzón-puntero — la voz de h hacia el

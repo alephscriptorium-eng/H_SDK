@@ -24,6 +24,10 @@ WORLD_ROOT="${WORLD_ROOT:-${1:-}}"
 OUT_DIR="${OUT_DIR:-${2:-}}"
 INTERVAL="${INTERVAL:-${3:-45}}"
 ONCE="${ONCE:-0}"
+# INT-V-05: base de worktrees calibrable. Si el consumidor exporta
+# WORKTREE_BASE (p. ej. worktrees fuera del árbol del mundo), el pulso lo
+# honra; si no, cae al histórico $WORLD_ROOT/.worktrees.
+WORKTREE_BASE="${WORKTREE_BASE:-$WORLD_ROOT/.worktrees}"
 
 if [ -z "$WORLD_ROOT" ] || [ -z "$OUT_DIR" ]; then
   echo "uso: WORLD_ROOT=<repo> OUT_DIR=<salida> [INTERVAL=45] $0" >&2
@@ -93,9 +97,11 @@ cycle() {
   skills_n="$(WORLD_ROOT="$WORLD_ROOT" bash "$CONTAR")"
 
   # Conteo de worktrees reales (informativo; para el snapshot canónico).
+  # Sobre la base CALIBRADA (WORKTREE_BASE) — cuenta subdirectorios, que es
+  # lo que es un worktree; ficheros sueltos en la base no cuentan.
   local wt_n=0
-  if [ -d "$WORLD_ROOT/.worktrees" ]; then
-    wt_n="$(ls -1 "$WORLD_ROOT/.worktrees" 2>/dev/null | grep -c . || true)"
+  if [ -d "$WORKTREE_BASE" ]; then
+    wt_n="$(find "$WORKTREE_BASE" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | grep -c . || true)"
   fi
 
   # Locks (sin git status)

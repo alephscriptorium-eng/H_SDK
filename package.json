@@ -10,6 +10,6 @@
     "skills:sync": "alephscript-skills-sync --runtime claude"
   },
   "devDependencies": {
-    "@alephscript/skills-scriptorium": "0.11.0"
+    "@alephscript/skills-scriptorium": "0.12.0"
   }
 }

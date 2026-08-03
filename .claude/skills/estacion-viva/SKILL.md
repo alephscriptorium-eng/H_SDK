@@ -32,11 +32,12 @@ Cuando un agente fresco deba:
 | param | rol |
 | ----- | --- |
 | `WORLD_ROOT` | Raíz del repo / estación del mundo |
-| `GAME_MCP` | Endpoint o descriptor del servidor MCP de juego |
+| `GAME_MCP` | Endpoint o descriptor del servidor MCP de juego (obligatorio solo en perfil `jugador`; ver «Perfiles de boot») |
 | `OUT_DIR` | Carpeta de estado, logs y salidas duales de la sesión |
 
-Calibración local opcional: ruta de bitácora, preset del editor MCP de
-línea, canal del registry para C8, vocabulario de ceguera del mundo.
+Calibración local opcional: **perfil de boot** (`jugador`/`vigia`; default
+`jugador`), ruta de bitácora, preset del editor MCP de línea, canal del
+registry para C8, vocabulario de ceguera del mundo.
 
 ## Boot — 7 fases (contrato)
 
@@ -53,6 +54,28 @@ Detalle: `reference/BOOT.md`. Checklist ejecutable:
 7. Salida dual PO/scrum de serie
 ```
 
+## Perfiles de boot
+
+El boot corre bajo un **perfil** elegido en la calibración del mundo. Sin
+perfil declarado = `jugador` (compat).
+
+| perfil | fases | fase 5 (conexión al juego) |
+| ------ | ----- | -------------------------- |
+| `jugador` (default) | 1–7 completas | **exigida**: `GAME_MCP` + peercard firmada + kit registry |
+| `vigia` | 1–7 **salvo 5** | **omitida por contrato** (no exige `GAME_MCP`) |
+
+El perfil `vigia` no es un boot «a medias»: omite la conexión al juego de
+forma **declarada**, no por fallo; el resto de fases son idénticas. Tabla
+fase×perfil y detalle: `reference/BOOT.md`.
+
+## Modo fundación (pre-git)
+
+Un mundo recién nacido puede no tener aún `.git` ni bitácora. El boot
+**degrada explícitamente**, nunca falla mudo: `reference/BOOT.md`
+(«Modo fundación (pre-git)» y «Degradación · bitácora ausente»). La
+identidad de raíz pre-git la cubre el preflight fail-closed de
+`vigilancia` — un puntero, sin duplicar su doctrina.
+
 ## Pasos
 
 1. Leer `reference/BOOT.md` y fijar `WORLD_ROOT`, `GAME_MCP`, `OUT_DIR`.
@@ -62,7 +85,8 @@ Detalle: `reference/BOOT.md`. Checklist ejecutable:
    editor.
 4. Watcher: `scripts/watcher-sesion.sh` + whitelist
    `reference/WATCHER.md` (clase I71: sin whitelist ≈ miles de FP).
-5. Juego: `reference/GAME-MCP.md` — peercard firmada; kit
+5. Juego (**solo perfil `jugador`**; en `vigia` la fase se omite por
+   contrato): `reference/GAME-MCP.md` — peercard firmada; kit
    `player-mcp-kit@0.1.3` desde registry (C8); prohibido sibling path.
 6. Salidas: `reference/SALIDA-DUAL.md` + nota local en `plan/ESTACION.md`.
 7. Antes de entregar cara pública: `scripts/comprobar-ceguera.sh` →
@@ -70,7 +94,7 @@ Detalle: `reference/BOOT.md`. Checklist ejecutable:
 
 ## Recursos
 
-- `reference/BOOT.md` — contrato de las 7 fases
+- `reference/BOOT.md` — contrato de las 7 fases · perfiles `jugador`/`vigia` · modo fundación (pre-git) · layout librería/consumidor
 - `reference/BITACORA.md` — línea publicable + editor MCP del mundo
 - `reference/WATCHER.md` — sesión + whitelist `.claude/skills/`
 - `reference/GAME-MCP.md` — peercard + registry C8

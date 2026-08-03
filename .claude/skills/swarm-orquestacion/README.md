@@ -50,6 +50,34 @@ node skills/swarm-orquestacion/scripts/verificar-changelog.mjs \
 `--role paquete` se rechaza a propósito. Detalle: `reference/reglas-metodo-v04.md`
 (§ práctica CHANGELOG) y `--help` del script.
 
+## Gate · BACKLOG despachable (antes de la ola)
+
+`scripts/verificar-backlog.mjs` decide si el BACKLOG del mundo se puede
+repartir. **Bloquea lo decidible**: los siete campos por WP (`lane`, `WP`,
+`BRIEF`, `CA`, `P`, `deps`, `ejes`), prioridad/ejes/lanes dentro de los
+conjuntos declarados, contradicciones (`ninguna` junto a una dep real), `deps`
+que resuelven sin ciclos y el suelo de BRIEF/CA en palabras distintas.
+**Avisa sin bloquear** del CA ornamental (sin ancla ni objeto): la calidad de un
+CA es juicio, y un gate que rechaza CAs correctos acaba desactivado. El aviso es
+de **barrido amplio** (≈48 % de los WPs en un backlog real, tres cuartos de
+ellos CAs telegráficos): sirve para mirar dónde, no para concluir.
+
+```bash
+node skills/swarm-orquestacion/scripts/verificar-backlog.mjs \
+  --backlog plan/BACKLOG.md --series 'AA-[0-9]+|BB-[0-9]+' \
+  --prioridades P0,P1,P2
+```
+
+Exit `0` despachable (puede llevar avisos) · `1` defectos (citados por WP y
+campo) · `2` uso/configuración (flag desconocida, número inválido, regex rota) ·
+`3` **ausencia**: fichero vacío o 0 WPs. La ausencia nunca es verde, y una duda
+de uso nunca es un veredicto.
+
+Series, prioridades, ejes, lanes, nombres de columna, patrón de lane, suelos y
+léxico de CA son del consumidor (`--ayuda`). Contrato y límites honestos:
+`reference/backlog-despachable.md`. Fixtures en cuatro caras (28):
+`examples/fixture-backlog/` (`node --test scripts/verificar-backlog.test.mjs`).
+
 ## Ceguera (cara pública)
 
 Antes de publicar o empacar, en la raíz del paquete:
