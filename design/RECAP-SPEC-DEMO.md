@@ -35,7 +35,10 @@
 
 `packages/game-prueba-hm/` tal como está hoy = **boceto cerrado**
 (commits `9296c39`+`9c030f5`). No se itera más sobre él como si fuera la
-demo. Piezas rescatables SOLO si la adaptación las pide: el server de
+demo. El **artifact publicado** «Prueba de H·M — Barrio LORE» queda
+re-etiquetado en su propia cabecera como *boceto/espec del panel de
+ceremonia*: conserva el guion rescatado de `HANDOFF-DEMO.md` (su valor
+real) y el lenguaje visual aprobado por el PO; no representa la demo. Piezas rescatables SOLO si la adaptación las pide: el server de
 import maps + endpoints reales (`/api/acta`, `/api/verificar`, `/onfalo`),
 `puente-zeus` (browser-safety de `@zeus/ciudad`), la corrida del dominio
 real en navegador, tipestate→clips, y los datos (mapa sellado, piezas
