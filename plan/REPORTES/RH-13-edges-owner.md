@@ -9,7 +9,7 @@
 | eje(s) CA | I, II, hostil-omite |
 | riesgo de revisión | `independiente` |
 | revisor distinto del worker | `sí` |
-| estado propuesto | listo para revisión |
+| estado propuesto | devuelto-corregido |
 
 ## Qué se hizo
 
@@ -28,6 +28,11 @@ fingido), proyección H con sumidero opcional. Demolí `TransporteZeus`,
 state/ledger/lastStateTs. Typecheck root core+edge verde. No BACKLOG, no
 merge, no push, no composition root (RH-14), no vertical E2E (RH-15), no
 `file:../g-sdk` en package.json.
+
+**Corrección DEVOLUCION-RH-13 #1:** `abridorDesdeStartArgRuntime` ya no inventa
+`delta:${stateId}:${ledgerId}` si faltan `sessionId` e `id`; devuelve `err`
+explícito. Abridor tipa `Resultado`. Test de omisión + probe mutante añadidos
+(corregido en commit de esta entrega).
 
 ## Archivos tocados
 
@@ -69,7 +74,12 @@ bun run typecheck
 
 # tests hostil-omite + smoke
 cd packages/edge-zeus && bun test src
-→ 19 pass, 0 fail
+→ 20 pass, 0 fail
+
+# corrección #1 · mutante/omisión sessionId|id (DEVOLUCION-RH-13)
+# startArgRuntime → {} (sin sessionId ni id); M conectado+lastStateTs
+→ abrirSesion: {"ok":false,"error":"delta: runtime omite sessionId|id — denegado (hostil-omite; no se inventa sesionId)"}
+→ NO produce {"ok":true,"valor":{"sesionId":"delta:S1:L1"}}
 
 # contraevidencia BRIEF
 rg -n "destino:|mensaje:|'h-sdk'|\"h-sdk\"" packages/edge-zeus/src --glob '!*.test.ts'
@@ -78,6 +88,8 @@ rg -n "TransporteZeus" packages/edge-zeus/src
 → TRANSPORTE_SRC:0
 rg -n "from '@zeus/" packages/core/src
 → CORE_IMPORT_ZEUS:0
+rg -n 'delta:\$\{' packages/edge-zeus/src || echo 'INVENT_SESION:0'
+→ INVENT_SESION:0
 
 # G tip packs (smoke local, fuera de commit)
 # tarballs RH-09: %TEMP%/rh09-clean-2UkgFY/zeus-arg-{domain,runtime,player-mcp}-0.1.0.tgz
@@ -92,12 +104,14 @@ rg -n "from '@zeus/" packages/core/src
     `confirmarEntrada` error (`bun test` hostil-omite · Ciudad)
   - `[automatizado]` omitir `lastStateTs` o `connected` → M no conectado;
     `abrirSesion` delta deniega (`bun test` hostil-omite · M / delta)
+  - `[automatizado]` omitir `sessionId` e `id` en handle runtime →
+    `err` (no `ok` con `delta:S1:L1`); mutante DEVOLUCION-RH-13 #1
   - `[automatizado]` E/línea/evidencia → `err(pending_external_contract*)`,
     nunca `ok()` (`bun test` pending_external)
   - `[automatizado]` wire: intents con `anchorId|nodeId` / `message` /
     `tool+horseMode`; sin claves paralelas; actor ≠ `h-sdk`
   - `[manual]` grep contraevidencia PAYLOAD_GREP:0 / TRANSPORTE_SRC:0 /
-    CORE_IMPORT_ZEUS:0
+    CORE_IMPORT_ZEUS:0 / INVENT_SESION:0
 - `DEPENDENCIAS_DIRECTAS_VERIFICADAS`: edge runtime directo
   `@zeus/ciudad@^0.1.1`, `@zeus/player-mcp-kit@^0.1.4` (registry). Packs
   `@zeus/arg-*@0.1.0` tipados en tarball RH-09 / g-sdk@1fad30e —
@@ -106,9 +120,9 @@ rg -n "from '@zeus/" packages/core/src
 - `INSTALACION_LIMPIA`: `bun install` en worktree OK para deps registry;
   arg-* no en registry → no pin permanente; smoke tarball documentado arriba.
 - `TEST_AUTOMATIZADO_VS_EVIDENCIA_MANUAL`:
-  - Automatizado: `bun test src` (19) + `bun run typecheck`
+  - Automatizado: `bun test src` (20) + `bun run typecheck`
   - Manual: greps contraevidencia; inspección tip packs 1fad30e / RH-09 tarballs
-- `VEREDICTO_REVISOR`: `⏳ pendiente de revisor distinto`
+- `VEREDICTO_REVISOR`: `⏳ pendiente de revisor distinto` (post-corrección #1)
 
 ## Auto-revisión (PRACTICAS del mundo — con honestidad)
 
@@ -144,4 +158,5 @@ sibling path.
 
 ## Revisión del orquestador
 
-_(la rellena el orquestador: aceptado ✅ / devuelto con lista numerada)_
+DEVUELTO (contrarrevisión) · `plan/REPORTES/DEVOLUCION-RH-13.md` · defecto #1
+corregido → estado `devuelto-corregido`. Pendiente re-aceptación.

@@ -3,9 +3,12 @@
  */
 
 import { describe, expect, test } from 'bun:test';
-import { actorId, piezaId, type PiezaOnfalo } from '@h-sdk/core';
+import { actorId, ok, piezaId, type PiezaOnfalo } from '@h-sdk/core';
 import { crearPuertoEntradaCiudad } from './ciudad.ts';
-import { crearPuertoSesionDelta } from './delta.ts';
+import {
+  abridorDesdeStartArgRuntime,
+  crearPuertoSesionDelta,
+} from './delta.ts';
 import {
   acopleDesdeSaludM,
   abrirAsientoM,
@@ -137,7 +140,7 @@ describe('hostil-omite · delta exige M completo', () => {
   test('omite lastStateTs → abrirSesion error aunque haya abridor', async () => {
     const puerto = crearPuertoSesionDelta({
       abridor: {
-        abrir: async () => ({ sesionId: 'ses-1' }),
+        abrir: async () => ok({ sesionId: 'ses-1' }),
       },
       saludM: () => ({ connected: true }),
     });
@@ -154,7 +157,7 @@ describe('hostil-omite · delta exige M completo', () => {
   test('M completo + abridor → ok y smoke lastStateTs', async () => {
     const puerto = crearPuertoSesionDelta({
       abridor: {
-        abrir: async () => ({ sesionId: 'ses-smoke' }),
+        abrir: async () => ok({ sesionId: 'ses-smoke' }),
       },
       saludM: () => ({ connected: true, lastStateTs: 99 }),
     });
@@ -166,6 +169,33 @@ describe('hostil-omite · delta exige M completo', () => {
     });
     expect(r.ok).toBe(true);
     if (r.ok) expect(r.valor.sesionId).toBe('ses-smoke');
+  });
+
+  test('omite sessionId|id → abridor err; no inventa delta:S1:L1', async () => {
+    const abridor = abridorDesdeStartArgRuntime({
+      startArgRuntime: async () => ({}),
+      runtimeOpts: {},
+    });
+    const puerto = crearPuertoSesionDelta({
+      abridor,
+      saludM: () => ({ connected: true, lastStateTs: 1 }),
+    });
+    const r = await puerto.abrirSesion({
+      actor: ACTOR,
+      stateId: 'S1',
+      ledgerId: 'L1',
+    });
+    expect(r.ok).toBe(false);
+    if (!r.ok) {
+      expect(r.error).toContain('omite sessionId|id');
+      expect(r.error).not.toContain('delta:S1:L1');
+    }
+    // mutante: ausencia no produce ok con sesion inventada
+    expect(JSON.stringify(r)).not.toContain('delta:S1:L1');
+    expect(r).not.toEqual({
+      ok: true,
+      valor: { sesionId: 'delta:S1:L1' },
+    });
   });
 });
 

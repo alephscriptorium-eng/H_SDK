@@ -22,7 +22,9 @@ import {
 
 /** Apertura de runtime delta inyectable (smoke / tarball / registry). */
 export interface AbridorRuntimeDelta {
-  abrir(confirmacion: ConfirmacionCiudad): Promise<{ sesionId: string }>;
+  abrir(
+    confirmacion: ConfirmacionCiudad,
+  ): Promise<Resultado<{ sesionId: string }>>;
 }
 
 export interface OpcionesPuertoSesionDelta {
@@ -71,11 +73,12 @@ export function crearPuertoSesionDelta(
     }
 
     const abierto = await abridor.abrir(confirmacion);
-    if (!abierto.sesionId) {
+    if (!abierto.ok) return abierto;
+    if (!abierto.valor.sesionId) {
       return err('delta: runtime no devolvió sesionId');
     }
 
-    return ok({ sesionId: abierto.sesionId });
+    return ok({ sesionId: abierto.valor.sesionId });
   }
 
   return {
@@ -99,19 +102,23 @@ export function abridorDesdeStartArgRuntime(deps: {
     [key: string]: unknown;
   }>;
   runtimeOpts: Record<string, unknown>;
-  sesionIdDe?: (handle: Record<string, unknown>, c: ConfirmacionCiudad) => string;
+  sesionIdDe?: (
+    handle: Record<string, unknown>,
+    c: ConfirmacionCiudad,
+  ) => string | undefined;
 }): AbridorRuntimeDelta {
   return {
     async abrir(confirmacion) {
       const handle = await deps.startArgRuntime(deps.runtimeOpts);
-      const sesionId = deps.sesionIdDe
+      const raw = deps.sesionIdDe
         ? deps.sesionIdDe(handle, confirmacion)
-        : String(
-            handle.sessionId ??
-              handle.id ??
-              `delta:${confirmacion.stateId}:${confirmacion.ledgerId}`,
-          );
-      return { sesionId };
+        : handle.sessionId ?? handle.id;
+      if (typeof raw !== 'string' || raw.length === 0) {
+        return err(
+          'delta: runtime omite sessionId|id — denegado (hostil-omite; no se inventa sesionId)',
+        );
+      }
+      return ok({ sesionId: raw });
     },
   };
 }
