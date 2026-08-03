@@ -158,9 +158,9 @@ sibling path.
 
 ## Revisión del orquestador
 
-**DEVUELTO** 2026-08-03 ·  #1.
+**DEVUELTO** 2026-08-03 · `DEVOLUCION-RH-13.md` #1.
 
-**✅ aceptado** 2026-08-03 · orquestador-H · merge  · tras fix + re-contrarrevisión PASS.
+**✅ aceptado** 2026-08-03 · orquestador-H · merge `28762d0` · tras fix + re-contrarrevisión PASS.
 
 - CA: wire Ciudad real; M connected+lastStateTs; pending_external fail-closed; sessionId omitido → err.
 - 20 tests + typecheck verdes.
