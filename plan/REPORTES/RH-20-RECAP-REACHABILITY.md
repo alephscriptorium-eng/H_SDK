@@ -5,7 +5,7 @@
 | agente | worker-RH-20 / orquestador-H |
 | fecha | 2026-08-03 |
 | WORLD_ROOT | `C:\S_LAB\h-sdk` · identidad-raiz **PASS** |
-| tip base | `0f429f2` (merge RH-19) |
+| tip H `main` | `6cc797d` (docs RH-20) · base `0f429f2` (merge RH-19) |
 | veredicto CA | **PASS** documental · demo **NO** completa desde V |
 | claim producto / demo terminada | **PROHIBIDO · no declarado** |
 
