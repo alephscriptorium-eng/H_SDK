@@ -7,9 +7,19 @@
     "node": ">=22"
   },
   "scripts": {
-    "skills:sync": "alephscript-skills-sync --runtime claude"
+    "skills:sync": "alephscript-skills-sync --runtime claude",
+    "demo": "node packages/game-prueba-hm/server.mjs"
   },
   "devDependencies": {
     "@alephscript/skills-scriptorium": "0.12.0"
+  },
+  "dependencies": {
+    "@zeus/ciudad": "^0.1.1",
+    "@zeus/game-engine": "^0.1.4",
+    "@zeus/protocol": "^0.4.1",
+    "@zeus/startpack-ciudad": "^0.1.1",
+    "@zeus/ui-3d-kit": "^0.1.4",
+    "@zeus/view-kit": "^0.1.5",
+    "three": "^0.185.1"
   }
 }

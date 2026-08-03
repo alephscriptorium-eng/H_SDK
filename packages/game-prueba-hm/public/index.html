@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="Demo jugable de la ceremonia H·M: el descenso de la ciudad al barrio y el acta de la NOTARÍA.">
+<title>Prueba de H·M — El Descenso</title>
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23131008'/%3E%3Ccircle cx='16' cy='9.5' r='4' fill='none' stroke='%23E7B14C' stroke-width='2.4'/%3E%3Cpath d='M16 14.5v10m0 0l-3.8-3.8M16 24.5l3.8-3.8' fill='none' stroke='%2385BAA9' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+
+<!-- Estilos base del shell. La estética la manda /css/demo.css (W-UI),
+     que se carga después y por tanto gana en igualdad de especificidad. -->
+<style>
+  :root {
+    /* paleta única de la demo — nadie sale de aquí */
+    --sepia: #131008;
+    --sepia-alto: #1c1710;
+    --tinta: #EAE0C8;
+    --oro: #E7B14C;        /* voz de H */
+    --verdigris: #85BAA9;  /* voz de M */
+    --violeta: #AC97CE;    /* mock honesto */
+    --ok: #8FBF7F;
+    --fallo: #DB7A5D;
+    --tenue: rgba(234, 224, 200, .48);
+    --linea: rgba(234, 224, 200, .14);
+    --mono: "Cascadia Code", "Cascadia Mono", Consolas, "SF Mono", "DejaVu Sans Mono", ui-monospace, monospace;
+    --suave: cubic-bezier(.22, .61, .36, 1);
+  }
+
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--sepia);
+    color: var(--tinta);
+    font-family: var(--mono);
+    font-size: 14px;
+    line-height: 1.5;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* lienzo three.js — ocupa todo; los paneles flotan encima */
+  #escena {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background:
+      radial-gradient(120% 90% at 50% 12%, #1b1409 0%, var(--sepia) 62%, #0b0905 100%);
+  }
+  #escena canvas { display: block; width: 100%; height: 100%; }
+
+  /* raíl de paneles (DOM overlay) — el ratón pasa salvo en los hijos */
+  #paneles {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none;
+  }
+  #paneles > * { pointer-events: auto; }
+
+  /* banda SIMULACRO: el mock honesto no se esconde */
+  #banda {
+    position: fixed;
+    z-index: 20;
+    top: 0; left: 0; right: 0;
+    display: flex;
+    gap: .8em;
+    align-items: center;
+    justify-content: center;
+    padding: .34em 1em;
+    font-size: 11px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--violeta);
+    background: linear-gradient(180deg, rgba(172, 151, 206, .14), rgba(19, 16, 8, 0));
+    border-bottom: 1px solid rgba(172, 151, 206, .22);
+    pointer-events: none;
+    user-select: none;
+  }
+  #banda b { font-weight: 600; color: var(--violeta); }
+  #banda span { color: var(--tenue); letter-spacing: .1em; text-transform: none; }
+
+  /* velo de carga — se desvanece con el evento «hm:listo» */
+  #cargando {
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    display: grid;
+    place-content: center;
+    gap: .8em;
+    text-align: center;
+    background: var(--sepia);
+    transition: opacity .6s var(--suave), visibility .6s var(--suave);
+  }
+  #cargando h1 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    color: var(--oro);
+  }
+  #cargando p { margin: 0; font-size: 12px; color: var(--tenue); letter-spacing: .08em; }
+  #cargando .pulso {
+    width: 7em;
+    height: 1px;
+    margin: .2em auto 0;
+    background: linear-gradient(90deg, transparent, var(--verdigris), transparent);
+    animation: respirar 2.4s var(--suave) infinite;
+  }
+  @keyframes respirar { 0%, 100% { opacity: .18 } 50% { opacity: .9 } }
+
+  body[data-listo] #cargando { opacity: 0; visibility: hidden; }
+
+  /* aviso discreto si un módulo aún no está en su sitio */
+  #aviso {
+    position: fixed;
+    z-index: 40;
+    left: 50%;
+    bottom: 1.4em;
+    transform: translate(-50%, 1.2em);
+    max-width: min(52em, 88vw);
+    padding: .7em 1.1em;
+    font-size: 12px;
+    color: var(--fallo);
+    background: rgba(19, 16, 8, .92);
+    border: 1px solid rgba(219, 122, 93, .45);
+    border-radius: 3px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .45s var(--suave), transform .45s var(--suave), visibility .45s;
+  }
+  #aviso[data-visible] { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+
+  noscript {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: grid;
+    place-content: center;
+    padding: 2em;
+    text-align: center;
+    color: var(--oro);
+    background: var(--sepia);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: .001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: .001ms !important;
+    }
+  }
+</style>
+<link rel="stylesheet" href="/css/demo.css">
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "/vendor/three/three.module.js",
+    "three/": "/vendor/three/",
+    "three/addons/": "/vendor/three/examples/jsm/",
+    "three/examples/jsm/": "/vendor/three/examples/jsm/",
+    "@zeus/ui-3d-kit": "/kit/index.mjs",
+    "@zeus/ui-3d-kit/": "/kit/",
+    "@zeus/view-kit": "/view-kit/index.mjs",
+    "@zeus/view-kit/": "/view-kit/",
+    "@zeus/game-engine": "/game-engine/index.mjs",
+    "@zeus/game-engine/": "/game-engine/"
+  }
+}
+</script>
+
+<link rel="modulepreload" href="/vendor/three/three.module.js">
+</head>
+
+<body>
+  <div id="escena" aria-label="Escena tridimensional: ciudad, barrio y ceremonia"></div>
+
+  <div id="paneles" aria-live="polite"></div>
+
+  <div id="banda" role="note">
+    <b>Simulacro</b>
+    <span>ceremonia H·M reproducible — lo real y lo simulado van marcados</span>
+  </div>
+
+  <div id="cargando">
+    <h1>Prueba de H·M</h1>
+    <p>El Descenso — preparando la ciudad…</p>
+    <div class="pulso"></div>
+  </div>
+
+  <div id="aviso" role="alert"></div>
+
+  <noscript>Esta demo necesita JavaScript y WebGL para dibujar la ciudad.</noscript>
+
+  <script>
+    // Contrato del shell con el integrador (main.mjs):
+    //   document.dispatchEvent(new CustomEvent('hm:listo'))  → retira el velo
+    //   document.dispatchEvent(new CustomEvent('hm:aviso', { detail: 'texto' }))
+    (function () {
+      var aviso = document.getElementById('aviso');
+      var temporizador = null;
+
+      function mostrar(texto) {
+        aviso.textContent = texto;
+        aviso.setAttribute('data-visible', '');
+        clearTimeout(temporizador);
+        temporizador = setTimeout(function () { aviso.removeAttribute('data-visible'); }, 9000);
+      }
+
+      document.addEventListener('hm:listo', function () {
+        document.body.setAttribute('data-listo', '');
+      });
+      document.addEventListener('hm:aviso', function (ev) {
+        mostrar(String((ev && ev.detail) || 'Aviso sin texto.'));
+      });
+
+      window.addEventListener('error', function (ev) {
+        if (ev && ev.target && ev.target.tagName === 'SCRIPT') {
+          mostrar('No se pudo cargar ' + (ev.target.src || 'un módulo') + '.');
+          return;
+        }
+        if (ev && ev.message) mostrar('Error: ' + ev.message);
+      }, true);
+
+      window.addEventListener('unhandledrejection', function (ev) {
+        var r = ev && ev.reason;
+        mostrar('Error: ' + ((r && r.message) || r || 'promesa rechazada'));
+      });
+    }());
+  </script>
+
+  <script type="module" src="/js/main.mjs"></script>
+</body>
+</html>
