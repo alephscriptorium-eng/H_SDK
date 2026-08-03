@@ -139,4 +139,7 @@ independiente).
 
 ## Revisión del orquestador
 
-_(la rellena el orquestador: aceptado ✅ / devuelto con lista numerada)_
+**✅ aceptado** 2026-08-03 · orquestador-H · merge `36551c9` · contrarrevisión PASS.
+
+- CA: typecheck+9 tests; grep EntradaCadena/PuertoActa = 0; core sin `@zeus/*`.
+- Hallazgo: `edge-zeus` queda incompatible hasta RH-13.
