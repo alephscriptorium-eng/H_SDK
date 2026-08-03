@@ -5,7 +5,7 @@
 | agente | worker-RH-15 |
 | fecha | 2026-08-03 |
 | rama | `wp/rh-15-vertical` |
-| commits | _(anclar tras commit)_ |
+| commits | `5af8eb6` |
 | eje(s) CA | IV, hostil-omite |
 | riesgo de revisión | `independiente` |
 | revisor distinto del worker | `sí` (orquestador read-only post-obra) |
@@ -58,7 +58,7 @@ G main tip: 6b302b7; checkpoint G 35cbded intacto
 - `TEST_AUTOMATIZADO_VS_EVIDENCIA_MANUAL`:
   - Automatizado: 31 tests
   - Manual: `bun run demo` JSON
-- `VEREDICTO_REVISOR`: `⏳ pendiente de revisor distinto`
+- `VEREDICTO_REVISOR`: `PASS` (orquestador read-only; mutantes hostil-omite + demo JSON)
 
 ## Auto-revisión (PRACTICAS del mundo — con honestidad)
 
@@ -85,4 +85,8 @@ Ninguno para CA de RH-15 (vertical hasta pending_external visible).
 
 ## Revisión del orquestador
 
-_(pendiente PASS/DEVUELTO)_
+✅ aceptado 2026-08-03 — vertical observado: acople ciudad/delta/m conectado,
+sesión UUID de arg-runtime@0.1.1, pieza onfalo, pending E/línea/evidencia,
+cero complete. Contraevidencia: paths node_modules, hostil-omite sessionId,
+31 tests. G fixes sessionId+onfalo sello ya en main.
+
