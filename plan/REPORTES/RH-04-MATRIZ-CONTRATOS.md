@@ -1,6 +1,6 @@
 # RH-04 · MATRIZ CONTRATOS (install limpio)
 
-Generado: 2026-08-03T14:11:41.822Z
+Generado: 2026-08-03T16:34:21.973Z
 Registry: `https://npm.scriptorium.escrivivir.co`
 
 ## Método
@@ -22,8 +22,8 @@ node scripts/rh-04-matriz-contratos.mjs --json
 
 | estado | n | superficies |
 | --- | --- | --- |
-| VERDE | 4 | ciudad, authority-kit, rooms, player-mcp-kit |
-| ROJO | 12 | ver tabla |
+| VERDE | 7 | ciudad, authority-kit, rooms, player-mcp-kit, arg-domain, arg-runtime, arg-player-mcp |
+| ROJO | 9 | ver tabla |
 
 ### linea-kit (re-verificación obligatoria)
 
@@ -55,40 +55,30 @@ Install limpio: exit 0
 
 | paquete | version_exacta | export_map | d.ts | runtime_import | owner | veredicto | evidencia | notas |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| @zeus/ciudad | 0.1.1 | 11 keys: ., ./domain, ./contract, ./presencia, ./acta, ./jugadores, ./scene, ./misiones… | declared:./types/contract.d.ts; disk:./types/contract.d.ts,./types/domain.d.ts,./types/presencia.d.ts,./types/acta.d.ts,./types/jugadores.d.ts,./types/scene.d.ts,./types/misiones.d.ts,./types/cronista.d.ts,./types/salud.d.ts,./types/edificios.d.ts; missing:none | OK | G/Z (ciudad) | VERDE | npm view @zeus/ciudad@0.1.1 name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → version=0.1.1; types=./types/contract.d.ts \|\| cd C:\Users\aleph\AppData\Local\Temp\rh04-matriz-nxrHeY && npm install --ignore-scripts --no-package-lock  |  |
-| @zeus/authority-kit | 0.4.2 | 2 keys: ., ./create-authority | declared:./types/index.d.ts; disk:./types/index.d.ts,./types/create-authority.d.ts; missing:none | OK | Z (authority) | VERDE | npm view @zeus/authority-kit@0.4.2 name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → version=0.4.2; types=./types/index.d.ts \|\| cd C:\Users\aleph\AppData\Local\Temp\rh04-matriz-nxrHeY && npm install --ignore-scripts --no-package-l |  |
-| @zeus/rooms | 0.1.2 | 1 keys: . | declared:./types/index.d.ts; disk:./types/index.d.ts; missing:none | OK | Z (rooms) | VERDE | npm view @zeus/rooms@0.1.2 name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → version=0.1.2; types=./types/index.d.ts \|\| cd C:\Users\aleph\AppData\Local\Temp\rh04-matriz-nxrHeY && npm install --ignore-scripts --no-package-lock  (de |  |
-| @zeus/player-mcp-kit | 0.1.4 | 1 keys: . | declared:./types/index.d.ts; disk:./types/index.d.ts; missing:none | OK | Z (player-mcp) | VERDE | npm view @zeus/player-mcp-kit@0.1.4 name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → version=0.1.4; types=./types/index.d.ts \|\| cd C:\Users\aleph\AppData\Local\Temp\rh04-matriz-nxrHeY && npm install --ignore-scripts --no-package- |  |
-| @zeus/arg-domain | — | — | — | N/A | G (delta) | ROJO / pending_external_contract | npm view @zeus/arg-domain name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → E404 (exit 1): {
-  "error": {
-    "code": "E404",
-    "summary": "Not Found - GET https://npm.scriptorium.escrivivir.co/@zeus%2farg-domain - no such package | delta público tipado |
-| @zeus/arg-runtime | — | — | — | N/A | G (delta) | ROJO / pending_external_contract | npm view @zeus/arg-runtime name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → E404 (exit 1): {
-  "error": {
-    "code": "E404",
-    "summary": "Not Found - GET https://npm.scriptorium.escrivivir.co/@zeus%2farg-runtime - no such packa | si existe publicado |
-| @zeus/arg-view-kit | — | — | — | N/A | G (delta) | ROJO / pending_external_contract | npm view @zeus/arg-view-kit name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → E404 (exit 1): {
-  "error": {
-    "code": "E404",
-    "summary": "Not Found - GET https://npm.scriptorium.escrivivir.co/@zeus%2farg-view-kit - no such pac | si existe |
-| @zeus/arg-player-mcp | — | — | — | N/A | G (delta) | ROJO / pending_external_contract | npm view @zeus/arg-player-mcp name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → E404 (exit 1): {
-  "error": {
-    "code": "E404",
-    "summary": "Not Found - GET https://npm.scriptorium.escrivivir.co/@zeus%2farg-player-mcp - no such |  |
+| @zeus/ciudad | 0.1.1 | 11 keys: ., ./domain, ./contract, ./presencia, ./acta, ./jugadores, ./scene, ./misiones… | declared:./types/contract.d.ts; disk:./types/contract.d.ts,./types/domain.d.ts,./types/presencia.d.ts,./types/acta.d.ts,./types/jugadores.d.ts,./types/scene.d.ts,./types/misiones.d.ts,./types/cronista.d.ts,./types/salud.d.ts,./types/edificios.d.ts; missing:none | OK | G/Z (ciudad) | VERDE | npm view @zeus/ciudad@0.1.1 name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → version=0.1.1; types=./types/contract.d.ts \|\| cd C:\Users\aleph\AppData\Local\Temp\rh04-matriz-5ds9jn && npm install --ignore-scripts --no-package-lock  |  |
+| @zeus/authority-kit | 0.4.2 | 2 keys: ., ./create-authority | declared:./types/index.d.ts; disk:./types/index.d.ts,./types/create-authority.d.ts; missing:none | OK | Z (authority) | VERDE | npm view @zeus/authority-kit@0.4.2 name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → version=0.4.2; types=./types/index.d.ts \|\| cd C:\Users\aleph\AppData\Local\Temp\rh04-matriz-5ds9jn && npm install --ignore-scripts --no-package-l |  |
+| @zeus/rooms | 0.1.2 | 1 keys: . | declared:./types/index.d.ts; disk:./types/index.d.ts; missing:none | OK | Z (rooms) | VERDE | npm view @zeus/rooms@0.1.2 name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → version=0.1.2; types=./types/index.d.ts \|\| cd C:\Users\aleph\AppData\Local\Temp\rh04-matriz-5ds9jn && npm install --ignore-scripts --no-package-lock  (de |  |
+| @zeus/player-mcp-kit | 0.1.4 | 1 keys: . | declared:./types/index.d.ts; disk:./types/index.d.ts; missing:none | OK | Z (player-mcp) | VERDE | npm view @zeus/player-mcp-kit@0.1.4 name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → version=0.1.4; types=./types/index.d.ts \|\| cd C:\Users\aleph\AppData\Local\Temp\rh04-matriz-5ds9jn && npm install --ignore-scripts --no-package- |  |
+| @zeus/arg-domain | 0.1.0 | 5 keys: ., ./contract, ./scenes/delta-v0, ./scenes/tap-cloaks, ./node | declared:./types/index.d.ts; disk:./types/index.d.ts,./types/intents.d.ts,./types/scene.d.ts,./types/tap-cloaks.d.ts,./types/node.d.ts; missing:none | OK | G (delta) | VERDE | npm view @zeus/arg-domain name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → version=0.1.0; types=./types/index.d.ts \|\| cd C:\Users\aleph\AppData\Local\Temp\rh04-matriz-5ds9jn && npm install --ignore-scripts --no-package-lock  (dep | delta público tipado |
+| @zeus/arg-runtime | 0.1.1 | 1 keys: . | declared:./types/index.d.ts; disk:./types/index.d.ts; missing:none | OK | G (delta) | VERDE | npm view @zeus/arg-runtime name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → version=0.1.1; types=./types/index.d.ts \|\| cd C:\Users\aleph\AppData\Local\Temp\rh04-matriz-5ds9jn && npm install --ignore-scripts --no-package-lock  (de | si existe publicado |
+| @zeus/arg-view-kit | 0.1.0 | 3 keys: ., ./node, ./package.json | declared:./types/index.d.ts; disk:./types/index.d.ts,./types/node.d.ts; missing:none | FAIL: node:internal/modules/esm/resolve:274
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module 'C:\assets\room-client\room-client.browser.mjs' imported from C:\Users\aleph\AppData\Local\Temp\rh04-matriz-5ds9jn\node_modules\@zeus\view-kit\src\room.mjs
+    | G (delta) | ROJO / runtime_import_fail | npm view @zeus/arg-view-kit name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → version=0.1.0; types=./types/index.d.ts \|\| cd C:\Users\aleph\AppData\Local\Temp\rh04-matriz-5ds9jn && npm install --ignore-scripts --no-package-lock  (d | si existe |
+| @zeus/arg-player-mcp | 0.1.0 | 3 keys: ., ./server, ./package.json | declared:./types/index.d.ts; disk:./types/index.d.ts,./types/server.d.ts; missing:none | OK | G (delta) | VERDE | npm view @zeus/arg-player-mcp name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → version=0.1.0; types=./types/index.d.ts \|\| cd C:\Users\aleph\AppData\Local\Temp\rh04-matriz-5ds9jn && npm install --ignore-scripts --no-package-lock   |  |
 | @zeus/arg-feeds | — | — | — | N/A | G (delta) | ROJO / pending_external_contract | npm view @zeus/arg-feeds name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → E404 (exit 1): {
   "error": {
     "code": "E404",
     "summary": "Not Found - GET https://npm.scriptorium.escrivivir.co/@zeus%2farg-feeds - no such package a | si aplica |
-| @zeus/mockdatas-ciudad | — | — | — | N/A | G (mockdatas) | ROJO / pending_external_contract | npm view @zeus/mockdatas-ciudad name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → E404 (exit 1): {
-  "error": {
-    "code": "E404",
-    "summary": "Not Found - GET https://npm.scriptorium.escrivivir.co/@zeus%2fmockdatas-ciudad - no  |  |
-| (candidatos: @zeus/onfalo, @zeus/onfalo-fixture, @zeus/fixtures-onfalo, onfalo, onfalo-fixture) | — | — | — | N/A (no package) | H/G (artefacto) | ROJO / pending_external_contract | npm view @zeus/onfalo version --registry=https://npm.scriptorium.escrivivir.co → E404 \| npm view @zeus/onfalo-fixture version --registry=https://npm.scriptorium.escrivivir.co → E404 \| npm view @zeus/fixtures-onfalo version --registry=https://npm.scriptorium.escrivivir.co → E404 | artefacto Ónfalo pinneado |
+| @zeus/mockdatas-ciudad | 0.1.0 | 3 keys: ., ./package.json, ./volumes/volumes.json | none | OK | G (mockdatas) | ROJO / publicado-sin-types | npm view @zeus/mockdatas-ciudad name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → version=0.1.0; types=— \|\| cd C:\Users\aleph\AppData\Local\Temp\rh04-matriz-5ds9jn && npm install --ignore-scripts --no-package-lock  (deps: @zeus/ci |  |
+| (candidatos: @zeus/onfalo, @zeus/onfalo-fixture, @zeus/fixtures-onfalo, onfalo, onfalo-fixture) | — | — | — | N/A (no package) | H/G (artefacto) | ROJO / pending_external_contract | npm view @zeus/onfalo version --registry=https://npm.scriptorium.escrivivir.co → E404 \| npm view @zeus/onfalo-fixture version --registry=https://npm.scriptorium.escrivivir.co → undefined \| npm view @zeus/fixtures-onfalo version --registry=https://npm.scriptorium.escrivivir.co → | artefacto Ónfalo pinneado |
 | (candidatos: lore-hm-candidate, lore-hm, @logos/lore-hm, @alephscript/lore-hm-candidate) | — | — | — | N/A (no package) | S/lengua (externo) | ROJO / pending_external_contract | npm view lore-hm-candidate version --registry=https://npm.scriptorium.escrivivir.co → E404 \| npm view lore-hm version --registry=https://npm.scriptorium.escrivivir.co → E404 \| npm view @logos/lore-hm version --registry=https://npm.scriptorium.escrivivir.co → E404 \| npm view @a | candidato LORE-HM |
 | (candidatos: @zeus/provider-e, @zeus/analisis-e, provider-e) | — | — | — | N/A (no package) | E (externo) | ROJO / pending_external_contract | npm view @zeus/provider-e version --registry=https://npm.scriptorium.escrivivir.co → E404 \| npm view @zeus/analisis-e version --registry=https://npm.scriptorium.escrivivir.co → E404 \| npm view provider-e version --registry=https://npm.scriptorium.escrivivir.co → E404 | provider E |
-| @zeus/linea-kit | 0.3.0 | 10 keys: ., ./curation, ./resolve, ./force-activation, ./validate, ./loader, ./tools, ./starterkits… | none | OK | Z (línea/materialización) | ROJO / publicado-sin-types | npm view @zeus/linea-kit@0.3.0 name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → version=0.3.0; types=— \|\| cd C:\Users\aleph\AppData\Local\Temp\rh04-matriz-nxrHeY && npm install --ignore-scripts --no-package-lock  (deps: @zeus/ciu | re-verificar types en manifest instalado |
+| @zeus/linea-kit | 0.3.0 | 10 keys: ., ./curation, ./resolve, ./force-activation, ./validate, ./loader, ./tools, ./starterkits… | none | OK | Z (línea/materialización) | ROJO / publicado-sin-types | npm view @zeus/linea-kit@0.3.0 name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → version=0.3.0; types=— \|\| cd C:\Users\aleph\AppData\Local\Temp\rh04-matriz-5ds9jn && npm install --ignore-scripts --no-package-lock  (deps: @zeus/ciu | re-verificar types en manifest instalado |
 | (candidatos: @zeus/evidence-kit, @zeus/evidencia-kit, @zeus/hub-evidence, @zeus/ceremony-kit, @zeus/notaria-kit) | — | — | — | N/A (no package) | HUB (externo) | ROJO / pending_external_contract | npm view @zeus/evidence-kit version --registry=https://npm.scriptorium.escrivivir.co → E404 \| npm view @zeus/evidencia-kit version --registry=https://npm.scriptorium.escrivivir.co → E404 \| npm view @zeus/hub-evidence version --registry=https://npm.scriptorium.escrivivir.co → E4 | ceremonia/evidencia canónica; acta-kit medido aparte como candidato parcial |
-| @zeus/acta-kit | 0.1.1 | 7 keys: ., ./tipos, ./emitir, ./validar, ./publicar, ./adoptar, ./huella | none | OK | Z/HUB (candidato parcial) | ROJO / publicado-sin-types | npm view @zeus/acta-kit@0.1.1 name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → version=0.1.1; types=— \|\| cd C:\Users\aleph\AppData\Local\Temp\rh04-matriz-nxrHeY && npm install --ignore-scripts --no-package-lock  (deps: @zeus/ciud | publicado; no sustituye evidencia canónica tipada |
+| @zeus/acta-kit | 0.1.1 | 7 keys: ., ./tipos, ./emitir, ./validar, ./publicar, ./adoptar, ./huella | none | OK | Z/HUB (candidato parcial) | ROJO / publicado-sin-types | npm view @zeus/acta-kit@0.1.1 name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → version=0.1.1; types=— \|\| cd C:\Users\aleph\AppData\Local\Temp\rh04-matriz-5ds9jn && npm install --ignore-scripts --no-package-lock  (deps: @zeus/ciud | publicado; no sustituye evidencia canónica tipada |
 
 ## Hipótesis del BRIEF vs observado
 
@@ -97,10 +87,10 @@ Install limpio: exit 0
 | verde: ciudad | VERDE |
 | verde: rooms | VERDE |
 | verde: player-mcp-kit | VERDE |
-| rojo hasta publicación: arg-domain | ROJO / pending_external_contract |
-| rojo hasta publicación: arg-runtime | ROJO / pending_external_contract |
-| rojo hasta publicación: arg-view-kit | ROJO / pending_external_contract |
-| rojo hasta publicación: arg-player-mcp | ROJO / pending_external_contract |
+| rojo hasta publicación: arg-domain | VERDE |
+| rojo hasta publicación: arg-runtime | VERDE |
+| rojo hasta publicación: arg-view-kit | ROJO / runtime_import_fail |
+| rojo hasta publicación: arg-player-mcp | VERDE |
 | rojo hasta publicación: artefacto-onfalo | ROJO / pending_external_contract |
 | rojo hasta publicación: lore-hm-candidate | ROJO / pending_external_contract |
 | rojo hasta publicación: provider-e | ROJO / pending_external_contract |
