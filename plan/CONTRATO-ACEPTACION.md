@@ -7,10 +7,13 @@ repos. Ancla de estados: `plan/REPORTES/RH-04-MATRIZ-CONTRATOS.md`
 > **No declara producto.** Ausencias y superficies sin types tipados quedan
 > visibles; no se tapan con stubs en H.
 
-**Siguiente (post RH-11b types Z):** linea-kit / feed-kit / acta-kit tipados
-pinneados; vertical H sigue en `pending_external` **E + evidencia HUB**
-(acta ≠ canónico). Tip H: ver `plan/REPORTES/RH-11b-types-z.md`. H no
-implementa V ni providers externos.
+**Siguiente (post RH-11b types Z + ELEV-E-HUB 2026-08-03):** linea-kit /
+feed-kit / acta-kit tipados pinneados; vertical H sigue en
+`pending_external` **E + evidencia HUB** (acta ≠ canónico). Re-chequeo
+registry E/HUB = E404; **solo elevación** (cero publish) —
+`C:/S_META/HSDK/NOTA-ELEV-E-HUB-2026-08-03.md` · addenda
+`plan/REPORTES/RH-11-ELEV-E-HUB-2026-08-03.md`. Tip H: ver
+`plan/REPORTES/RH-11b-types-z.md`. H no implementa V ni providers externos.
 
 ---
 
