@@ -5,7 +5,7 @@
 | agente | worker-RH-14 |
 | fecha | 2026-08-03 |
 | rama | `wp/rh-14-composition-root` |
-| commits | `1139079` feat · tip reporte = HEAD de `wp/rh-14-composition-root` |
+| commits | `1139079` feat · `b05d03a` reporte · tip = HEAD de `wp/rh-14-composition-root` |
 | eje(s) CA | I, II |
 | riesgo de revisión | `independiente` |
 | revisor distinto del worker | `sí` |
