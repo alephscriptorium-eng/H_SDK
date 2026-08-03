@@ -16,9 +16,10 @@
     "typecheck:core": "bun x tsc -p packages/core --noEmit",
     "typecheck:edge-zeus": "bun x tsc -p packages/edge-zeus --noEmit",
     "typecheck:app": "bun x tsc -p packages/app-prueba-hm --noEmit",
-    "test:reachability": "bun test packages/app-prueba-hm/src/reachability.test.ts packages/app-prueba-hm/src/composition.test.ts packages/app-prueba-hm/src/vertical.test.ts",
+    "test:reachability": "bun test packages/app-prueba-hm/src/reachability.test.ts packages/app-prueba-hm/src/composition.test.ts packages/app-prueba-hm/src/vertical.test.ts packages/app-prueba-hm/src/mcp-http.test.ts",
     "skills:sync": "alephscript-skills-sync --runtime claude",
-    "demo": "bun run packages/app-prueba-hm/src/main.ts"
+    "demo": "bun run packages/app-prueba-hm/src/main.ts",
+    "mcp": "bun run packages/app-prueba-hm/src/server.ts"
   },
   "devDependencies": {
     "@alephscript/skills-scriptorium": "0.12.0",

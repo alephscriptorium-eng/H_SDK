@@ -77,7 +77,7 @@ const DESCRIPTORES: readonly ResourceDescriptor[] = [
   },
 ];
 
-/** Almacén in-process; el servidor MCP de producto lo proyectará (RH-16). */
+/** Almacén in-process; proyectado por `mcp-http.ts` / `bun run mcp`. */
 export class AlmacenResources {
   private readonly cuerpos = new Map<ResourceUri, string>();
 

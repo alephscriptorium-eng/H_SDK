@@ -5,10 +5,13 @@
   "type": "module",
   "private": true,
   "exports": {
-    ".": "./src/main.ts"
+    ".": "./src/main.ts",
+    "./mcp": "./src/server.ts",
+    "./catalog": "./src/catalog.ts"
   },
   "scripts": {
     "start": "bun run src/main.ts",
+    "mcp": "bun run src/server.ts",
     "typecheck": "bun x tsc --noEmit",
     "test": "bun test src"
   },
