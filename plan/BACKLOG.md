@@ -64,9 +64,9 @@ DOWNSTREAM_PATTERNS='["S/*"]'
 
 | WP | P | BRIEF | CA | deps | ejes |
 | -- | - | ----- | -- | ---- | ---- |
-| **RH-16** | P1 | ✅ 2026-08-03 · tip V f12ac76 · tip H c3a0afe · 17 tests V · transport MCP producto H `<pendiente>` · Servicio experiencia H en V (MinimalMcpClient/ResourceProjectionService): descubrir server H listar/leer resources validar version/shape; modelar pending connected error complete sin hardcode; sin import sibling H ni IPlay/ICompany hasta runtime real | tests de parseo/estados; fixtures MCP tras RH-05; integracion real tras RH-14 | RH-05 | I, IV |
+| **RH-16** | P1 | ✅ 2026-08-03 · tip V f12ac76 · tip H c3a0afe · 17 tests V · **transport MCP producto H cerrado** (tramo B · ver RH-TRANSPORT) · Servicio experiencia H en V (MinimalMcpClient/ResourceProjectionService): descubrir server H listar/leer resources validar version/shape; modelar pending connected error complete sin hardcode; sin import sibling H ni IPlay/ICompany hasta runtime real | tests de parseo/estados; fixtures MCP tras RH-05; integracion real tras RH-14 | RH-05 | I, IV |
 | **RH-17** | P1 | ✅ 2026-08-03 · tip V f54be58 · tip H d627878 · TreeView+webview experiencia · 180 tests related PASS · Vista V dedicada TreeView diagnostico + webview experiencia con CSP/nonce existentes; render Ciudad escena via arg-view-kit estado M Onfalo analisis linea evidencia; comandos = tools MCP; H sin paneles HTML; Teatro hardcodeado fuera del cambio | vista data-driven sin Teatro; compile/lint verdes | RH-08, RH-14, RH-16 | I |
-| **RH-18** | P2 | ✅ 2026-08-03 · tip V b856b9e · VSIX `dist/aleph-0-0.2.0.vsix` · fases connecting/failed · fixtures + transport `<pendiente>` fail-closed · Empaquetar VSIX y probar contra H/M reales; distinguir pending_external_contract connecting connected failed complete; no exito con resources stale ni actores/escenas inventados | VSIX instalable; transicion observada hasta estados reales | RH-15, RH-17 | IV, hostil-omite |
+| **RH-18** | P2 | ✅ 2026-08-03 · tip V b856b9e · VSIX `dist/aleph-0-0.2.0.vsix` · fases connecting/failed · fixtures + **transport producto H→V cerrado** (fail-closed; no complete fingido) · Empaquetar VSIX y probar contra H/M reales; distinguir pending_external_contract connecting connected failed complete; no exito con resources stale ni actores/escenas inventados | VSIX instalable; transicion observada hasta estados reales | RH-15, RH-17 | IV, hostil-omite |
 
 ---
 
@@ -82,18 +82,18 @@ DOWNSTREAM_PATTERNS='["S/*"]'
 | 5 | RH-09 | gate publicacion G |
 | 6 | RH-12 → RH-13 → RH-14 → RH-15 | reconstruccion H en serie |
 | 7 | RH-16 → RH-17 → RH-18 | RH-16 ✅ · RH-17 ✅ tip V `f54be58` · RH-18 ✅ tip V `b856b9e` (VSIX) |
-| 8 | RH-19 → RH-20 | cierre (bloqueado por transport H→V + owners E/línea/HUB) |
+| 8 | RH-19 → RH-20 | cierre (transport H→V ✅; bloqueado por owners E/HUB + clean-room) |
 
-### Siguiente (post RH-18 · tip V `b856b9e`)
+### Siguiente (post transport H→V · tramo B)
 
-- **Despachable desde H/G ahora:** nada de producto H/G pendiente en lote 6–7.
-  Gobierno: RH-16 ✅ · RH-17 ✅ · RH-18 ✅ (obra en V; no re-implementar en H).
-- **Carril V:** lote 7 cerrado. Siguiente E2E es **RH-19** (clean-room) cuando
-  haya GO; bloqueado mientras transport MCP producto H→V sea `<pendiente>`.
+- **Transport MCP producto H→V:** ✅ `bun run mcp` + env `H_SDK_MCP_*` /
+  catálogo `h.experiencia` · reporte
+  [`REPORTES/RH-TRANSPORT-MCP-H-V.md`](./REPORTES/RH-TRANSPORT-MCP-H-V.md).
+  No finge `complete`; E/HUB siguen `pending_external`.
+- **Despachable con GO:** **RH-19** (E2E clean-room H+V con endpoint real).
 - **Bloqueado por owners externos:** LORE-HM · provider E · evidencia HUB
   canónica (RH-11; linea-kit@0.4.0 / acta-kit@0.1.2 / feed-kit@0.3.1 tipados —
-  `pending_release_types` cerrado; acta ≠ HUB). H no rellena. Transport MCP
-  producto H→V sigue `<pendiente>` (no inventar connected/complete).
+  acta ≠ HUB). H no rellena.
 - **ELEV-E-HUB 2026-08-03:** re-chequeo registry E404; e-sdk sin artefacto
   tipable (submodules vacíos + DA-5); **cero publish**; elevación en
   `C:/S_META/HSDK/NOTA-ELEV-E-HUB-2026-08-03.md` +

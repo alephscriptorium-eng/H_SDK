@@ -47,7 +47,7 @@ Estados permitidos (mapeo RH-04):
 | Línea / materialización | Z (línea) | `@zeus/linea-kit` **con types**; API `materializeRecorrido` desde `@zeus/linea-kit/viaje` | H delega; no inventa `line.materialize` | **VERDE** (`@zeus/linea-kit@0.4.0`) |
 | Ceremonia / evidencia canónica HUB | HUB (externo) | kit tipado canónico (candidatos RH-04 E404) | H verifica; V muestra veredicto | **pending_external_contract** |
 | Acta kit (candidato parcial; no sustituye evidencia canónica) | Z/HUB | `@zeus/acta-kit` tipado | H **no** lo usa como evidencia HUB canónica | **VERDE tipado** (`@zeus/acta-kit@0.1.2`); evidencia canónica sigue **pending_external** |
-| Proyección experiencia H (estado / escena / evidencia) | **H** | resources MCP versionados **o** JSON Schema servido como resource (superficie propia H) | **V** (único UI) | **shapes `0.1.0` in-process** (`AlmacenResources`); transport MCP producto → RH-16/handoff V |
+| Proyección experiencia H (estado / escena / evidencia) | **H** | resources MCP versionados **o** JSON Schema servido como resource (superficie propia H) | **V** (único UI) | **shapes `0.1.0` + transport HTTP** (`bun run mcp` · `POST /mcp`); discovery V: catálogo `h.experiencia` o env `H_SDK_MCP_HOST`/`H_SDK_MCP_PORT` · ver `plan/REPORTES/RH-TRANSPORT-MCP-H-V.md` |
 
 Conteo sensor RH-04 (2026-08-03T17:15:35.787Z): **10 VERDE · 7 ROJO**.
 Gaps que bloquean `complete`: **E + evidencia HUB** (linea tipada ya
