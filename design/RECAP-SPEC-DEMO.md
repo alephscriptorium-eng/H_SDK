@@ -8,6 +8,28 @@
 > «Boceto TERMINADO» ≠ product-reachable. Tabla y regla de cinco flags:
 > `C:/S_META/HSDK/REPLAN-PRUEBA-HM-REACHABILITY.md` §8.
 
+> **RH-20 (verdad de reachability · 2026-08-03):** la demo **NO** está
+> completa desde V. Observación RH-19 = fail-closed PASS con
+> `pending_external_contract` (cero `complete`). Checkpoint H/G, boceto
+> `game-prueba-hm` y obra G original = **evidencia histórica**, no
+> alternativas operativas. Acta:
+> [`../plan/REPORTES/RH-19-E2E-CLEAN-ROOM.md`](../plan/REPORTES/RH-19-E2E-CLEAN-ROOM.md).
+
+## Veredicto reachability (RH-19 → RH-20)
+
+| eje | estado observado | ancla |
+| --- | ---------------- | ----- |
+| Composition Bun/TS + edges registry | alcanzable hasta PARAR en owners | tip H `0f429f2` (acta tip obra `5fadbb4`); `bun run demo` → `pending_external_contract` |
+| Transport MCP H→V | vivo; resources `0.1.0` | `bun run mcp` · tips H~`5fadbb4` · V `27a98ef` · SMOKE_OK |
+| Vista V / MinimalMcpClient | lee estado real; fase ≠ complete | RH-19 §2.7 · tip V `27a98ef` |
+| Provider E / LORE-HM | **pending_external_contract** | RH-11 · ELEV-E-HUB |
+| Línea (input E) | **pending** (API tipada; falta E) | `linea-kit@0.4.0` · bloquea `line_materialized` |
+| Evidencia HUB canónica | **pending_external_contract** | acta-kit ≠ HUB · ELEV-E-HUB |
+| Room Ciudad viva | stub en path demo | RH-19 G4 |
+| Demo `complete` desde V | **NO observada** | `completeFingido: false` |
+
+**Frase de veredicto:** *reachability real hasta `pending_external_contract` (E / línea-sin-E / HUB); demo NO completa desde V.*
+
 ## La spec, con sus fuentes
 
 | elemento | palabra del PO (paráfrasis fiel) |
@@ -42,32 +64,32 @@
    propio de H es **TypeScript estricto source-first, Bun, hexágono
    core/edges, MODES** — la raspa de network-engine rehecha.
 
-## El boceto queda TERMINADO (no es la demo)
+## El boceto queda TERMINADO (evidencia histórica · no es la demo)
 
 `packages/game-prueba-hm/` tal como está hoy = **boceto cerrado**
 (commits `9296c39`+`9c030f5`). No se itera más sobre él como si fuera la
-demo. **[RH-03]** TERMINADO(boceto) **no** implica product-reachable, «cero
-violaciones» ni demo observada desde V. El **artifact publicado** «Prueba de H·M — Barrio LORE» queda
-re-etiquetado en su propia cabecera como *boceto/espec del panel de
-ceremonia*: conserva el guion rescatado de `HANDOFF-DEMO.md` (su valor
-real) y el lenguaje visual aprobado por el PO; no representa la demo. Piezas rescatables SOLO si la adaptación las pide: el server de
-import maps + endpoints reales (`/api/acta`, `/api/verificar`, `/onfalo`),
-`puente-zeus` (browser-safety de `@zeus/ciudad`), la corrida del dominio
-real en navegador, tipestate→clips, y los datos (mapa sellado, piezas
-selladas del Ónfalo).
+demo. **[RH-03 · RH-20]** TERMINADO(boceto) **no** implica product-reachable,
+«cero violaciones» ni demo observada desde V. Queda referenciado solo como
+**evidencia histórica** (guion / assets), no como alternativa operativa ni
+entrypoint de producto. El **artifact publicado** «Prueba de H·M — Barrio
+LORE» queda re-etiquetado en su propia cabecera como *boceto/espec del panel
+de ceremonia*: conserva el guion rescatado de `HANDOFF-DEMO.md` (su valor
+real) y el lenguaje visual aprobado por el PO; no representa la demo.
 
-## La adaptación (esqueleto, pendiente de medición)
+Igual tratamiento histórico (no operativo): checkpoint H
+`e53694e` / G `wp/g-prueba-hm-adaptacion@35cbded` y la obra G de adaptación
+tal cual (`document-machine` sibling) — ver REPLAN §1–2 y plan.md step 20.
 
-- **delta aporta**: el juego base — dominio de flujo (gotas→mar vivo→
-  cristales, grifos como válvulas), vistas tablero/jugador (arg-console),
-  MCP-por-actor (arg-player-mcp), bots rabbit/spider/horse.
-- **ciudad aporta**: el dominio de entrada (join/walk/announce/wake/sleep +
-  acta) — ya probado real en navegador.
-- **el barrio Lore aporta**: las units de la DocumentMachine, el Ónfalo,
-  la lengua para modelizar el flujo.
-- **V aporta**: el asiento de H — el juego se ve y se opera desde el
-  Zigurat, y el teatro (`IPlay`: actos/escenas/cast) es candidato natural
-  para representar el guion.
-- **A medir antes de plan**: cómo corre delta hoy (launch, rooms, qué está
-  publicado de `packages/delta/*`), y el patrón exacto de webview/teatro
-  en v-sdk para asentar la vista de H.
+## La adaptación (estado post RH-01…20)
+
+- **delta aporta (publicado tipado):** `@zeus/arg-domain@0.1.0`,
+  `arg-runtime@0.1.1`, `arg-view-kit@0.1.0`, `arg-player-mcp@0.1.0` —
+  consumidos por H/V vía registry (RH-06…10, RH-15).
+- **ciudad aporta:** entrada join/walk/announce/wake con wire real
+  (RH-13/15); room viva socket = stub en el path demo documentado (RH-19 G4).
+- **barrio Lore / Ónfalo:** fixture pinneado `@zeus/onfalo-fixture@0.1.1`
+  sellado observado; LORE-HM + provider E = **pending_external** (owners).
+- **V aporta:** asiento MCP de H (TreeView + webview + VSIX); transport
+  producto cerrado; **no** muestra `complete` con gaps abiertos.
+- **No declarar** producto ni demo terminada mientras falten E / línea-con-E /
+  HUB y la observación `complete` desde V (decisión ⑥ + ⑧).

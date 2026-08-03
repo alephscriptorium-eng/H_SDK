@@ -11,7 +11,7 @@ Fuente narrativa: [`../plan.md`](../plan.md) (20 steps).
 | lanes | `h` · `g` · `v` · `ext` · `gov` |
 | estados | ⬜ pendiente · 🔶 en curso · ✅ aceptado |
 | despacho | nada 🔶 sin GO de lote del custodio |
-| legado H0–H3 | H01–H04 ✅ históricos; H05/H10–H33 **no despachar** — se cierran o reescriben en RH-20 |
+| legado H0–H3 | H01–H04 ✅ históricos; H05/H10–H33 **cerrados o reescritos en RH-20** (tabla abajo) — **no despachar** |
 
 Calibración identidad (ambos roots, antes de cualquier efecto):
 
@@ -32,7 +32,7 @@ DOWNSTREAM_PATTERNS='["S/*"]'
 | **RH-03** | P1 | ✅ 2026-08-03 · merge bc01b33 · REPLAN §8 tabla cinco flags · claims tachados · Corregir en dossier y plan H las afirmaciones falsas de cero violaciones listo o product-reachable; tabla por artefacto con committed reachable observed clean-room owner-correct; solo cinco positivos permiten declarar producto | tabla de artefacto publicada en plan o REPLAN; claims falsos eliminados o tachados con evidencia | RH-01 | III |
 | **RH-05** | P1 | ✅ 2026-08-03 · merge b132b2b · plan/CONTRATO-ACEPTACION.md · Definir contrato de aceptacion entre repos sin copiar shapes | documento de contrato en plan/ con owner por superficie y regla pending_external_contract | RH-04 | IV |
 | **RH-19** | P0 | ✅ 2026-08-03 · tip H 5fadbb4 · V 27a98ef · clean-room sin siblings · MCP 18765 SMOKE_OK · MinimalMcpClient PASS · pending_external E/línea/HUB · cero complete · acta REPORTES/RH-19-E2E-CLEAN-ROOM.md · Ejecutar demo desde checkouts limpios H y V solo con packages pinneados registry y endpoints; prohibir resolucion via g-sdk z-sdk o playground; capturar versiones commits health lastStateTs state/ledger hash Onfalo provider linea y veredicto evidencia | acta E2E clean-room con las capturas; resolucion sin siblings | RH-15, RH-18 | IV, ceguera, hostil-omite |
-| **RH-20** | P2 | Actualizar RECAP backlog y DECISIONES con verdad de reachability; cerrar o reescribir H10-H33; declarar demo solo si se observo completa desde V; checkpoints y boceto como evidencia historica | RECAP/BACKLOG/DECISIONES alineados; H10-H33 cerrados o reescritos; sin claim demo sin observacion V | RH-19 | III |
+| **RH-20** | P2 | ✅ 2026-08-03 · base 0f429f2 · acta REPORTES/RH-20-RECAP-REACHABILITY.md · RECAP/DECISIONES⑧/legado H05·H10–H33 · demo NO completa desde V · Actualizar RECAP backlog y DECISIONES con verdad de reachability; cerrar o reescribir H10-H33; declarar demo solo si se observo completa desde V; checkpoints y boceto como evidencia historica | RECAP/BACKLOG/DECISIONES alineados; H10-H33 cerrados o reescritos; sin claim demo sin observacion V | RH-19 | III |
 
 ## Lane h · territorio h-sdk
 
@@ -70,41 +70,59 @@ DOWNSTREAM_PATTERNS='["S/*"]'
 
 ---
 
-## Ola sugerida (tras GO)
+## Legado H0–H3 · cerrado / reescrito (RH-20 · no despachar)
 
-| lote | WPs | nota |
-| ---- | --- | ---- |
-| 0 | RH-01 | preservacion dual; bloquea casi todo |
-| 1 | RH-02 · RH-03 | ramas + verdad documental (paralelo tras RH-01) |
-| 2 | RH-04 | matriz contratos desde H |
-| 3 | RH-05 · RH-06 · RH-10 · RH-11 | contrato + escena G + artefactos + externos |
-| 4 | RH-07 · RH-08 | packs G en paralelo tras RH-06 |
-| 5 | RH-09 | gate publicacion G |
-| 6 | RH-12 → RH-13 → RH-14 → RH-15 | reconstruccion H en serie |
-| 7 | RH-16 → RH-17 → RH-18 | RH-16 ✅ · RH-17 ✅ tip V `f54be58` · RH-18 ✅ tip V `b856b9e` (VSIX) |
-| 8 | RH-19 → RH-20 | RH-19 ✅ fail-closed; RH-20 pendiente GO (owners E/HUB + RECAP) |
+Fuente histórica: BACKLOG init `c8703e7` (olas H0–H3). Serie vigente = `RH-\d{2}`.
 
-### Siguiente (post RH-19 · fail-closed PASS)
+| ficha | disposición | cita RH / nota |
+| ----- | ----------- | -------------- |
+| **H01** | ✅ histórico | init raspa/ADR/plan (`c8703e7`) |
+| **H02** | ✅ histórico | `plan/ESTACION.md` calibrada |
+| **H03** | 🔁 reescrito | → **RH-04** matriz contratos registry |
+| **H04** | ✅ histórico | decisión ④ + reporte types a G |
+| **H05** | ⏳ cerrado-pending | consumo LORE-HM = **pending_external** · **RH-11** / ELEV; **no despachar** en H |
+| **H10** | 🔁 reescrito | → **RH-13** edges owner (no `adapter-zeus` 3D) |
+| **H11** | 🚫 cerrado anti-alcance | `mapa.json→gamemap` era Descenso; entrada = Ciudad real **RH-13/15** |
+| **H12** | 🚫 cerrado anti-alcance | `units→puppets` / tipestate 3D — demolido en RECAP |
+| **H13** | 🔁 reescrito (parcial) | walk/wake vertical **RH-15/19**; no «barrio 20 monigote 3D» |
+| **H20** | 🚫 cerrado anti-alcance | `game-domain` guion→Activities — fuera de recuperación |
+| **H21** | 🚫 cerrado anti-alcance | «El Descenso» demolido (RECAP) |
+| **H22** | 🔁 reescrito + gap | ceremonia fail-closed **RH-15/19**; evidencia HUB = pending **RH-11** |
+| **H30** | 🔁 reescrito + gap | Ónfalo sellado **RH-15/19**; analyze/line bloqueados por E |
+| **H31** | 🔁 reescrito | M vía `@zeus/player-mcp-kit` / arg-player-mcp · **RH-15/19** |
+| **H32** | 🚫 cerrado / no despachar | `@zeus/parte-kit` fuera del vertical de recuperación |
+| **H33** | 🚫 cerrado anti-alcance | log FM / onfaloTrace escénico — no producto de esta ola |
 
-- **RH-19:** ✅ acta
-  [`REPORTES/RH-19-E2E-CLEAN-ROOM.md`](./REPORTES/RH-19-E2E-CLEAN-ROOM.md) ·
-  espejo `C:/S_META/HSDK/RH-19-E2E-CLEAN-ROOM.md` · clean-room sin siblings ·
-  transport vivo `H_SDK_MCP_*:18765` SMOKE_OK · V MinimalMcpClient PASS ·
-  **cero** claim `complete`/demo terminada.
-- **Transport MCP producto H→V:** ✅ tip H `5fadbb4`/`0ea993b` · V `27a98ef` ·
+---
+
+## Ola RH-01…20 · resumen (cierre)
+
+| lote | WPs | resultado |
+| ---- | --- | --------- |
+| 0 | RH-01 | ✅ preservación dual H+G; REPLAN |
+| 1 | RH-02 · RH-03 | ✅ ramas ejecución + verdad artefactos |
+| 2 | RH-04 | ✅ matriz contratos |
+| 3 | RH-05 · RH-06 · RH-10 · RH-11 | ✅ contrato + escena G + artefactos + gaps exteriores |
+| 4 | RH-07 · RH-08 · RH-12 | ✅ packs G tipados + core máquina |
+| 5 | RH-09 | ✅ gate publish G |
+| 6 | RH-13 → RH-14 → RH-15 | ✅ edges + composition + vertical fail-closed |
+| 7 | RH-16 → RH-17 → RH-18 | ✅ servicio/vista/VSIX V + transport MCP |
+| 8 | RH-19 → RH-20 | ✅ E2E clean-room fail-closed + RECAP/legado |
+
+### Estado post-ola (no inventar VERDE E/HUB)
+
+- **Demo completa desde V:** **NO** — RH-19 observó `pending_external_contract`; RH-20 lo declara explícito (decisión ⑧ · RECAP).
+- **Transport MCP H→V:** ✅ tips H~`5fadbb4` · V `27a98ef` ·
   [`REPORTES/RH-TRANSPORT-MCP-H-V.md`](./REPORTES/RH-TRANSPORT-MCP-H-V.md).
-- **Despachable con GO:** **RH-20** (RECAP/BACKLOG/DECISIONES; cerrar H10–H33;
-  declarar demo solo si se observó `complete` desde V — hoy **no**).
-- **Bloqueado por owners externos:** LORE-HM · provider E · evidencia HUB
-  canónica (RH-11; linea-kit@0.4.0 / acta-kit@0.1.2 / feed-kit@0.3.1 tipados —
-  acta ≠ HUB). H no rellena. Room viva real sigue stub en path demo.
-- **ELEV-E-HUB 2026-08-03:** re-chequeo registry E404; e-sdk sin artefacto
-  tipable (submodules vacíos + DA-5); **cero publish**; elevación en
-  `C:/S_META/HSDK/NOTA-ELEV-E-HUB-2026-08-03.md` +
-  `plan/REPORTES/RH-11-ELEV-E-HUB-2026-08-03.md`. Bloquea `analyzed` (E) y
-  `evidence_verified` (HUB).
-- **No tocar:** checkpoint G `wp/g-prueba-hm-adaptacion@35cbded`.
-- **No hacer RH-20** sin otro GO.
+- **RH-19 acta:** [`REPORTES/RH-19-E2E-CLEAN-ROOM.md`](./REPORTES/RH-19-E2E-CLEAN-ROOM.md) ·
+  tip merge H `0f429f2` · fail-closed PASS · cero complete.
+- **Gaps abiertos (owners):** LORE-HM · provider E · evidencia HUB canónica;
+  línea tipada (`linea-kit@0.4.0`) sin input E; room Ciudad viva stub.
+  Elevación: `C:/S_META/HSDK/NOTA-ELEV-E-HUB-2026-08-03.md`.
+- **Evidencia histórica (no operativa):** checkpoint H `e53694e` · G
+  `wp/g-prueba-hm-adaptacion@35cbded` · boceto `packages/game-prueba-hm`.
+- **Serie RH-01…20:** ✅ todos aceptados. **Nada más despachable** en esta ola
+  sin nuevo GO del custodio (owners externos / room viva).
 
 ## Anti-alcance (del plan)
 
@@ -112,3 +130,4 @@ DOWNSTREAM_PATTERNS='["S/*"]'
 - No copiar Teatro; no desarrollar provider/lengua/notaría en H.
 - No fusionar la rama G completa tal cual; no siblings como runtime.
 - No declarar demo parcial como terminada.
+- No despachar fichas legado H05/H10–H33.
