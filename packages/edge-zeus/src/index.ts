@@ -1,15 +1,67 @@
 /**
- * @h-sdk/edge-zeus — el único puerto de h-sdk hacia `@zeus/*`.
- *
- * Regla del hexágono: los tipos de zeus entran hasta aquí y no pasan. Lo que
- * cruza al core son los tipos del core.
+ * @h-sdk/edge-zeus — único IO de h-sdk hacia owners `@zeus/*` / G tipados.
+ * El core declara puertos; aquí se acoplan. Sin transporte genérico ni
+ * payloads paralelos vetados.
  */
 
-export { JUEGO_CIUDAD, intentDeCiudad } from './protocolo.ts';
-export type { IntentPayload, TransporteZeus } from './protocolo.ts';
+export {
+  EVENTS,
+  makeIntent,
+  intentJoin,
+  intentWalk,
+  intentAnnounce,
+  intentWake,
+} from './wire-ciudad.ts';
+export type {
+  ArgsWake,
+  EmisorCiudad,
+  HaciaWalk,
+} from './wire-ciudad.ts';
 
-export { crearPuertoCiudad } from './ciudad.ts';
-export type { OpcionesPuertoCiudad } from './ciudad.ts';
+export { crearPuertoEntradaCiudad } from './ciudad.ts';
+export type {
+  ObservablesCiudad,
+  OpcionesPuertoEntradaCiudad,
+} from './ciudad.ts';
 
-export { leerActa } from './acta.ts';
-export type { ActaDeBarrio, ActaRecibida } from './acta.ts';
+export {
+  crearPuertoSesionDelta,
+  abridorDesdeStartArgRuntime,
+} from './delta.ts';
+export type {
+  AbridorRuntimeDelta,
+  OpcionesPuertoSesionDelta,
+} from './delta.ts';
+
+export {
+  abrirAsientoM,
+  acopleDesdeSaludM,
+  leerSaludDesdeBridge,
+  saludMConectada,
+} from './asiento-m.ts';
+export type {
+  BridgeM,
+  FactoryArgPlayerMcp,
+  HandleAsientoM,
+  OpcionesAsientoM,
+  SaludM,
+} from './asiento-m.ts';
+
+export {
+  crearPuertoAnalisisE,
+  MOTIVO_ANALISIS_E,
+} from './analisis-e.ts';
+export {
+  crearPuertoMaterializacionLinea,
+  MOTIVO_LINEA,
+} from './linea.ts';
+export {
+  crearPuertoEvidenciaCanonica,
+  MOTIVO_EVIDENCIA,
+} from './evidencia.ts';
+
+export { crearPuertoProyeccion } from './proyeccion.ts';
+export type {
+  OpcionesPuertoProyeccion,
+  SumideroProyeccion,
+} from './proyeccion.ts';
