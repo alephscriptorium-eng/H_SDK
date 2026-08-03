@@ -31,7 +31,7 @@ DOWNSTREAM_PATTERNS='["S/*"]'
 | **RH-02** | P0 | ✅ 2026-08-03 · merge 13e1f9e · H/G/V wp/rh-ejecucion · ckpt G 35cbded intacto · Sin fusionar checkpoints: crear ramas de ejecucion h desde su checkpoint para reemplazar superficie; g desde el padre del checkpoint para reaplicar solo piezas genericas; v desde main; conservar ramas checkpoint intactas como red de recuperacion | tres ramas de ejecucion existen y las checkpoint siguen alcanzables sin merge al tip de obra | RH-01 | III |
 | **RH-03** | P1 | ✅ 2026-08-03 · merge bc01b33 · REPLAN §8 tabla cinco flags · claims tachados · Corregir en dossier y plan H las afirmaciones falsas de cero violaciones listo o product-reachable; tabla por artefacto con committed reachable observed clean-room owner-correct; solo cinco positivos permiten declarar producto | tabla de artefacto publicada en plan o REPLAN; claims falsos eliminados o tachados con evidencia | RH-01 | III |
 | **RH-05** | P1 | ✅ 2026-08-03 · merge b132b2b · plan/CONTRATO-ACEPTACION.md · Definir contrato de aceptacion entre repos sin copiar shapes | documento de contrato en plan/ con owner por superficie y regla pending_external_contract | RH-04 | IV |
-| **RH-19** | P0 | Ejecutar demo desde checkouts limpios H y V solo con packages pinneados registry y endpoints; prohibir resolucion via g-sdk z-sdk o playground; capturar versiones commits health lastStateTs state/ledger hash Onfalo provider linea y veredicto evidencia | acta E2E clean-room con las capturas; resolucion sin siblings | RH-15, RH-18 | IV, ceguera, hostil-omite |
+| **RH-19** | P0 | ✅ 2026-08-03 · tip H 5fadbb4 · V 27a98ef · clean-room sin siblings · MCP 18765 SMOKE_OK · MinimalMcpClient PASS · pending_external E/línea/HUB · cero complete · acta REPORTES/RH-19-E2E-CLEAN-ROOM.md · Ejecutar demo desde checkouts limpios H y V solo con packages pinneados registry y endpoints; prohibir resolucion via g-sdk z-sdk o playground; capturar versiones commits health lastStateTs state/ledger hash Onfalo provider linea y veredicto evidencia | acta E2E clean-room con las capturas; resolucion sin siblings | RH-15, RH-18 | IV, ceguera, hostil-omite |
 | **RH-20** | P2 | Actualizar RECAP backlog y DECISIONES con verdad de reachability; cerrar o reescribir H10-H33; declarar demo solo si se observo completa desde V; checkpoints y boceto como evidencia historica | RECAP/BACKLOG/DECISIONES alineados; H10-H33 cerrados o reescritos; sin claim demo sin observacion V | RH-19 | III |
 
 ## Lane h · territorio h-sdk
@@ -82,24 +82,29 @@ DOWNSTREAM_PATTERNS='["S/*"]'
 | 5 | RH-09 | gate publicacion G |
 | 6 | RH-12 → RH-13 → RH-14 → RH-15 | reconstruccion H en serie |
 | 7 | RH-16 → RH-17 → RH-18 | RH-16 ✅ · RH-17 ✅ tip V `f54be58` · RH-18 ✅ tip V `b856b9e` (VSIX) |
-| 8 | RH-19 → RH-20 | cierre (transport H→V ✅; bloqueado por owners E/HUB + clean-room) |
+| 8 | RH-19 → RH-20 | RH-19 ✅ fail-closed; RH-20 pendiente GO (owners E/HUB + RECAP) |
 
-### Siguiente (post transport H→V · tramo B)
+### Siguiente (post RH-19 · fail-closed PASS)
 
-- **Transport MCP producto H→V:** ✅ `bun run mcp` + env `H_SDK_MCP_*` /
-  catálogo `h.experiencia` · reporte
+- **RH-19:** ✅ acta
+  [`REPORTES/RH-19-E2E-CLEAN-ROOM.md`](./REPORTES/RH-19-E2E-CLEAN-ROOM.md) ·
+  espejo `C:/S_META/HSDK/RH-19-E2E-CLEAN-ROOM.md` · clean-room sin siblings ·
+  transport vivo `H_SDK_MCP_*:18765` SMOKE_OK · V MinimalMcpClient PASS ·
+  **cero** claim `complete`/demo terminada.
+- **Transport MCP producto H→V:** ✅ tip H `5fadbb4`/`0ea993b` · V `27a98ef` ·
   [`REPORTES/RH-TRANSPORT-MCP-H-V.md`](./REPORTES/RH-TRANSPORT-MCP-H-V.md).
-  No finge `complete`; E/HUB siguen `pending_external`.
-- **Despachable con GO:** **RH-19** (E2E clean-room H+V con endpoint real).
+- **Despachable con GO:** **RH-20** (RECAP/BACKLOG/DECISIONES; cerrar H10–H33;
+  declarar demo solo si se observó `complete` desde V — hoy **no**).
 - **Bloqueado por owners externos:** LORE-HM · provider E · evidencia HUB
   canónica (RH-11; linea-kit@0.4.0 / acta-kit@0.1.2 / feed-kit@0.3.1 tipados —
-  acta ≠ HUB). H no rellena.
+  acta ≠ HUB). H no rellena. Room viva real sigue stub en path demo.
 - **ELEV-E-HUB 2026-08-03:** re-chequeo registry E404; e-sdk sin artefacto
   tipable (submodules vacíos + DA-5); **cero publish**; elevación en
   `C:/S_META/HSDK/NOTA-ELEV-E-HUB-2026-08-03.md` +
   `plan/REPORTES/RH-11-ELEV-E-HUB-2026-08-03.md`. Bloquea `analyzed` (E) y
   `evidence_verified` (HUB).
 - **No tocar:** checkpoint G `wp/g-prueba-hm-adaptacion@35cbded`.
+- **No hacer RH-20** sin otro GO.
 
 ## Anti-alcance (del plan)
 
