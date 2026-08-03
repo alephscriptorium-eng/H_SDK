@@ -158,5 +158,9 @@ sibling path.
 
 ## Revisión del orquestador
 
-DEVUELTO (contrarrevisión) · `plan/REPORTES/DEVOLUCION-RH-13.md` · defecto #1
-corregido → estado `devuelto-corregido`. Pendiente re-aceptación.
+**DEVUELTO** 2026-08-03 ·  #1.
+
+**✅ aceptado** 2026-08-03 · orquestador-H · merge  · tras fix + re-contrarrevisión PASS.
+
+- CA: wire Ciudad real; M connected+lastStateTs; pending_external fail-closed; sessionId omitido → err.
+- 20 tests + typecheck verdes.
