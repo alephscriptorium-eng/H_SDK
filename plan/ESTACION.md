@@ -9,15 +9,17 @@ registry, con `C:\S` como downstream y la obra en `C:\S_LAB`.
 
 | param | valor |
 | ----- | ----- |
-| `MUNDO_RAIZ` / `WORLD_ROOT` | `C:\S_LAB\h-sdk` (checkout principal) |
-| `CANONICAL_WORLD_ROOT` | = `WORLD_ROOT` (rutas con `/` en preflight) |
-| `WORKTREE_BASE` | `C:\S_LAB\wt` (salas `h-<wp>`, convención viva) |
-| `OUT_DIR` | `C:\S_LAB\vigilancia\h` — **siempre fuera del WORLD_ROOT** (lección LORE-HM: su evidencia quedó dentro y violó el gobierno) |
+| `WORLD_ROOTS` (orquestador recuperación) | `C:\S_LAB\h-sdk` · `C:\S_LAB\g-sdk` — un gorro, dos territorios; obra G solo en g; obra H solo en h |
+| `MUNDO_RAIZ` / `WORLD_ROOT` | por efecto: el root del territorio tocado (`h-sdk` o `g-sdk`) |
+| `CANONICAL_WORLD_ROOT` | = `WORLD_ROOT` del mismo territorio (rutas con `/` en preflight) |
+| `WORKTREE_BASE` | h: `C:\S_LAB\wt` salas `h-<wp>` · g: `C:\S_LAB\.worktrees\g` (o `C:\S_LAB\wt` salas `g-<wp>` si el lote lo declara) |
+| `OUT_DIR` | h: `C:\S_LAB\vigilancia\h` · g: `C:\S_LAB\vigilancia\g` — **siempre fuera** del WORLD_ROOT tocado |
 | `INTERVAL` | `45` (default del watcher) |
-| `DOWNSTREAM_PATTERNS` | `['C:/S/**']` — el hub es downstream; el patrón **jamás** cubre el propio `WORLD_ROOT` (LOCK del preflight) |
-| `READ_ONLY_ROOTS` | `C:/S` · hermanos de `C:/S_LAB` · OASIS (solo cita genealógica) |
+| `DOWNSTREAM_PATTERNS` | `["S/*"]` — segmentos; **no** `C:/S/**` (el detector lo marca LOCK por ambigüedad) |
+| `READ_ONLY_ROOTS` | `["C:/S","C:/S_META"]` |
 | `SIBLING_ROOT` | `C:\S_LAB` |
 | `GAME_MCP` | `<pendiente>` hasta E4 (rooms de `@zeus` por registry) |
+| backlog encolado | fuente `plan.md` → fichas `RH-01`…`RH-20` en `plan/BACKLOG.md` |
 
 ## Espejo de skills
 

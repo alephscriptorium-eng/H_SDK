@@ -1,47 +1,92 @@
-# BACKLOG · h-sdk — olas H0–H3 (nada se despacha sin GO)
+# BACKLOG · recuperación Prueba-H-M
 
-> **CORRECCIÓN DE RUMBO (2026-08-03, orden del PO)**: la demo es una
-> **adaptación de delta para ciudad, en el barrio Lore, sobre la
-> DocumentMachine, con V como interfaz de H** — ver
-> [`design/RECAP-SPEC-DEMO.md`](../design/RECAP-SPEC-DEMO.md). Lo construido
-> en `packages/game-prueba-hm/` queda como **boceto terminado** (piezas
-> rescatables listadas en el recap). Las olas H2/H3 se re-derivan tras medir
-> delta y el patrón de webview/teatro de V.
+Fuente narrativa: [`../plan.md`](../plan.md) (20 steps).  
+**WORLD_ROOTS de este orquestador:** `C:\S_LAB\h-sdk` · `C:\S_LAB\g-sdk`.  
+`v-sdk` y owners externos viven en lanes `v` / `ext`: se encolan aquí; **no se despachan** workers sobre ellos desde este gorro sin handoff al carril dueño.
 
-Fuente de diseño: [`VISION.md`](VISION.md) (§6 experimentos E1–E6, §7 olas).
+| dato | valor |
+| ---- | ----- |
+| serie | `RH-\d{2}` |
+| prioridades | P0 · P1 · P2 |
+| lanes | `h` · `g` · `v` · `ext` · `gov` |
+| estados | ⬜ pendiente · 🔶 en curso · ✅ aceptado |
+| despacho | nada 🔶 sin GO de lote del custodio |
+| legado H0–H3 | H01–H04 ✅ históricos; H05/H10–H33 **no despachar** — se cierran o reescriben en RH-20 |
 
-## H0 · Fundación (en curso)
+Calibración identidad (ambos roots, antes de cualquier efecto):
 
-| ficha | qué | CA | estado |
-| ----- | --- | -- | ------ |
-| H01 | raspa + ADR 0001/0002 + plan | mundo git limpio, espejo skills commiteado | ✅ 2026-08-03 (`c8703e7`; repo `H_SDK` + submodule en hub) |
-| H02 | estación calibrada + handoffs por skill | `plan/ESTACION.md` con los 8 skills | ✅ 2026-08-03 (espejo 8/8 tras 0.12.0) |
-| H03 | **E1** sondeo de tipos desde registry (`npm view @zeus/*` + `tsc` estricto contra `.d.ts`) | matriz paquete×types con evidencia | ✅ 2026-08-03: matriz 33/33 con verificador adversarial (0 discrepancias) — `plan/REPORTES/E1-MATRIZ-TYPES-ZEUS.md`. Hallazgos mayores: cola B (linea/acta/linea-system/force-system) **sin types en registry**; pozo y solve-coagula **sin publicar**; kits UI todos tipados |
-| H04 | reporte a G: gap de `types` en `ciudad`/`startpack-ciudad` (decisión ④) | nota entregada al owner | ✅ 2026-08-03 **resuelto en origen**: g-sdk `wp/g-ciudad-types` fusionada, 0.1.1 publicados con `types` (acta `g-sdk/plan/REPORTES/ACTA-TYPES-CIUDAD-0.1.1.md`; de paso, guard del publish corregido a versión exacta) |
-| H05 | consumo del candidato de lengua cuando la notaría publique (decisión ①) | `tsc --noEmit` verde contra el candidato | ⬜ bloqueada por publicación |
+```text
+WORLD_ROOT=<root> CANONICAL_WORLD_ROOT=<root>
+READ_ONLY_ROOTS='["C:/S","C:/S_META"]'
+DOWNSTREAM_PATTERNS='["S/*"]'
+```
 
-## H1 · Gamemap habitado
+---
 
-| ficha | qué | CA |
-| ----- | --- | -- |
-| H10 | `packages/adapter-zeus` mínimo (protocol/game-engine/ui-3d-kit) | compila estricto desde registry |
-| H11 | adapter `mapa.json→gamemap` (**E2**) | 24 barrios + calles de `handoffEdges`; round-trip ids/digests |
-| H12 | adapter `units→puppets+clips` (**E3**) | tipestate→cuerpo según VISION §4; derivado del catálogo, no lista manual |
-| H13 | gamemap navegable hasta el barrio 20 con monigote (**E6** parcial) | `wake` emitido solo tras `grant→materialize` |
+## Lane gov · gobierno dual / preservación
 
-## H2 · Ceremonia jugable
+| WP | P | BRIEF | CA | deps | ejes |
+| -- | - | ----- | -- | ---- | ---- |
+| **RH-01** | P0 | 🔶 GO 2026-08-03 lote-0 · BRIEF plan/REPORTES/BRIEF-RH-01-preservacion.md · Revisar unstaged de h-sdk y g-sdk excluyendo secretos outputs y generados; checks read-only; crear checkpoint en h-sdk/main (fundacion no alcanzable) y en g-sdk/wp/g-prueba-hm-adaptacion (adaptacion forense); registrar hash padre diff-stat checks y limites en C:/S_META/HSDK/REPLAN-PRUEBA-HM-REACHABILITY.md; dejar ambos repos con status limpio | acta REPLAN con hashes y git status limpio en h-sdk y g-sdk; cero secretos en los commits checkpoint | ninguna | III |
+| **RH-02** | P0 | Sin fusionar checkpoints: crear ramas de ejecucion h desde su checkpoint para reemplazar superficie; g desde el padre del checkpoint para reaplicar solo piezas genericas; v desde main; conservar ramas checkpoint intactas como red de recuperacion | tres ramas de ejecucion existen y las checkpoint siguen alcanzables sin merge al tip de obra | RH-01 | III |
+| **RH-03** | P1 | Corregir en dossier y plan H las afirmaciones falsas de cero violaciones listo o product-reachable; tabla por artefacto con committed reachable observed clean-room owner-correct; solo cinco positivos permiten declarar producto | tabla de artefacto publicada en plan o REPLAN; claims falsos eliminados o tachados con evidencia | RH-01 | III |
+| **RH-05** | P1 | Definir contrato de aceptacion entre repos sin copiar shapes: G publica tipos delta; owners Ciudad lengua provider evidencia publican; H solo proyeccion propia versionada o JSON Schema resource; V consume proyeccion H y tipos visuales delta; ausencias = pending_external_contract visible sin contingencia local | documento de contrato en plan/ con owner por superficie y regla pending_external_contract | RH-04 | IV |
+| **RH-19** | P0 | Ejecutar demo desde checkouts limpios H y V solo con packages pinneados registry y endpoints; prohibir resolucion via g-sdk z-sdk o playground; capturar versiones commits health lastStateTs state/ledger hash Onfalo provider linea y veredicto evidencia | acta E2E clean-room con las capturas; resolucion sin siblings | RH-15, RH-18 | IV, ceguera, hostil-omite |
+| **RH-20** | P2 | Actualizar RECAP backlog y DECISIONES con verdad de reachability; cerrar o reescribir H10-H33; declarar demo solo si se observo completa desde V; checkpoints y boceto como evidencia historica | RECAP/BACKLOG/DECISIONES alineados; H10-H33 cerrados o reescritos; sin claim demo sin observacion V | RH-19 | III |
 
-| ficha | qué | CA |
-| ----- | --- | -- |
-| H20 | `packages/game-domain`: compilador `guion→Activities` | los 10 turnos compilan; frase fuera de gramática no compila |
-| H21 | El Descenso: cámara por planos, ceguera ascendente (niebla+clamp), llave/acta como trayectorias | vista-M no puede ascender; H sí |
-| H22 | ceremonia completa: leases, denegación atómica, Alpha/Beta, cremallera bilateral, acta a la NOTARÍA, restart→recupera | evidencia verificada; **E5** |
+## Lane h · territorio h-sdk
 
-## H3 · El final bonito
+| WP | P | BRIEF | CA | deps | ejes |
+| -- | - | ----- | -- | ---- | ---- |
+| **RH-04** | P0 | Matriz ejecutable desde install limpio H: versiones exactas export maps d.ts runtime import y owner para Ciudad authority-kit rooms player-mcp-kit delta domain/runtime/view/player mockdatas Onfalo LORE-HM provider E linea y evidencia HUB; prohibir paths file link workspace externos y d.ts ambientales; re-verificar linea-kit 0.3.0 types | matriz paquete×gate en plan/REPORTES con verdes/rojos observados; cero paths sibling en resolucion | RH-02 | III, IV |
+| **RH-12** | P0 | Rehacer packages/core como maquina idle→ciudad_connected→lore_reached→barrio_awake→delta_running→onfalo_selected→analyzed→line_materialized→evidence_verified→complete con errores/pending; puertos solo de caso de uso H; eliminar EntradaCadena PuertoActa y shapes externos paralelos no propios | typecheck verde; transiciones unit-tested; grep sin EntradaCadena/PuertoActa en core | RH-05 | II |
+| **RH-13** | P0 | Sustituir edge generico por edges de owner: Ciudad makeIntent/EVENTS con state/ledger; delta via paquetes G publicados; M via arg-player-mcp/player-mcp-kit exigiendo connected+lastStateTs; analisis provider E; linea/evidencia canonicos; connected nunca es solo objeto transporte | adapters tipados consumen registry; smoke confirma state/ledger y lastStateTs; sin payloads destino/mensaje paralelos | RH-09, RH-10, RH-11, RH-12 | I, II, hostil-omite |
+| **RH-14** | P0 | Composition root Bun/TS alcanzable (p.ej. packages/app-prueba-hm/src/main.ts): Ciudad entrada; delta tras reach/wake; asiento M; resources MCP versionados estado/escena/evidencia; comando raiz Bun/TS; retirar game-prueba-hm del producto alcanzable; test de reachability del entrypoint | bun typecheck + test reachability importan core y edges; demo raiz no apunta a server.mjs | RH-12, RH-13 | I, II |
+| **RH-15** | P0 | Vertical minimo real: join Ciudad walk ancla Lore wake barrio delta con escena Lore M por MCP pieza Onfalo provider E linea canonica evidencia; dependencia ausente detiene y queda visible; sin demo replay | flujo observado con confirmaciones; fallo explicito si falta contrato; cero modo replay | RH-10, RH-11, RH-14 | IV, hostil-omite |
 
-| ficha | qué | CA |
-| ----- | --- | -- |
-| H30 | **una línea real del Ónfalo** de punta a punta (analyze → line.materialize) | cristal en la red semántica + cadena verificada + transcript descargable |
-| H31 | M vivo por `@zeus/player-mcp-kit` + rooms (**E4**) | modo conectado declarado, fail-closed |
-| H32 | parte legible del evidence/report (`@zeus/parte-kit`) | render estricto del JSON |
-| H33 | log FM completo en escena (huecos, ausencias, hilos onfaloTrace) | cada elemento de VISION §4.1 renderizado desde datos, no decorado |
+## Lane g · territorio g-sdk
+
+| WP | P | BRIEF | CA | deps | ejes |
+| -- | - | ----- | -- | ---- | ---- |
+| **RH-06** | P0 | En rama G limpia reaplicar parametrizacion generica de escena a createArgDomainState reducer nav proyecciones con delta-v0 default identico; extraer ciudad-v0 a fixture aceptacion/config H; pruebas de paridad delta y escena minima distinta sin ids grifo-a orillas cantera congelados | test:delta + paridad delta-v0 + escena inyectada verde; ciudad-v0 fuera de verdad G | RH-02, RH-04 | I |
+| **RH-07** | P0 | Promover @zeus/arg-domain publico con d.ts (escena estado intents feeds snapshots); extraer @zeus/arg-runtime publico desde arg-demos authority componiendo authority-kit con escena/feed/gamemap inyectados dueño de wire dual tick snapshot shutdown | tarball arg-domain y arg-runtime con types; consumidor limpio importa sin sibling H | RH-06 | I |
+| **RH-08** | P1 | Extraer @zeus/arg-view-kit browser-safe tipado (grifos rios mar gotas cantera) sin server rooms ni Lore; convertir arg-player-mcp en factory publica tipada sobre player-mcp-kit con escena/actor inyectados; apps arg-console/arg-demos privadas | tarballs view-kit y player-mcp tipados; apps privadas; sin contenido Lore en view-kit | RH-06 | I |
+| **RH-09** | P0 | Rechazar publicacion de document-machine.mjs tal cual: sin ../h-sdk sin ancestros sin ledger/notaria local sin fallback; conservar tests gotas/sellos/excavacion como spec adapter H con deps/fixtures explicitas; publicar y verificar tarballs arg-domain arg-runtime arg-view-kit arg-player-mcp en dir sin H/Z siblings | gate G abre solo tras install+typecheck aislado; grep tarball sin h-sdk ni ledger local | RH-07, RH-08 | II, I, ceguera |
+| **RH-10** | P1 | Publicar/pinnear Onfalo read-only (piezas manifest media types hashes) y @zeus/mockdatas-ciudad con volumenes Lore; consumidor por package resuelto nunca checkout; sello produce identidad artefacto/version/hash | packages pinneados instalables; verificacion de sello con manifest del paquete | ninguna | I |
+
+## Lane ext · owners externos (no territorio h/g)
+
+| WP | P | BRIEF | CA | deps | ejes |
+| -- | - | ----- | -- | ---- | ---- |
+| **RH-11** | P1 | Obtener publicaciones tipadas del candidato LORE-HM provider E y ceremonia/evidencia/materializacion canonica por sus owners; si linea-kit no expone operacion/tipos elevar gap; H no implementa line.materialize provider digest cremallera notaria ni ledger sustituto | contratos tipados en registry o pending_external_contract explicito por superficie; cero implementacion local en H | ninguna | IV, V |
+
+## Lane v · handoff v-sdk (fuera de WORLD_ROOTS)
+
+| WP | P | BRIEF | CA | deps | ejes |
+| -- | - | ----- | -- | ---- | ---- |
+| **RH-16** | P1 | En V servicio experiencia H sobre MinimalMcpClient/ResourceProjectionService: descubrir server H listar/leer resources validar version/shape; modelar pending connected error complete sin hardcode; sin import sibling H ni IPlay/ICompany hasta runtime real | tests de parseo/estados; fixtures MCP tras RH-05; integracion real tras RH-14 | RH-05 | I, IV |
+| **RH-17** | P1 | Vista V dedicada TreeView diagnostico + webview experiencia con CSP/nonce existentes; render Ciudad escena via arg-view-kit estado M Onfalo analisis linea evidencia; comandos = tools MCP; H sin paneles HTML; Teatro hardcodeado fuera del cambio | vista data-driven sin Teatro; compile/lint verdes | RH-08, RH-14, RH-16 | I |
+| **RH-18** | P2 | Empaquetar VSIX y probar contra H/M reales; distinguir pending_external_contract connecting connected failed complete; no exito con resources stale ni actores/escenas inventados | VSIX instalable; transicion observada hasta estados reales | RH-15, RH-17 | IV, hostil-omite |
+
+---
+
+## Ola sugerida (tras GO)
+
+| lote | WPs | nota |
+| ---- | --- | ---- |
+| 0 | RH-01 | preservacion dual; bloquea casi todo |
+| 1 | RH-02 · RH-03 | ramas + verdad documental (paralelo tras RH-01) |
+| 2 | RH-04 | matriz contratos desde H |
+| 3 | RH-05 · RH-06 · RH-10 · RH-11 | contrato + escena G + artefactos + externos |
+| 4 | RH-07 · RH-08 | packs G en paralelo tras RH-06 |
+| 5 | RH-09 | gate publicacion G |
+| 6 | RH-12 → RH-13 → RH-14 → RH-15 | reconstruccion H en serie |
+| 7 | RH-16 → RH-17 → RH-18 | handoff carril V |
+| 8 | RH-19 → RH-20 | cierre |
+
+## Anti-alcance (del plan)
+
+- No revivir El Descenso/ceguera/holones como producto de esta ola.
+- No copiar Teatro; no desarrollar provider/lengua/notaría en H.
+- No fusionar la rama G completa tal cual; no siblings como runtime.
+- No declarar demo parcial como terminada.
