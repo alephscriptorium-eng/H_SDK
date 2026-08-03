@@ -64,7 +64,7 @@ DOWNSTREAM_PATTERNS='["S/*"]'
 
 | WP | P | BRIEF | CA | deps | ejes |
 | -- | - | ----- | -- | ---- | ---- |
-| **RH-16** | P1 | En V servicio experiencia H sobre MinimalMcpClient/ResourceProjectionService: descubrir server H listar/leer resources validar version/shape; modelar pending connected error complete sin hardcode; sin import sibling H ni IPlay/ICompany hasta runtime real | tests de parseo/estados; fixtures MCP tras RH-05; integracion real tras RH-14 | RH-05 | I, IV |
+| **RH-16** | P1 | 🔶 2026-08-03 · handoff encolado (no obra en h-sdk) · BRIEF+HANDOFF en plan/REPORTES · tip H 9bfd7ff · En V servicio experiencia H sobre MinimalMcpClient/ResourceProjectionService: descubrir server H listar/leer resources validar version/shape; modelar pending connected error complete sin hardcode; sin import sibling H ni IPlay/ICompany hasta runtime real | tests de parseo/estados; fixtures MCP tras RH-05; integracion real tras RH-14 | RH-05 | I, IV |
 | **RH-17** | P1 | Vista V dedicada TreeView diagnostico + webview experiencia con CSP/nonce existentes; render Ciudad escena via arg-view-kit estado M Onfalo analisis linea evidencia; comandos = tools MCP; H sin paneles HTML; Teatro hardcodeado fuera del cambio | vista data-driven sin Teatro; compile/lint verdes | RH-08, RH-14, RH-16 | I |
 | **RH-18** | P2 | Empaquetar VSIX y probar contra H/M reales; distinguir pending_external_contract connecting connected failed complete; no exito con resources stale ni actores/escenas inventados | VSIX instalable; transicion observada hasta estados reales | RH-15, RH-17 | IV, hostil-omite |
 
@@ -81,8 +81,18 @@ DOWNSTREAM_PATTERNS='["S/*"]'
 | 4 | RH-07 · RH-08 | packs G en paralelo tras RH-06 |
 | 5 | RH-09 | gate publicacion G |
 | 6 | RH-12 → RH-13 → RH-14 → RH-15 | reconstruccion H en serie |
-| 7 | RH-16 → RH-17 → RH-18 | handoff carril V |
-| 8 | RH-19 → RH-20 | cierre |
+| 7 | RH-16 → RH-17 → RH-18 | **activo:** RH-16 🔶 handoff V (BRIEF+HANDOFF en REPORTES); obra en v-sdk |
+| 8 | RH-19 → RH-20 | cierre (bloqueado por V + owners E/línea/HUB) |
+
+### Siguiente (post RH-15 · tip H `9bfd7ff`)
+
+- **Despachable desde H/G ahora:** nada de producto H/G pendiente en lote 6.
+  Gobierno: handoff RH-16 (hecho al marcar 🔶) · refresco RH-04/CONTRATO.
+- **Carril V:** ejecutar BRIEF-RH-16 en clone `v-sdk` (PASS identidad V).
+- **Bloqueado por owners externos:** LORE-HM · provider E · linea-kit tipado ·
+  evidencia HUB (RH-11). H no rellena. No esperar z-sdk para arrancar RH-16
+  con fixtures.
+- **No tocar:** checkpoint G `wp/g-prueba-hm-adaptacion@35cbded`.
 
 ## Anti-alcance (del plan)
 
