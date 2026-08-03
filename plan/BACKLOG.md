@@ -65,7 +65,7 @@ DOWNSTREAM_PATTERNS='["S/*"]'
 | WP | P | BRIEF | CA | deps | ejes |
 | -- | - | ----- | -- | ---- | ---- |
 | **RH-16** | P1 | ✅ 2026-08-03 · tip V f12ac76 · tip H c3a0afe · 17 tests V · transport MCP producto H `<pendiente>` · Servicio experiencia H en V (MinimalMcpClient/ResourceProjectionService): descubrir server H listar/leer resources validar version/shape; modelar pending connected error complete sin hardcode; sin import sibling H ni IPlay/ICompany hasta runtime real | tests de parseo/estados; fixtures MCP tras RH-05; integracion real tras RH-14 | RH-05 | I, IV |
-| **RH-17** | P1 | Vista V dedicada TreeView diagnostico + webview experiencia con CSP/nonce existentes; render Ciudad escena via arg-view-kit estado M Onfalo analisis linea evidencia; comandos = tools MCP; H sin paneles HTML; Teatro hardcodeado fuera del cambio | vista data-driven sin Teatro; compile/lint verdes | RH-08, RH-14, RH-16 | I |
+| **RH-17** | P1 | ✅ 2026-08-03 · tip V f54be58 · tip H e53ca50 · TreeView+webview experiencia · 180 tests related PASS · Vista V dedicada TreeView diagnostico + webview experiencia con CSP/nonce existentes; render Ciudad escena via arg-view-kit estado M Onfalo analisis linea evidencia; comandos = tools MCP; H sin paneles HTML; Teatro hardcodeado fuera del cambio | vista data-driven sin Teatro; compile/lint verdes | RH-08, RH-14, RH-16 | I |
 | **RH-18** | P2 | Empaquetar VSIX y probar contra H/M reales; distinguir pending_external_contract connecting connected failed complete; no exito con resources stale ni actores/escenas inventados | VSIX instalable; transicion observada hasta estados reales | RH-15, RH-17 | IV, hostil-omite |
 
 ---
@@ -81,21 +81,21 @@ DOWNSTREAM_PATTERNS='["S/*"]'
 | 4 | RH-07 · RH-08 | packs G en paralelo tras RH-06 |
 | 5 | RH-09 | gate publicacion G |
 | 6 | RH-12 → RH-13 → RH-14 → RH-15 | reconstruccion H en serie |
-| 7 | RH-16 → RH-17 → RH-18 | RH-16 ✅ tip V `f12ac76` · tip H `c3a0afe`; **siguiente:** RH-17 (vista) tras GO |
+| 7 | RH-16 → RH-17 → RH-18 | RH-16 ✅ tip V `f12ac76` · RH-17 ✅ tip V `f54be58`; **siguiente:** RH-18 (VSIX) tras GO |
 | 8 | RH-19 → RH-20 | cierre (bloqueado por V + owners E/línea/HUB) |
 
-### Siguiente (post RH-16 · tip V `f12ac76` · tip H `c3a0afe`)
+### Siguiente (post RH-17 · tip V `f54be58`)
 
-- **Despachable desde H/G ahora:** nada de producto H/G pendiente en lote 6.
-  Gobierno: RH-16 ✅ aceptado (obra en V; no re-implementar en H).
-- **Carril V:** siguiente es RH-17 (vista) cuando haya GO de lote; no encolar 🔶 hasta GO.
+- **Despachable desde H/G ahora:** nada de producto H/G pendiente en lote 6–7.
+  Gobierno: RH-16 ✅ · RH-17 ✅ (obra en V; no re-implementar en H).
+- **Carril V:** siguiente es RH-18 (VSIX) cuando haya GO de lote; no encolar 🔶 hasta GO.
 - **Bloqueado por owners externos:** LORE-HM · provider E · evidencia HUB
   canónica (RH-11; linea-kit@0.4.0 / acta-kit@0.1.2 / feed-kit@0.3.1 tipados —
   `pending_release_types` cerrado; acta ≠ HUB). H no rellena. Transport MCP
   producto H→V sigue `<pendiente>` (no inventar connected/complete).
-- **ELEV-E-HUB 2026-08-03 (paralelo RH-17):** re-chequeo registry E404;
-  e-sdk sin artefacto tipable (submodules vacíos + DA-5); **cero publish**;
-  elevación en `C:/S_META/HSDK/NOTA-ELEV-E-HUB-2026-08-03.md` +
+- **ELEV-E-HUB 2026-08-03:** re-chequeo registry E404; e-sdk sin artefacto
+  tipable (submodules vacíos + DA-5); **cero publish**; elevación en
+  `C:/S_META/HSDK/NOTA-ELEV-E-HUB-2026-08-03.md` +
   `plan/REPORTES/RH-11-ELEV-E-HUB-2026-08-03.md`. Bloquea `analyzed` (E) y
   `evidence_verified` (HUB).
 - **No tocar:** checkpoint G `wp/g-prueba-hm-adaptacion@35cbded`.
