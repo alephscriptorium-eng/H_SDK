@@ -5,7 +5,7 @@
 | agente | `worker-RH-02 <alephscriptorium@gmail.com>` |
 | fecha | 2026-08-03 |
 | rama | `wp/rh-02-ramas-ejecucion` |
-| commits | `c17b67262070199aa8305f6b12cb3f417589322d` |
+| commits | `c17b67262070199aa8305f6b12cb3f417589322d`, `18e10dee1ff5a086e9702c0c9847e28c4f37e448` |
 | eje(s) CA | III |
 | riesgo de revisión | `normal` |
 | revisor distinto del worker | `no requerido` |
