@@ -1,9 +1,5 @@
 /**
- * Sustantivos del mundo H. Regla de la corrección de rumbo
- * (`design/RECAP-SPEC-DEMO.md`): cada elemento lleva la fuente de la que se
- * deriva. Lo que no se derive, no entra — por eso este fichero es corto y
- * los huecos están marcados PENDIENTE en vez de rellenados a ojo.
- *
+ * Sustantivos del dominio H (experiencia). Sin shapes Zeus/HUB.
  * Nada de aquí conoce IO, red, fs ni `@zeus/*`.
  */
 
@@ -21,15 +17,8 @@ export const piezaId = (raw: string): PiezaId => raw as PiezaId;
 export const actorId = (raw: string): ActorId => raw as ActorId;
 
 /**
- * Los dos lados de la ceremonia H·M — RECAP («el juego Prueba-H-M») y
- * `design/ARQUITECTURA-DEMO-R2.md` §W-CEREMONIA-REAL(3): «dos cadenas H/ y M/».
- */
-export type Lado = 'H' | 'M';
-
-/**
- * Pieza del Ónfalo. Campos tomados del manifiesto sellado real
- * (`packages/game-prueba-hm/assets/onfalo/source.manifest.json`), no inventados.
- * H las lee; no las produce (ADR 0002: nunca lengua ni notaría).
+ * Pieza del Ónfalo (artefacto sellado del owner). H la selecciona/lee;
+ * no la produce (ADR 0002: nunca lengua ni notaría).
  */
 export interface PiezaOnfalo {
   readonly id: PiezaId;
@@ -39,32 +28,8 @@ export interface PiezaOnfalo {
 }
 
 /**
- * Entrada de cadena de evidencia. Forma literal de
- * `design/ARQUITECTURA-DEMO-R2.md` §W-CEREMONIA-REAL(3):
- * `{step, verb, object, causalDigest, wireDigest, activityId, side}`.
- * Se conservan los nombres de campo del contrato para que el round-trip con
- * `chain.ndjson` sea identidad.
- */
-export interface EntradaCadena {
-  readonly step: number;
-  readonly verb: string;
-  readonly object: string;
-  readonly causalDigest: string;
-  readonly wireDigest: string;
-  readonly activityId: string;
-  readonly side: Lado;
-}
-
-/** Cadena de un lado: entradas en orden de emisión. */
-export type Cadena = readonly EntradaCadena[];
-
-/**
- * Referencia a una unit de la DocumentMachine del barrio Lore
- * (RECAP · «Materia»; backlog H12).
- *
- * PENDIENTE: el tipestate de la unit y su proyección a cuerpo/clips no está
- * medido todavía — se deriva del catálogo real, no de una lista a mano. Hasta
- * esa medición solo existe la referencia.
+ * Referencia a una unit de DocumentMachine / barrio Lore.
+ * Tipestate completo: `<pendiente>` hasta catálogo pinneado del owner.
  */
 export interface UnidadRef {
   readonly id: UnidadId;
@@ -72,7 +37,48 @@ export interface UnidadRef {
 }
 
 /**
- * Estado del acople con el exterior. ALEPH-H: «replay ≠ conectado, jamás
- * fallback silencioso». Todo puerto que pueda degradar lo declara con esto.
+ * Régimen de acople del adaptador. «replay ≠ conectado»; sin fallback
+ * silencioso (ALEPH-H).
  */
 export type Acople = 'conectado' | 'replay';
+
+/**
+ * Estados literales de la experiencia H (`plan.md` step 12).
+ * `error` y `pending_external_contract` son terminales de fallo/bloqueo
+ * explícitos — no hay fallthrough silencioso.
+ */
+export type EstadoExperiencia =
+  | 'idle'
+  | 'ciudad_connected'
+  | 'lore_reached'
+  | 'barrio_awake'
+  | 'delta_running'
+  | 'onfalo_selected'
+  | 'analyzed'
+  | 'line_materialized'
+  | 'evidence_verified'
+  | 'complete'
+  | 'error'
+  | 'pending_external_contract';
+
+/** Orden del camino feliz (sin terminales de fallo). */
+export const CAMINO_FELIZ: readonly EstadoExperiencia[] = [
+  'idle',
+  'ciudad_connected',
+  'lore_reached',
+  'barrio_awake',
+  'delta_running',
+  'onfalo_selected',
+  'analyzed',
+  'line_materialized',
+  'evidence_verified',
+  'complete',
+] as const;
+
+export function esTerminal(estado: EstadoExperiencia): boolean {
+  return (
+    estado === 'complete' ||
+    estado === 'error' ||
+    estado === 'pending_external_contract'
+  );
+}

@@ -1,9 +1,8 @@
 /**
  * Resultado explícito — el core no lanza para lo esperable.
  *
- * Un puerto que puede fallar devuelve `Resultado`, nunca `undefined` mudo:
- * la degradación se declara (ALEPH-H · doble acople, «jamás fallback
- * silencioso»).
+ * Un puerto o transición que puede fallar devuelve `Resultado`, nunca
+ * `undefined` mudo: la degradación se declara (sin fallback silencioso).
  */
 
 export type Resultado<T, E = string> =
