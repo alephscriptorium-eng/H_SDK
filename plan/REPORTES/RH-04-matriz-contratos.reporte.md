@@ -5,7 +5,7 @@
 | agente | worker-RH-04 |
 | fecha | 2026-08-03 |
 | rama | `wp/rh-04-matriz-contratos` |
-| commits | `e3b9186d55deb7ea42bf11762b911db5c604d91c` + este commit |
+| commits | `e3b9186d55deb7ea42bf11762b911db5c604d91c`,  |
 | eje(s) CA | III, IV |
 | riesgo de revisión | `independiente` |
 | revisor distinto del worker | `sí` |
