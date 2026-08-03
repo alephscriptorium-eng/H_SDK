@@ -28,4 +28,5 @@ createPaneles/createFlujo) se conservan para que main.mjs sufra lo mínimo;
 `node --check` + humo de server + un fetch real de cada endpoint nuevo. Nada más.
 Cada worker anota en su resultado QUÉ mecanismo real quedó dentro y QUÉ quedó
 `pendiente` con motivo (browser-unsafe, no publicado, etc.). Esa lista es
-producto: es la frontera real/pendiente que la demo enseña.
+la frontera real/pendiente que el boceto enseña — **[RH-03]** no es
+declaración de product-reachable (ver REPLAN §8).

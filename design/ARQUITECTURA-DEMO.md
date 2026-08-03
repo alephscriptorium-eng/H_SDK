@@ -1,4 +1,8 @@
-# ARQUITECTURA · demo «Prueba-H-M» (El Descenso) — brief para workers
+# ARQUITECTURA · demo «Prueba-H-M» (~~El Descenso~~) — brief para workers
+
+> **RH-03 / RECAP:** «El Descenso» está muerto como marco de demo. Este brief
+> describe el **boceto** `.mjs`, no un producto alcanzable. No declara
+> product-reachable ni «cero violaciones». Ver REPLAN §8 y `RECAP-SPEC-DEMO.md`.
 
 **Objetivo**: app three.js jugable, elegante, servida sin bundler. Prioridad
 del PO: resultados y elegancia; validaciones relajadas (node --check y humo).
