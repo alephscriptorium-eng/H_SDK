@@ -1,13 +1,14 @@
 {
   "name": "@h-sdk/core",
   "version": "0.1.0",
-  "description": "Dominio H puro — sin IO, sin red, sin fs, sin @zeus. Declara los puertos; no los implementa.",
+  "description": "Dominio H puro — máquina de experiencia y puertos de caso de uso; sin IO, sin @zeus.",
   "type": "module",
   "private": true,
   "exports": {
     ".": "./src/index.ts"
   },
   "scripts": {
-    "typecheck": "bun x tsc --noEmit"
+    "typecheck": "bun x tsc --noEmit",
+    "test": "bun test src"
   }
 }
