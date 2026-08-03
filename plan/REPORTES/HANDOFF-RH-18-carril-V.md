@@ -6,6 +6,7 @@
 | fecha | 2026-08-03 |
 | WP | **RH-18** (lane `v`) · estado propuesto: **✅** |
 | tip V | `b856b9e` (`main`) |
+| tip H | `58283c1` (`main`) al documentar |
 | tip G | no tocado · checkpoint `35cbded` intacto |
 
 ## Entrega

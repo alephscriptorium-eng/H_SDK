@@ -5,6 +5,7 @@
 | fecha | 2026-08-03 |
 | emisor | worker-RH-18 / custodio (carril V) |
 | tip V `main` | `b856b9e` |
+| tip H docs | `58283c1` |
 | obra | merge en `V_SDK` main · rama `worker-RH-18` borrada |
 | VSIX | `C:\S_LAB\v-sdk\dist\aleph-0-0.2.0.vsix` (gitignored; regenerable) |
 
