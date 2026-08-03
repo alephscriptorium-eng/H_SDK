@@ -4,6 +4,8 @@
 | ---- | ----- |
 | agente | worker-RH-transport / orquestador-H |
 | fecha | 2026-08-03 |
+| tip H | `e38ba28` (`main`) |
+| tip V | `27a98ef` (`main`) |
 | WORLD_ROOTS | `C:\S_LAB\h-sdk` (primario) · `C:\S_LAB\v-sdk` (ajuste mínimo) |
 | cierra | `<pendiente>` transport de RH-16/18 |
 | no cierra | provider E · evidencia HUB · `complete` de producto |
