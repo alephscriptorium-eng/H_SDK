@@ -1,0 +1,486 @@
+{
+  "rows": [
+    {
+      "superficie": "ciudad",
+      "paquete": "@zeus/ciudad",
+      "owner": "G/Z (ciudad)",
+      "notes": "",
+      "packageName": "@zeus/ciudad",
+      "pin": "0.1.1",
+      "version_exacta": "0.1.1",
+      "export_map": "11 keys: ., ./domain, ./contract, ./presencia, ./acta, ./jugadores, ./scene, ./misiones…",
+      "d_ts": "declared:./types/contract.d.ts; disk:./types/contract.d.ts,./types/domain.d.ts,./types/presencia.d.ts,./types/acta.d.ts,./types/jugadores.d.ts,./types/scene.d.ts,./types/misiones.d.ts,./types/cronista.d.ts,./types/salud.d.ts,./types/edificios.d.ts; missing:none",
+      "typesField": "./types/contract.d.ts",
+      "typingsField": null,
+      "hasTypesInExports": true,
+      "dts_found": [
+        "./types/contract.d.ts",
+        "./types/domain.d.ts",
+        "./types/presencia.d.ts",
+        "./types/acta.d.ts",
+        "./types/jugadores.d.ts",
+        "./types/scene.d.ts",
+        "./types/misiones.d.ts",
+        "./types/cronista.d.ts",
+        "./types/salud.d.ts",
+        "./types/edificios.d.ts"
+      ],
+      "runtime_import": "OK",
+      "registry": "OK",
+      "pollution": [],
+      "veredicto": "VERDE",
+      "evidencia": "npm view @zeus/ciudad@0.1.1 name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → version=0.1.1; types=./types/contract.d.ts || cd C:\\Users\\aleph\\AppData\\Local\\Temp\\rh04-matriz-X2Q4Iz && npm install --ignore-scripts --no-package-lock  (deps: @zeus/ciudad, @zeus/authority-kit, @zeus/rooms, @zeus/player-mcp-kit, @zeus/linea-kit, @zeus/acta-kit) → exit 0 || cat node_modules/@zeus/ciudad/package.json → version=0.1.1; types=./types/contract.d.ts; typings=—; dts_on_disk=./types/contract.d.ts,./types/domain.d.ts,./types/presencia.d.ts,./types/acta.d.ts,./types/jugadores.d.ts,./types/scene.d.ts,./types/misiones.d.ts,./types/cronista.d.ts,./types/salud.d.ts,./types/edificios.d.ts; declared_missing=none || runtime: C:\\Program Files\\nodejs\\node.exe C:\\Users\\aleph\\AppData\\Local\\Temp\\rh04-matriz-X2Q4Iz\\probe-_zeus_ciudad.mjs → OK || pollution: 0",
+      "view_types": "./types/contract.d.ts",
+      "declaredTypesMissing": []
+    },
+    {
+      "superficie": "authority-kit",
+      "paquete": "@zeus/authority-kit",
+      "owner": "Z (authority)",
+      "notes": "",
+      "packageName": "@zeus/authority-kit",
+      "pin": "0.4.2",
+      "version_exacta": "0.4.2",
+      "export_map": "2 keys: ., ./create-authority",
+      "d_ts": "declared:./types/index.d.ts; disk:./types/index.d.ts,./types/create-authority.d.ts; missing:none",
+      "typesField": "./types/index.d.ts",
+      "typingsField": null,
+      "hasTypesInExports": true,
+      "dts_found": [
+        "./types/index.d.ts",
+        "./types/create-authority.d.ts"
+      ],
+      "runtime_import": "OK",
+      "registry": "OK",
+      "pollution": [],
+      "veredicto": "VERDE",
+      "evidencia": "npm view @zeus/authority-kit@0.4.2 name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → version=0.4.2; types=./types/index.d.ts || cd C:\\Users\\aleph\\AppData\\Local\\Temp\\rh04-matriz-X2Q4Iz && npm install --ignore-scripts --no-package-lock  (deps: @zeus/ciudad, @zeus/authority-kit, @zeus/rooms, @zeus/player-mcp-kit, @zeus/linea-kit, @zeus/acta-kit) → exit 0 || cat node_modules/@zeus/authority-kit/package.json → version=0.4.2; types=./types/index.d.ts; typings=—; dts_on_disk=./types/index.d.ts,./types/create-authority.d.ts; declared_missing=none || runtime: C:\\Program Files\\nodejs\\node.exe C:\\Users\\aleph\\AppData\\Local\\Temp\\rh04-matriz-X2Q4Iz\\probe-_zeus_authority-kit.mjs → OK || pollution: 0",
+      "view_types": "./types/index.d.ts",
+      "declaredTypesMissing": []
+    },
+    {
+      "superficie": "rooms",
+      "paquete": "@zeus/rooms",
+      "owner": "Z (rooms)",
+      "notes": "",
+      "packageName": "@zeus/rooms",
+      "pin": "0.1.2",
+      "version_exacta": "0.1.2",
+      "export_map": "1 keys: .",
+      "d_ts": "declared:./types/index.d.ts; disk:./types/index.d.ts; missing:none",
+      "typesField": "./types/index.d.ts",
+      "typingsField": null,
+      "hasTypesInExports": true,
+      "dts_found": [
+        "./types/index.d.ts"
+      ],
+      "runtime_import": "OK",
+      "registry": "OK",
+      "pollution": [],
+      "veredicto": "VERDE",
+      "evidencia": "npm view @zeus/rooms@0.1.2 name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → version=0.1.2; types=./types/index.d.ts || cd C:\\Users\\aleph\\AppData\\Local\\Temp\\rh04-matriz-X2Q4Iz && npm install --ignore-scripts --no-package-lock  (deps: @zeus/ciudad, @zeus/authority-kit, @zeus/rooms, @zeus/player-mcp-kit, @zeus/linea-kit, @zeus/acta-kit) → exit 0 || cat node_modules/@zeus/rooms/package.json → version=0.1.2; types=./types/index.d.ts; typings=—; dts_on_disk=./types/index.d.ts; declared_missing=none || runtime: C:\\Program Files\\nodejs\\node.exe C:\\Users\\aleph\\AppData\\Local\\Temp\\rh04-matriz-X2Q4Iz\\probe-_zeus_rooms.mjs → OK || pollution: 0",
+      "view_types": "./types/index.d.ts",
+      "declaredTypesMissing": []
+    },
+    {
+      "superficie": "player-mcp-kit",
+      "paquete": "@zeus/player-mcp-kit",
+      "owner": "Z (player-mcp)",
+      "notes": "",
+      "packageName": "@zeus/player-mcp-kit",
+      "pin": "0.1.4",
+      "version_exacta": "0.1.4",
+      "export_map": "1 keys: .",
+      "d_ts": "declared:./types/index.d.ts; disk:./types/index.d.ts; missing:none",
+      "typesField": "./types/index.d.ts",
+      "typingsField": null,
+      "hasTypesInExports": true,
+      "dts_found": [
+        "./types/index.d.ts"
+      ],
+      "runtime_import": "OK",
+      "registry": "OK",
+      "pollution": [],
+      "veredicto": "VERDE",
+      "evidencia": "npm view @zeus/player-mcp-kit@0.1.4 name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → version=0.1.4; types=./types/index.d.ts || cd C:\\Users\\aleph\\AppData\\Local\\Temp\\rh04-matriz-X2Q4Iz && npm install --ignore-scripts --no-package-lock  (deps: @zeus/ciudad, @zeus/authority-kit, @zeus/rooms, @zeus/player-mcp-kit, @zeus/linea-kit, @zeus/acta-kit) → exit 0 || cat node_modules/@zeus/player-mcp-kit/package.json → version=0.1.4; types=./types/index.d.ts; typings=—; dts_on_disk=./types/index.d.ts; declared_missing=none || runtime: C:\\Program Files\\nodejs\\node.exe C:\\Users\\aleph\\AppData\\Local\\Temp\\rh04-matriz-X2Q4Iz\\probe-_zeus_player-mcp-kit.mjs → OK || pollution: 0",
+      "view_types": "./types/index.d.ts",
+      "declaredTypesMissing": []
+    },
+    {
+      "superficie": "arg-domain",
+      "paquete": "@zeus/arg-domain",
+      "owner": "G (delta)",
+      "notes": "delta público tipado",
+      "version_exacta": "—",
+      "export_map": "—",
+      "d_ts": "—",
+      "typesField": null,
+      "typingsField": null,
+      "hasTypesInExports": false,
+      "dts_found": [],
+      "runtime_import": "N/A",
+      "registry": "E404",
+      "pollution": [],
+      "veredicto": "ROJO / pending_external_contract",
+      "evidencia": "npm view @zeus/arg-domain name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → E404 (exit 1): {\n  \"error\": {\n    \"code\": \"E404\",\n    \"summary\": \"Not Found - GET https://npm.scriptorium.escrivivir.co/@zeus%2farg-domain - no such package available\",\n    \"detail\": \"'@zeus/arg-domain@*' is not in "
+    },
+    {
+      "superficie": "arg-runtime",
+      "paquete": "@zeus/arg-runtime",
+      "owner": "G (delta)",
+      "notes": "si existe publicado",
+      "version_exacta": "—",
+      "export_map": "—",
+      "d_ts": "—",
+      "typesField": null,
+      "typingsField": null,
+      "hasTypesInExports": false,
+      "dts_found": [],
+      "runtime_import": "N/A",
+      "registry": "E404",
+      "pollution": [],
+      "veredicto": "ROJO / pending_external_contract",
+      "evidencia": "npm view @zeus/arg-runtime name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → E404 (exit 1): {\n  \"error\": {\n    \"code\": \"E404\",\n    \"summary\": \"Not Found - GET https://npm.scriptorium.escrivivir.co/@zeus%2farg-runtime - no such package available\",\n    \"detail\": \"'@zeus/arg-runtime@*' is not i"
+    },
+    {
+      "superficie": "arg-view-kit",
+      "paquete": "@zeus/arg-view-kit",
+      "owner": "G (delta)",
+      "notes": "si existe",
+      "version_exacta": "—",
+      "export_map": "—",
+      "d_ts": "—",
+      "typesField": null,
+      "typingsField": null,
+      "hasTypesInExports": false,
+      "dts_found": [],
+      "runtime_import": "N/A",
+      "registry": "E404",
+      "pollution": [],
+      "veredicto": "ROJO / pending_external_contract",
+      "evidencia": "npm view @zeus/arg-view-kit name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → E404 (exit 1): {\n  \"error\": {\n    \"code\": \"E404\",\n    \"summary\": \"Not Found - GET https://npm.scriptorium.escrivivir.co/@zeus%2farg-view-kit - no such package available\",\n    \"detail\": \"'@zeus/arg-view-kit@*' is not"
+    },
+    {
+      "superficie": "arg-player-mcp",
+      "paquete": "@zeus/arg-player-mcp",
+      "owner": "G (delta)",
+      "notes": "",
+      "version_exacta": "—",
+      "export_map": "—",
+      "d_ts": "—",
+      "typesField": null,
+      "typingsField": null,
+      "hasTypesInExports": false,
+      "dts_found": [],
+      "runtime_import": "N/A",
+      "registry": "E404",
+      "pollution": [],
+      "veredicto": "ROJO / pending_external_contract",
+      "evidencia": "npm view @zeus/arg-player-mcp name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → E404 (exit 1): {\n  \"error\": {\n    \"code\": \"E404\",\n    \"summary\": \"Not Found - GET https://npm.scriptorium.escrivivir.co/@zeus%2farg-player-mcp - no such package available\",\n    \"detail\": \"'@zeus/arg-player-mcp@*' is"
+    },
+    {
+      "superficie": "arg-feeds",
+      "paquete": "@zeus/arg-feeds",
+      "owner": "G (delta)",
+      "notes": "si aplica",
+      "version_exacta": "—",
+      "export_map": "—",
+      "d_ts": "—",
+      "typesField": null,
+      "typingsField": null,
+      "hasTypesInExports": false,
+      "dts_found": [],
+      "runtime_import": "N/A",
+      "registry": "E404",
+      "pollution": [],
+      "veredicto": "ROJO / pending_external_contract",
+      "evidencia": "npm view @zeus/arg-feeds name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → E404 (exit 1): {\n  \"error\": {\n    \"code\": \"E404\",\n    \"summary\": \"Not Found - GET https://npm.scriptorium.escrivivir.co/@zeus%2farg-feeds - no such package available\",\n    \"detail\": \"'@zeus/arg-feeds@*' is not in th"
+    },
+    {
+      "superficie": "mockdatas-ciudad",
+      "paquete": "@zeus/mockdatas-ciudad",
+      "owner": "G (mockdatas)",
+      "notes": "",
+      "version_exacta": "—",
+      "export_map": "—",
+      "d_ts": "—",
+      "typesField": null,
+      "typingsField": null,
+      "hasTypesInExports": false,
+      "dts_found": [],
+      "runtime_import": "N/A",
+      "registry": "E404",
+      "pollution": [],
+      "veredicto": "ROJO / pending_external_contract",
+      "evidencia": "npm view @zeus/mockdatas-ciudad name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → E404 (exit 1): {\n  \"error\": {\n    \"code\": \"E404\",\n    \"summary\": \"Not Found - GET https://npm.scriptorium.escrivivir.co/@zeus%2fmockdatas-ciudad - no such package available\",\n    \"detail\": \"'@zeus/mockdatas-ciudad@*"
+    },
+    {
+      "superficie": "artefacto-onfalo",
+      "paquete": "(candidatos: @zeus/onfalo, @zeus/onfalo-fixture, @zeus/fixtures-onfalo, onfalo, onfalo-fixture)",
+      "owner": "H/G (artefacto)",
+      "notes": "artefacto Ónfalo pinneado",
+      "version_exacta": "—",
+      "export_map": "—",
+      "d_ts": "—",
+      "typesField": null,
+      "typingsField": null,
+      "hasTypesInExports": false,
+      "dts_found": [],
+      "runtime_import": "N/A (no package)",
+      "registry": "E404",
+      "pollution": [],
+      "veredicto": "ROJO / pending_external_contract",
+      "evidencia": "npm view @zeus/onfalo version --registry=https://npm.scriptorium.escrivivir.co → E404 | npm view @zeus/onfalo-fixture version --registry=https://npm.scriptorium.escrivivir.co → E404 | npm view @zeus/fixtures-onfalo version --registry=https://npm.scriptorium.escrivivir.co → E404 | npm view onfalo version --registry=https://npm.scriptorium.escrivivir.co → E404 | npm view onfalo-fixture version --registry=https://npm.scriptorium.escrivivir.co → E404",
+      "candidate_probes": [
+        {
+          "candidate": "@zeus/onfalo",
+          "result": "E404",
+          "cmd": "npm view @zeus/onfalo version --registry=https://npm.scriptorium.escrivivir.co"
+        },
+        {
+          "candidate": "@zeus/onfalo-fixture",
+          "result": "E404",
+          "cmd": "npm view @zeus/onfalo-fixture version --registry=https://npm.scriptorium.escrivivir.co"
+        },
+        {
+          "candidate": "@zeus/fixtures-onfalo",
+          "result": "E404",
+          "cmd": "npm view @zeus/fixtures-onfalo version --registry=https://npm.scriptorium.escrivivir.co"
+        },
+        {
+          "candidate": "onfalo",
+          "result": "E404",
+          "cmd": "npm view onfalo version --registry=https://npm.scriptorium.escrivivir.co"
+        },
+        {
+          "candidate": "onfalo-fixture",
+          "result": "E404",
+          "cmd": "npm view onfalo-fixture version --registry=https://npm.scriptorium.escrivivir.co"
+        }
+      ]
+    },
+    {
+      "superficie": "lore-hm-candidate",
+      "paquete": "(candidatos: lore-hm-candidate, lore-hm, @logos/lore-hm, @alephscript/lore-hm-candidate)",
+      "owner": "S/lengua (externo)",
+      "notes": "candidato LORE-HM",
+      "version_exacta": "—",
+      "export_map": "—",
+      "d_ts": "—",
+      "typesField": null,
+      "typingsField": null,
+      "hasTypesInExports": false,
+      "dts_found": [],
+      "runtime_import": "N/A (no package)",
+      "registry": "E404",
+      "pollution": [],
+      "veredicto": "ROJO / pending_external_contract",
+      "evidencia": "npm view lore-hm-candidate version --registry=https://npm.scriptorium.escrivivir.co → E404 | npm view lore-hm version --registry=https://npm.scriptorium.escrivivir.co → E404 | npm view @logos/lore-hm version --registry=https://npm.scriptorium.escrivivir.co → E404 | npm view @alephscript/lore-hm-candidate version --registry=https://npm.scriptorium.escrivivir.co → E404",
+      "candidate_probes": [
+        {
+          "candidate": "lore-hm-candidate",
+          "result": "E404",
+          "cmd": "npm view lore-hm-candidate version --registry=https://npm.scriptorium.escrivivir.co"
+        },
+        {
+          "candidate": "lore-hm",
+          "result": "E404",
+          "cmd": "npm view lore-hm version --registry=https://npm.scriptorium.escrivivir.co"
+        },
+        {
+          "candidate": "@logos/lore-hm",
+          "result": "E404",
+          "cmd": "npm view @logos/lore-hm version --registry=https://npm.scriptorium.escrivivir.co"
+        },
+        {
+          "candidate": "@alephscript/lore-hm-candidate",
+          "result": "E404",
+          "cmd": "npm view @alephscript/lore-hm-candidate version --registry=https://npm.scriptorium.escrivivir.co"
+        }
+      ]
+    },
+    {
+      "superficie": "provider-e",
+      "paquete": "(candidatos: @zeus/provider-e, @zeus/analisis-e, provider-e)",
+      "owner": "E (externo)",
+      "notes": "provider E",
+      "version_exacta": "—",
+      "export_map": "—",
+      "d_ts": "—",
+      "typesField": null,
+      "typingsField": null,
+      "hasTypesInExports": false,
+      "dts_found": [],
+      "runtime_import": "N/A (no package)",
+      "registry": "E404",
+      "pollution": [],
+      "veredicto": "ROJO / pending_external_contract",
+      "evidencia": "npm view @zeus/provider-e version --registry=https://npm.scriptorium.escrivivir.co → E404 | npm view @zeus/analisis-e version --registry=https://npm.scriptorium.escrivivir.co → E404 | npm view provider-e version --registry=https://npm.scriptorium.escrivivir.co → E404",
+      "candidate_probes": [
+        {
+          "candidate": "@zeus/provider-e",
+          "result": "E404",
+          "cmd": "npm view @zeus/provider-e version --registry=https://npm.scriptorium.escrivivir.co"
+        },
+        {
+          "candidate": "@zeus/analisis-e",
+          "result": "E404",
+          "cmd": "npm view @zeus/analisis-e version --registry=https://npm.scriptorium.escrivivir.co"
+        },
+        {
+          "candidate": "provider-e",
+          "result": "E404",
+          "cmd": "npm view provider-e version --registry=https://npm.scriptorium.escrivivir.co"
+        }
+      ]
+    },
+    {
+      "superficie": "linea-kit",
+      "paquete": "@zeus/linea-kit",
+      "owner": "Z (línea/materialización)",
+      "notes": "re-verificar types en manifest instalado",
+      "packageName": "@zeus/linea-kit",
+      "pin": "0.3.0",
+      "version_exacta": "0.3.0",
+      "export_map": "10 keys: ., ./curation, ./resolve, ./force-activation, ./validate, ./loader, ./tools, ./starterkits…",
+      "d_ts": "none",
+      "typesField": null,
+      "typingsField": null,
+      "hasTypesInExports": false,
+      "dts_found": [],
+      "runtime_import": "OK",
+      "registry": "OK",
+      "pollution": [],
+      "veredicto": "ROJO / publicado-sin-types",
+      "evidencia": "npm view @zeus/linea-kit@0.3.0 name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → version=0.3.0; types=— || cd C:\\Users\\aleph\\AppData\\Local\\Temp\\rh04-matriz-X2Q4Iz && npm install --ignore-scripts --no-package-lock  (deps: @zeus/ciudad, @zeus/authority-kit, @zeus/rooms, @zeus/player-mcp-kit, @zeus/linea-kit, @zeus/acta-kit) → exit 0 || cat node_modules/@zeus/linea-kit/package.json → version=0.3.0; types=—; typings=—; dts_on_disk=none; declared_missing=none || runtime: C:\\Program Files\\nodejs\\node.exe C:\\Users\\aleph\\AppData\\Local\\Temp\\rh04-matriz-X2Q4Iz\\probe-_zeus_linea-kit.mjs → OK || pollution: 0",
+      "view_types": null,
+      "declaredTypesMissing": []
+    },
+    {
+      "superficie": "ceremonia-evidencia-hub",
+      "paquete": "(candidatos: @zeus/evidence-kit, @zeus/evidencia-kit, @zeus/hub-evidence, @zeus/ceremony-kit, @zeus/notaria-kit)",
+      "owner": "HUB (externo)",
+      "notes": "ceremonia/evidencia canónica; acta-kit medido aparte como candidato parcial",
+      "version_exacta": "—",
+      "export_map": "—",
+      "d_ts": "—",
+      "typesField": null,
+      "typingsField": null,
+      "hasTypesInExports": false,
+      "dts_found": [],
+      "runtime_import": "N/A (no package)",
+      "registry": "E404",
+      "pollution": [],
+      "veredicto": "ROJO / pending_external_contract",
+      "evidencia": "npm view @zeus/evidence-kit version --registry=https://npm.scriptorium.escrivivir.co → E404 | npm view @zeus/evidencia-kit version --registry=https://npm.scriptorium.escrivivir.co → E404 | npm view @zeus/hub-evidence version --registry=https://npm.scriptorium.escrivivir.co → E404 | npm view @zeus/ceremony-kit version --registry=https://npm.scriptorium.escrivivir.co → E404 | npm view @zeus/notaria-kit version --registry=https://npm.scriptorium.escrivivir.co → E404",
+      "candidate_probes": [
+        {
+          "candidate": "@zeus/evidence-kit",
+          "result": "E404",
+          "cmd": "npm view @zeus/evidence-kit version --registry=https://npm.scriptorium.escrivivir.co"
+        },
+        {
+          "candidate": "@zeus/evidencia-kit",
+          "result": "E404",
+          "cmd": "npm view @zeus/evidencia-kit version --registry=https://npm.scriptorium.escrivivir.co"
+        },
+        {
+          "candidate": "@zeus/hub-evidence",
+          "result": "E404",
+          "cmd": "npm view @zeus/hub-evidence version --registry=https://npm.scriptorium.escrivivir.co"
+        },
+        {
+          "candidate": "@zeus/ceremony-kit",
+          "result": "E404",
+          "cmd": "npm view @zeus/ceremony-kit version --registry=https://npm.scriptorium.escrivivir.co"
+        },
+        {
+          "candidate": "@zeus/notaria-kit",
+          "result": "E404",
+          "cmd": "npm view @zeus/notaria-kit version --registry=https://npm.scriptorium.escrivivir.co"
+        }
+      ]
+    },
+    {
+      "superficie": "acta-kit-candidato",
+      "paquete": "@zeus/acta-kit",
+      "owner": "Z/HUB (candidato parcial)",
+      "notes": "publicado; no sustituye evidencia canónica tipada",
+      "packageName": "@zeus/acta-kit",
+      "pin": "0.1.1",
+      "version_exacta": "0.1.1",
+      "export_map": "7 keys: ., ./tipos, ./emitir, ./validar, ./publicar, ./adoptar, ./huella",
+      "d_ts": "none",
+      "typesField": null,
+      "typingsField": null,
+      "hasTypesInExports": false,
+      "dts_found": [],
+      "runtime_import": "OK",
+      "registry": "OK",
+      "pollution": [],
+      "veredicto": "ROJO / publicado-sin-types",
+      "evidencia": "npm view @zeus/acta-kit@0.1.1 name version types typings exports main module --registry=https://npm.scriptorium.escrivivir.co → version=0.1.1; types=— || cd C:\\Users\\aleph\\AppData\\Local\\Temp\\rh04-matriz-X2Q4Iz && npm install --ignore-scripts --no-package-lock  (deps: @zeus/ciudad, @zeus/authority-kit, @zeus/rooms, @zeus/player-mcp-kit, @zeus/linea-kit, @zeus/acta-kit) → exit 0 || cat node_modules/@zeus/acta-kit/package.json → version=0.1.1; types=—; typings=—; dts_on_disk=none; declared_missing=none || runtime: C:\\Program Files\\nodejs\\node.exe C:\\Users\\aleph\\AppData\\Local\\Temp\\rh04-matriz-X2Q4Iz\\probe-_zeus_acta-kit.mjs → OK || pollution: 0",
+      "view_types": null,
+      "declaredTypesMissing": []
+    }
+  ],
+  "summary": {
+    "verdes": [
+      "ciudad",
+      "authority-kit",
+      "rooms",
+      "player-mcp-kit"
+    ],
+    "rojos": [
+      "arg-domain:ROJO / pending_external_contract",
+      "arg-runtime:ROJO / pending_external_contract",
+      "arg-view-kit:ROJO / pending_external_contract",
+      "arg-player-mcp:ROJO / pending_external_contract",
+      "arg-feeds:ROJO / pending_external_contract",
+      "mockdatas-ciudad:ROJO / pending_external_contract",
+      "artefacto-onfalo:ROJO / pending_external_contract",
+      "lore-hm-candidate:ROJO / pending_external_contract",
+      "provider-e:ROJO / pending_external_contract",
+      "linea-kit:ROJO / publicado-sin-types",
+      "ceremonia-evidencia-hub:ROJO / pending_external_contract",
+      "acta-kit-candidato:ROJO / publicado-sin-types"
+    ],
+    "install": {
+      "temp": "C:\\Users\\aleph\\AppData\\Local\\Temp\\rh04-matriz-X2Q4Iz",
+      "status": 0,
+      "cmd": "cd C:\\Users\\aleph\\AppData\\Local\\Temp\\rh04-matriz-X2Q4Iz && npm install --ignore-scripts --no-package-lock  (deps: @zeus/ciudad, @zeus/authority-kit, @zeus/rooms, @zeus/player-mcp-kit, @zeus/linea-kit, @zeus/acta-kit)",
+      "stderr": "npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me",
+      "stdout": "added 235 packages, and audited 236 packages in 6s\n\n53 packages are looking for funding\n  run `npm fund` for details\n\nfound 0 vulnerabilities"
+    },
+    "repo_pollution_S_LAB_file_link": [],
+    "mutant_probe": {
+      "id": "mutant-types-exports-no-disk",
+      "description": "hasTypesInExports=true, dts_found=[], runtime OK, export_map present → must NOT be VERDE",
+      "input": {
+        "superficie": "mutant-types-exports-no-disk",
+        "registry": "OK",
+        "version_exacta": "0.0.0-mutant",
+        "export_map": "1 keys: .",
+        "typesField": null,
+        "typingsField": null,
+        "hasTypesInExports": true,
+        "dts_found": [],
+        "runtime_import": "OK",
+        "pollution": []
+      },
+      "veredicto": "ROJO / sin d.ts",
+      "expected": "ROJO / sin d.ts (any ROJO*)",
+      "pass": true
+    },
+    "linea_kit_types": {
+      "version": "0.3.0",
+      "typesField": null,
+      "typingsField": null,
+      "hasTypesInExports": false,
+      "d_ts": "none",
+      "veredicto": "ROJO / publicado-sin-types"
+    }
+  },
+  "registry": "https://npm.scriptorium.escrivivir.co",
+  "generatedAt": "2026-08-03T14:12:12.947Z"
+}
