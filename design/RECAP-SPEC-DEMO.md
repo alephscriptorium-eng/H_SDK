@@ -30,6 +30,13 @@
    (arg-domain/arg-console con su flow engine, mar vivo, tablero/jugador).
 4. Los paneles DOM propios como interfaz de H — **la interfaz de H es V**.
 5. La cámara/ceguera como mecánica estrella no pedida.
+6. **Implementar la parte H en `.mjs` plano** contra el mandato explícito del
+   PO («typescript y su mundo de layers… ponlo en modo ASI», «la interfaz no
+   será html5 sino ya bien typescript», «pero bun, su hexagon») y contra el
+   propio `ADR/0001` de este mundo. El idioma `.mjs` es correcto en los
+   mundos de zeus/g (y en la obra de adaptación dentro de delta); el código
+   propio de H es **TypeScript estricto source-first, Bun, hexágono
+   core/edges, MODES** — la raspa de network-engine rehecha.
 
 ## El boceto queda TERMINADO (no es la demo)
 
