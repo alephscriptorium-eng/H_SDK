@@ -5,7 +5,7 @@
 | agente | worker-RH-04 |
 | fecha | 2026-08-03 |
 | rama | `wp/rh-04-matriz-contratos` |
-| commits | e3b9186 (entrega); bb238be · 87d7dc4 · 42a9883 · 5ab0f55 (anclas); + commit fix DEVOLUCION #1 (ver §corrección) |
+| commits | e3b9186 (entrega); bb238be · 87d7dc4 · 42a9883 · 5ab0f55 (anclas); a1e1f8e49228dde7060df0b4145741adb3f6add4 (fix DEVOLUCION #1) |
 | eje(s) CA | III, IV |
 | riesgo de revisión | `independiente` |
 | revisor distinto del worker | `sí` |
@@ -47,7 +47,7 @@ matriz/JSON/reporte regenerados; mutante documentado y ROJO.
 | --- | --- |
 | defecto | `verdictFor` VERDE con `hasTypesInExports` y `dts_found=[]` |
 | remedio | VERDE exige `dts_found.length > 0` (paths declarados top-level/exports en disco); si declara types y no hay archivo → `ROJO / sin d.ts` |
-| corregido en commit | _(hash del commit de fix)_ |
+| corregido en commit | a1e1f8e49228dde7060df0b4145741adb3f6add4 |
 
 ### Mutante → ROJO
 
