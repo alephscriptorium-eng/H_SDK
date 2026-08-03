@@ -6,10 +6,10 @@ Fuente de diseño: [`VISION.md`](VISION.md) (§6 experimentos E1–E6, §7 olas)
 
 | ficha | qué | CA | estado |
 | ----- | --- | -- | ------ |
-| H01 | raspa + ADR 0001/0002 + plan | mundo git limpio, espejo skills commiteado | 🔄 |
-| H02 | estación calibrada + handoffs por skill | `plan/ESTACION.md` con los 8 skills | 🔄 |
-| H03 | **E1** sondeo de tipos desde registry (`npm view @zeus/*` + `tsc` estricto contra `.d.ts`) | matriz paquete×types con evidencia | ⬜ |
-| H04 | reporte a G: gap de `types` en `ciudad`/`startpack-ciudad` (decisión ④) | nota entregada al owner | ⬜ |
+| H01 | raspa + ADR 0001/0002 + plan | mundo git limpio, espejo skills commiteado | ✅ 2026-08-03 (`c8703e7`; repo `H_SDK` + submodule en hub) |
+| H02 | estación calibrada + handoffs por skill | `plan/ESTACION.md` con los 8 skills | ✅ 2026-08-03 (espejo 8/8 tras 0.12.0) |
+| H03 | **E1** sondeo de tipos desde registry (`npm view @zeus/*` + `tsc` estricto contra `.d.ts`) | matriz paquete×types con evidencia | 🔶 parcial: probe estricto+mutante contra `ciudad`/`startpack` 0.1.1 verde; falta la matriz completa `@zeus/*` |
+| H04 | reporte a G: gap de `types` en `ciudad`/`startpack-ciudad` (decisión ④) | nota entregada al owner | ✅ 2026-08-03 **resuelto en origen**: g-sdk `wp/g-ciudad-types` fusionada, 0.1.1 publicados con `types` (acta `g-sdk/plan/REPORTES/ACTA-TYPES-CIUDAD-0.1.1.md`; de paso, guard del publish corregido a versión exacta) |
 | H05 | consumo del candidato de lengua cuando la notaría publique (decisión ①) | `tsc --noEmit` verde contra el candidato | ⬜ bloqueada por publicación |
 
 ## H1 · Gamemap habitado
