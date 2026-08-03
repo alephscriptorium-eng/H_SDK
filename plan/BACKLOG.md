@@ -1,5 +1,13 @@
 # BACKLOG · h-sdk — olas H0–H3 (nada se despacha sin GO)
 
+> **CORRECCIÓN DE RUMBO (2026-08-03, orden del PO)**: la demo es una
+> **adaptación de delta para ciudad, en el barrio Lore, sobre la
+> DocumentMachine, con V como interfaz de H** — ver
+> [`design/RECAP-SPEC-DEMO.md`](../design/RECAP-SPEC-DEMO.md). Lo construido
+> en `packages/game-prueba-hm/` queda como **boceto terminado** (piezas
+> rescatables listadas en el recap). Las olas H2/H3 se re-derivan tras medir
+> delta y el patrón de webview/teatro de V.
+
 Fuente de diseño: [`VISION.md`](VISION.md) (§6 experimentos E1–E6, §7 olas).
 
 ## H0 · Fundación (en curso)
