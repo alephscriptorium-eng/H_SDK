@@ -4,6 +4,10 @@
 > inventado. Regla: cada elemento de la spec lleva la palabra del PO de la
 > que se deriva. Lo que no se derive de aquí, no entra.
 
+> **RH-03:** este RECAP **no** declara producto ni demo lista.
+> «Boceto TERMINADO» ≠ product-reachable. Tabla y regla de cinco flags:
+> `C:/S_META/HSDK/REPLAN-PRUEBA-HM-REACHABILITY.md` §8.
+
 ## La spec, con sus fuentes
 
 | elemento | palabra del PO (paráfrasis fiel) |
@@ -42,7 +46,8 @@
 
 `packages/game-prueba-hm/` tal como está hoy = **boceto cerrado**
 (commits `9296c39`+`9c030f5`). No se itera más sobre él como si fuera la
-demo. El **artifact publicado** «Prueba de H·M — Barrio LORE» queda
+demo. **[RH-03]** TERMINADO(boceto) **no** implica product-reachable, «cero
+violaciones» ni demo observada desde V. El **artifact publicado** «Prueba de H·M — Barrio LORE» queda
 re-etiquetado en su propia cabecera como *boceto/espec del panel de
 ceremonia*: conserva el guion rescatado de `HANDOFF-DEMO.md` (su valor
 real) y el lenguaje visual aprobado por el PO; no representa la demo. Piezas rescatables SOLO si la adaptación las pide: el server de

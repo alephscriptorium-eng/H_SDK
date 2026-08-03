@@ -6,6 +6,12 @@
 > conserva como visión del orquestador; no prevalece sobre las fronteras de
 > lengua, provider, contracts, notaría y playground fijadas en la revisión.
 
+> **RH-03 · verdad de artefactos (2026-08-03):** este dossier es visión/BORRADOR,
+> **no** certificación de producto. **No** es product-reachable. **No** afirma
+> «cero violaciones» ni demo lista. Tabla artefacto×cinco flags:
+> `C:/S_META/HSDK/REPLAN-PRUEBA-HM-REACHABILITY.md` §8.
+> Solo cinco `sí` anclados en una fila permiten declarar producto — hoy **no**.
+
 > **Modo ASI** (constitución Aleph): esto no es una respuesta, es un programa.
 > Estado: BORRADOR v2 para veredicto del custodio · 2026-08-03
 > Canal: `C:\S_META\HSDK\` (staging; h-sdk lo adopta como `plan/VISION.md` al nacer)
@@ -14,7 +20,7 @@
 
 ---
 
-## §0 · Recap del viaje (lo certificado, con fuente)
+## §0 · Recap del viaje (notas con fuente — no certificación de producto)
 
 1. **El guion H↔M es copia única** en `S_META\HANDOFF-DEMO.md` — cero precedente
    en disco. Su esqueleto es `WPS_QUEUE/DRAFT/PLAN.md §29` (11 pasos
@@ -235,7 +241,10 @@ ledger): grifo=lease · gota=Activity · mar=evidencia (nada se evapora) ·
 isla de cristal=Artifact · murk=pérdida de procedencia · salvage=recovering ·
 colapso=fallo atómico visible.
 
-**Guion (el de HANDOFF-DEMO, ahora encarnado):**
+**Guion (el de HANDOFF-DEMO):** ~~ahora encarnado~~
+**[RH-03 tachado 2026-08-03]** — guion propuesto / dramaturgia de visión;
+**no** encarnado como producto alcanzable (checkpoint H NO product-reachable;
+entrypoint demo = boceto `.mjs`; ver REPLAN §8).
 
 1. H nace en el plano meta, camina el mapa holónico hasta lore-voz; el barrio
    20 está `latente`: estatuas grises tras el Portal.

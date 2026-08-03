@@ -7,3 +7,4 @@
 | ③ | 2026-08-03 | **`@zeus/player-mcp-kit` es el asiento de M.** Criterio general: *cuando z-sdk tenga paquete para el trabajo, usarlo ES el experimento* |
 | ④ | 2026-08-03 | **Types de `@zeus/ciudad`/`startpack-ciudad`: G debe soportarlo ya.** Reporte al owner G en H0; no se tapan con `.d.ts` ambientales |
 | ⑤ | 2026-08-03 | **GO de fundación**: h-sdk nace en `C:\S_LAB\h-sdk`, mismo procedimiento que los otros mundos, downstream en `C:\S`, obra en `C:\S_LAB` |
+| ⑥ | 2026-08-03 | **Regla de declaración de producto (RH-03):** un artefacto solo se declara producto si la fila `committed × reachable × observed × clean-room × owner-correct` tiene **cinco `sí` anclados**. Hoy **no** se declara producto. Acta: `C:/S_META/HSDK/REPLAN-PRUEBA-HM-REACHABILITY.md` §8 |
