@@ -5,7 +5,7 @@
 | agente | worker-RH-12 |
 | fecha | 2026-08-03 |
 | rama | `wp/rh-12-core-maquina` |
-| commits | `20c7055` feat · `56e8da9` docs reporte · `f49971e` ancla (tip) |
+| commits | `20c7055` feat · `56e8da9` reporte · `f49971e` ancla · `4e885b1` lista · tip = HEAD de `wp/rh-12-core-maquina` |
 | eje(s) CA | II |
 | riesgo de revisión | `independiente` |
 | revisor distinto del worker | `sí` |
