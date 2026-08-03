@@ -5,7 +5,7 @@
 | agente | worker-RH-13 |
 | fecha | 2026-08-03 |
 | rama | `wp/rh-13-edges-owner` |
-| commits |  feat ·  reporte · tip = HEAD de  |
+| commits | `13a7826` feat · `040a034` reporte · tip = HEAD de `wp/rh-13-edges-owner` |
 | eje(s) CA | I, II, hostil-omite |
 | riesgo de revisión | `independiente` |
 | revisor distinto del worker | `sí` |
