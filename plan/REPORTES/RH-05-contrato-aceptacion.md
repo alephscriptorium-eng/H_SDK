@@ -5,7 +5,7 @@
 | agente | worker-RH-05 |
 | fecha | 2026-08-03 |
 | rama | `wp/rh-05-contrato-aceptacion` |
-| commits | _(rellenar tras commit)_ |
+| commits | `8800f56` (8800f56bdf8f45f2f09122da70776f0f9e836c11) |
 | eje(s) CA | IV |
 | riesgo de revisión | `normal` |
 | revisor distinto del worker | `no requerido` |
