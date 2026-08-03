@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "verbatimModuleSyntax": true,
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "types": ["bun-types"],
+    "paths": {
+      "@h-sdk/core": ["./packages/core/src/index.ts"],
+      "@h-sdk/edge-zeus": ["./packages/edge-zeus/src/index.ts"]
+    }
+  }
+}

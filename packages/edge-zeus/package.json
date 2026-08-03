@@ -1,0 +1,17 @@
+{
+  "name": "@h-sdk/edge-zeus",
+  "version": "0.1.0",
+  "description": "Puerto hacia @zeus/* — único sitio de h-sdk donde el idioma .mjs+d.ts de zeus toca el código propio (ADR 0002).",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "bun x tsc --noEmit"
+  },
+  "dependencies": {
+    "@zeus/ciudad": "^0.1.1",
+    "@zeus/protocol": "^0.4.1"
+  }
+}

@@ -1,0 +1,11 @@
+# Config Bun de h-sdk — ADR 0002 (doble acople: de zeus, todo lo publicado).
+#
+# Los dos scopes del scriptorium se resuelven contra el registry privado.
+# Hoy la lectura es anónima (verificado: 200 sin credencial), por eso aquí NO
+# hay token. Si el registry pasa a exigirlo, la forma es
+#   "@zeus" = { url = "https://npm.scriptorium.escrivivir.co", token = "$ZEUS_NPM_TOKEN" }
+# y el secreto entra SIEMPRE por entorno, jamás escrito en este fichero.
+
+[install.scopes]
+"@zeus" = "https://npm.scriptorium.escrivivir.co"
+"@alephscript" = "https://npm.scriptorium.escrivivir.co"

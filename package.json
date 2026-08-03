@@ -6,12 +6,20 @@
   "engines": {
     "node": ">=22"
   },
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
+    "typecheck": "bun x tsc -p packages/core --noEmit && bun x tsc -p packages/edge-zeus --noEmit",
+    "typecheck:core": "bun x tsc -p packages/core --noEmit",
+    "typecheck:edge-zeus": "bun x tsc -p packages/edge-zeus --noEmit",
     "skills:sync": "alephscript-skills-sync --runtime claude",
     "demo": "node packages/game-prueba-hm/server.mjs"
   },
   "devDependencies": {
-    "@alephscript/skills-scriptorium": "0.12.0"
+    "@alephscript/skills-scriptorium": "0.12.0",
+    "bun-types": "^1.3.11",
+    "typescript": "^5.9.3"
   },
   "dependencies": {
     "@zeus/ciudad": "^0.1.1",
