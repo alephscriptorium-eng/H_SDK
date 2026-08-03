@@ -2,8 +2,10 @@
 
 Generado: 2026-08-03T14:17:56Z  
 Registry: `https://npm.scriptorium.escrivivir.co`  
-Base RH-04: `plan/REPORTES/RH-04-MATRIZ-CONTRATOS.md` (2026-08-03T14:11:41Z)  
-Re-chequeo puntual: `npm view` + install limpio `@zeus/linea-kit@0.3.0` / `@zeus/acta-kit@0.1.1` (temp, `--ignore-scripts`, sin siblings).
+Base RH-04: `plan/REPORTES/RH-04-MATRIZ-CONTRATOS.md` (2026-08-03T17:15:35.787Z)  
+Re-chequeo puntual (RH-11b): linea-kit@0.4.0 / acta-kit@0.1.2 tipados.  
+Re-chequeo E/HUB (`worker-ELEV-E-HUB`): **2026-08-03T17:26:55Z** — E404
+persistente; nota `C:/S_META/HSDK/NOTA-ELEV-E-HUB-2026-08-03.md`.
 
 ## Frontera H (no-implementación local)
 
@@ -35,15 +37,24 @@ Superficies BRIEF aún abiertas: **LORE-HM · provider E · evidencia HUB canón
 
 - **Owner:** E (externo).
 - **Cita RH-04:** ROJO / `pending_external_contract`.
-- **Re-chequeo:** E404 (exit 1) en los tres candidatos.
-- **Veredicto:** `pending_external_contract`.
+- **Re-chequeo 2026-08-03T17:26:55Z:** E404 (exit 1) en
+  `@zeus/provider-e` · `@zeus/analisis-e` · `provider-e` ·
+  `@emmanuel/ichthys` · `@emmanuel/charis`.
+- **Owner tree (e-sdk):** submodules DocumentMachine* vacíos; DA-5 abierta
+  (bloquea nombre/publish); E00–E13 ⬜; sin paquete tipable listo.
+- **Veredicto:** `pending_external_contract`. **Bloquea** → `analyzed`.
+- **Elevación:** `C:/S_META/HSDK/NOTA-ELEV-E-HUB-2026-08-03.md` §provider-E.
 
 ## Detalle · ceremonia / evidencia
 
 - **Owner:** HUB (externo).
-- **Cita RH-04 / RH-11b:** candidatos canónicos E404; `@zeus/acta-kit@0.1.2` tipado pero **no** canónico.
+- **Cita RH-04 / RH-11b / ELEV-E-HUB:** candidatos canónicos E404;
+  `@zeus/acta-kit@0.1.2` tipado pero **no** canónico;
+  `@zeus/parte-kit@0.1.1` existe ≠ canónico HUB.
 - **Veredicto superficie canónica:** `pending_external_contract` (sigue).
+  **Bloquea** → `evidence_verified`.
 - **Nota:** `pending_release_types` de acta-kit **cerrado**; no sustituye evidencia HUB.
+- **Elevación:** misma nota S_META §ceremonia-evidencia-HUB.
 
 ## Detalle · materialización / linea-kit
 
@@ -58,9 +69,9 @@ Superficies BRIEF aún abiertas: **LORE-HM · provider E · evidencia HUB canón
 | id | destinatario | artefacto |
 | --- | --- | --- |
 | ELEV-RH-11-LORE | S / lengua | `C:/S_META/HSDK/RH-11-ELEVACION-OWNERS.md` §LORE-HM |
-| ELEV-RH-11-E | E | misma nota §provider-E |
-| ELEV-RH-11-HUB | HUB | misma nota §ceremonia-evidencia |
-| ELEV-RH-11-Z-LINEA | Z | misma nota §linea-kit |
+| ELEV-RH-11-E | E | misma nota §provider-E · refresco `NOTA-ELEV-E-HUB-2026-08-03.md` |
+| ELEV-RH-11-HUB | HUB | misma nota §ceremonia-evidencia · íd. refresco |
+| ELEV-RH-11-Z-LINEA | Z | misma nota §linea-kit · **cerrado tipado** (`linea-kit@0.4.0`) |
 
 Sin respuesta inventada del owner. Mediación: custodio ofrece; H solo documenta gap.
 

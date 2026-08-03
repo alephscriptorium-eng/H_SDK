@@ -93,6 +93,11 @@ DOWNSTREAM_PATTERNS='["S/*"]'
   canónica (RH-11; linea-kit@0.4.0 / acta-kit@0.1.2 / feed-kit@0.3.1 tipados —
   `pending_release_types` cerrado; acta ≠ HUB). H no rellena. Transport MCP
   producto H→V sigue `<pendiente>` (no inventar connected/complete).
+- **ELEV-E-HUB 2026-08-03 (paralelo RH-17):** re-chequeo registry E404;
+  e-sdk sin artefacto tipable (submodules vacíos + DA-5); **cero publish**;
+  elevación en `C:/S_META/HSDK/NOTA-ELEV-E-HUB-2026-08-03.md` +
+  `plan/REPORTES/RH-11-ELEV-E-HUB-2026-08-03.md`. Bloquea `analyzed` (E) y
+  `evidence_verified` (HUB).
 - **No tocar:** checkpoint G `wp/g-prueba-hm-adaptacion@35cbded`.
 
 ## Anti-alcance (del plan)
