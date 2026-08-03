@@ -1,0 +1,19 @@
+{
+  "name": "@h-sdk/app-prueba-hm",
+  "version": "0.1.0",
+  "description": "Composition root Bun/TS de la experiencia Prueba-H-M. Único entrypoint alcanzable.",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": "./src/main.ts"
+  },
+  "scripts": {
+    "start": "bun run src/main.ts",
+    "typecheck": "bun x tsc --noEmit",
+    "test": "bun test src"
+  },
+  "dependencies": {
+    "@h-sdk/core": "workspace:*",
+    "@h-sdk/edge-zeus": "workspace:*"
+  }
+}
