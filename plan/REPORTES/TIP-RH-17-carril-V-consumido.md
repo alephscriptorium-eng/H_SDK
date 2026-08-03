@@ -5,7 +5,7 @@
 | fecha | 2026-08-03 |
 | emisor | worker-RH-17 / custodio (carril V) |
 | tip V `main` | `f54be58` |
-| tip H docs | `77da988` |
+| tip H docs | `d627878` |
 | obra | merge en `V_SDK` main · rama `wp/rh-17-vista-experiencia` borrada |
 
 ## Resumen

@@ -65,7 +65,7 @@ DOWNSTREAM_PATTERNS='["S/*"]'
 | WP | P | BRIEF | CA | deps | ejes |
 | -- | - | ----- | -- | ---- | ---- |
 | **RH-16** | P1 | ✅ 2026-08-03 · tip V f12ac76 · tip H c3a0afe · 17 tests V · transport MCP producto H `<pendiente>` · Servicio experiencia H en V (MinimalMcpClient/ResourceProjectionService): descubrir server H listar/leer resources validar version/shape; modelar pending connected error complete sin hardcode; sin import sibling H ni IPlay/ICompany hasta runtime real | tests de parseo/estados; fixtures MCP tras RH-05; integracion real tras RH-14 | RH-05 | I, IV |
-| **RH-17** | P1 | ✅ 2026-08-03 · tip V f54be58 · tip H 77da988 · TreeView+webview experiencia · 180 tests related PASS · Vista V dedicada TreeView diagnostico + webview experiencia con CSP/nonce existentes; render Ciudad escena via arg-view-kit estado M Onfalo analisis linea evidencia; comandos = tools MCP; H sin paneles HTML; Teatro hardcodeado fuera del cambio | vista data-driven sin Teatro; compile/lint verdes | RH-08, RH-14, RH-16 | I |
+| **RH-17** | P1 | ✅ 2026-08-03 · tip V f54be58 · tip H d627878 · TreeView+webview experiencia · 180 tests related PASS · Vista V dedicada TreeView diagnostico + webview experiencia con CSP/nonce existentes; render Ciudad escena via arg-view-kit estado M Onfalo analisis linea evidencia; comandos = tools MCP; H sin paneles HTML; Teatro hardcodeado fuera del cambio | vista data-driven sin Teatro; compile/lint verdes | RH-08, RH-14, RH-16 | I |
 | **RH-18** | P2 | Empaquetar VSIX y probar contra H/M reales; distinguir pending_external_contract connecting connected failed complete; no exito con resources stale ni actores/escenas inventados | VSIX instalable; transicion observada hasta estados reales | RH-15, RH-17 | IV, hostil-omite |
 
 ---
