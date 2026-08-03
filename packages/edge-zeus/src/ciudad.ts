@@ -1,46 +1,80 @@
 /**
- * Implementación de `PuertoCiudad` (core) contra `@zeus/protocol`.
- *
- * Sin transporte el adaptador NO finge: se declara en `replay` y cada verbo
- * devuelve error explícito. Replay ≠ conectado (ALEPH-H).
+ * `PuertoEntradaCiudad` — confirma entrada solo con state/ledger observados.
+ * «Conectado» ≠ presencia de emisor; exige ambos ids opacos del owner.
  */
 
 import { err, ok } from '@h-sdk/core';
-import type { Acople, ActorId, BarrioId, PuertoCiudad, Resultado } from '@h-sdk/core';
-import { intentDeCiudad } from './protocolo.ts';
-import type { TransporteZeus } from './protocolo.ts';
+import type {
+  Acople,
+  ActorId,
+  ConfirmacionCiudad,
+  PuertoEntradaCiudad,
+  Resultado,
+} from '@h-sdk/core';
+import { intentJoin, type EmisorCiudad } from './wire-ciudad.ts';
 
-export interface OpcionesPuertoCiudad {
-  /** Ausente ⇒ el puerto queda en `replay`, dicho en voz alta. */
-  readonly transporte?: TransporteZeus;
+/**
+ * Observables del owner (EVENTS.STATE / EVENTS.LEDGER).
+ * Campos omitidos ⇒ denegación (hostil-omite). No se inventan.
+ */
+export interface ObservablesCiudad {
+  readonly stateId?: string;
+  readonly ledgerId?: string;
 }
 
-const SIN_TRANSPORTE = 'replay: sin transporte @zeus; el intent no salió';
+export interface OpcionesPuertoEntradaCiudad {
+  readonly emisor: EmisorCiudad;
+  /** Lectura actual de ids observados; sin ambos ⇒ no conectado. */
+  readonly observar: () => ObservablesCiudad;
+}
 
-export function crearPuertoCiudad(opciones: OpcionesPuertoCiudad = {}): PuertoCiudad {
-  const { transporte } = opciones;
+function idsCompletos(
+  o: ObservablesCiudad,
+): o is { readonly stateId: string; readonly ledgerId: string } {
+  return (
+    typeof o.stateId === 'string' &&
+    o.stateId.length > 0 &&
+    typeof o.ledgerId === 'string' &&
+    o.ledgerId.length > 0
+  );
+}
 
-  const acople = (): Acople => (transporte ? 'conectado' : 'replay');
+export function crearPuertoEntradaCiudad(
+  opciones: OpcionesPuertoEntradaCiudad,
+): PuertoEntradaCiudad {
+  const { emisor, observar } = opciones;
 
-  async function emitir(
+  const acople = (): Acople => (idsCompletos(observar()) ? 'conectado' : 'replay');
+
+  async function confirmarEntrada(
     actor: ActorId,
-    intent: string,
-    args: Record<string, unknown> = {},
-  ): Promise<Resultado<void>> {
-    if (!transporte) return err(SIN_TRANSPORTE);
-    await transporte.enviar(intentDeCiudad(actor, intent, args));
-    return ok(undefined);
+  ): Promise<Resultado<ConfirmacionCiudad>> {
+    const antes = observar();
+    if (!idsCompletos(antes)) {
+      return err(
+        'ciudad: stateId|ledgerId omitidos — denegado (no hay confirmación sin observables)',
+      );
+    }
+
+    await emisor.emitir(intentJoin(actor));
+
+    const despues = observar();
+    if (!idsCompletos(despues)) {
+      return err(
+        'ciudad: tras join faltan stateId|ledgerId observados — denegado',
+      );
+    }
+
+    return ok({
+      actor,
+      stateId: despues.stateId,
+      ledgerId: despues.ledgerId,
+    });
   }
 
   return {
     nombre: '@h-sdk/edge-zeus/ciudad',
     acople,
-    entrar: (actor) => emitir(actor, 'join'),
-    caminar: (actor, destino) => emitir(actor, 'walk', { destino }),
-    anunciar: (actor, mensaje) => emitir(actor, 'announce', { mensaje }),
-    // `wake` sin actor: el verbo lo emite el barrio; el actorId de sistema es
-    // PENDIENTE de medir contra el dominio real de `@zeus/ciudad`.
-    despertar: (barrio: BarrioId) =>
-      emitir('h-sdk' as ActorId, 'wake', { barrio, horseMode: 'stub' }),
+    confirmarEntrada,
   };
 }
