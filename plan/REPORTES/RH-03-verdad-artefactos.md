@@ -5,7 +5,7 @@
 | agente | worker-RH-03 |
 | fecha | 2026-08-03 |
 | rama | `wp/rh-03-verdad-artefactos` |
-| commits | `d844138296b78ca67a500df42111c262efa6627c` |
+| commits | `d844138296b78ca67a500df42111c262efa6627c`, `a8cfaac09dab6c27e7526f1ecd02776358c075cf` |
 | eje(s) CA | III |
 | riesgo de revisión | `normal` |
 | revisor distinto del worker | `no requerido` |
