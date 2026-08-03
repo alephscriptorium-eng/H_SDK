@@ -1,0 +1,15 @@
+{
+  "name": "h-sdk",
+  "private": true,
+  "description": "H_SDK — mundo H; vendor externo del scriptorium: consume skills-scriptorium y @zeus/* por registry",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "skills:sync": "alephscript-skills-sync --runtime claude"
+  },
+  "devDependencies": {
+    "@alephscript/skills-scriptorium": "0.11.0"
+  }
+}

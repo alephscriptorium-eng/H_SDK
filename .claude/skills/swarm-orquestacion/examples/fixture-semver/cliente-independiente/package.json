@@ -1,0 +1,8 @@
+{
+  "name": "cliente-independiente-del-gate",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "beta": ">=2.4.1 <3.0.0"
+  }
+}

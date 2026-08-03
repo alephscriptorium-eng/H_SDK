@@ -1,0 +1,13 @@
+{
+  "defaultPolicy": "major-band",
+  "runtimeRoots": ["src"],
+  "runtimeImports": ["beta"],
+  "allow": ["beta"],
+  "dedupPatterns": [
+    {
+      "name": "CONTRATO_CLIENTE",
+      "pattern": "\\bconst\\s+CONTRATO_CLIENTE\\b",
+      "maxDefinitions": 1
+    }
+  ]
+}
