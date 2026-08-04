@@ -1,7 +1,7 @@
 {
   "name": "@h-sdk/app-prueba-hm",
   "version": "0.1.0",
-  "description": "Composition root Bun/TS de la experiencia Prueba-H-M. Único entrypoint alcanzable.",
+  "description": "Composition root Bun/TS de la experiencia Prueba-H-M.",
   "type": "module",
   "private": true,
   "exports": {
@@ -11,7 +11,7 @@
   },
   "scripts": {
     "start": "bun run src/main.ts",
-    "mcp": "bun run src/server.ts",
+    "mcp": "bun --env-file=.env run src/server.ts",
     "typecheck": "bun x tsc --noEmit",
     "test": "bun test src"
   },

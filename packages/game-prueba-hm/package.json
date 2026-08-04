@@ -1,0 +1,13 @@
+{
+  "name": "@h-sdk/game-prueba-hm",
+  "version": "0.1.0",
+  "description": "Demo browser Prueba-H-M: servidor node:http + escena 3D.",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": "./server.mjs"
+  },
+  "scripts": {
+    "start": "node server.mjs"
+  }
+}

@@ -13,7 +13,9 @@
     "paths": {
       "@h-sdk/core": ["./packages/core/src/index.ts"],
       "@h-sdk/edge-zeus": ["./packages/edge-zeus/src/index.ts"],
-      "@h-sdk/app-prueba-hm": ["./packages/app-prueba-hm/src/main.ts"]
+      "@h-sdk/app-prueba-hm": ["./packages/app-prueba-hm/src/main.ts"],
+      "@h-sdk/demo-barrio-lore": ["./packages/demo-barrio-lore/src/index.ts"],
+      "@h-sdk/demo-barrio-lore/*": ["./packages/demo-barrio-lore/src/*"]
     }
   }
 }

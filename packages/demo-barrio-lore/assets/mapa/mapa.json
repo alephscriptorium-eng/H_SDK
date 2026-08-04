@@ -1,0 +1,496 @@
+{
+  "kind": "hm-mapa-holones-distritos",
+  "version": "1.0.0",
+  "mode": "import-once-projection",
+  "wp": "WP-HUB-108",
+  "counts": {
+    "holones": 7,
+    "distritos": 6,
+    "barrios": 24
+  },
+  "holones": [
+    {
+      "id": "01",
+      "slug": "mythos",
+      "name": "Mythos (Zeus/Homero)",
+      "runtimeKind": "anchor",
+      "barrios": [
+        "vscode-extension"
+      ],
+      "razonSinBarrio": null,
+      "note": "Cosmos cerrado / host Zigurat (ancla zeus).",
+      "registro": {
+        "capa": "cosmológica — destino cerrado, un solo cosmos",
+        "origen": "fuente directa",
+        "estado": "narrativa por ratificar · **anclado** (2026-07-15): el mundo zeus (`SCRIPTORIUM_V0\\zeus-sdk`, mjs — anclaje unidireccional: zeus no sabe que este registro existe)"
+      }
+    },
+    {
+      "id": "02",
+      "slug": "logos",
+      "name": "Logos (Sócrates/Platón)",
+      "runtimeKind": "anchor",
+      "barrios": [
+        "blockly-editor",
+        "wiring-editor",
+        "prolog-editor",
+        "typed-prompts-editor",
+        "workflow-editor",
+        "wiring-app-hypergraph-editor"
+      ],
+      "razonSinBarrio": null,
+      "note": "Dialéctica / editores visuales — razón que busca tras apariencias.",
+      "registro": {
+        "capa": "racional — la razón busca el Bien tras las apariencias",
+        "origen": "juntura 01↔03",
+        "estado": "pendiente"
+      }
+    },
+    {
+      "id": "03",
+      "slug": "revelacion",
+      "name": "Revelación (Cristo / E-SDK)",
+      "runtimeKind": "anchor",
+      "barrios": [
+        "document-machine-sdk",
+        "onfalo-asesor-sdk",
+        "agent-lore-sdk",
+        "vector-machine-sdk",
+        "vector-machine-ui"
+      ],
+      "razonSinBarrio": null,
+      "note": "Distrito lore-voz · Document Machine (L01 MAPA-HOLONICO).",
+      "registro": {
+        "capa": "personal — el Bien se hace persona, la gracia rompe el destino",
+        "origen": "fuente directa",
+        "estado": "Material pendiente · **anclado** (2026-07-16): el mundo emmanuel (`SCRIPTORIUM_V0\\emmanuel-sdk`, sound system — anclaje unidireccional; la fuente entra como primera línea por el contrato público)"
+      }
+    },
+    {
+      "id": "04",
+      "slug": "ilustracion",
+      "name": "Razón inmanente (Ilustración / Network-Engine)",
+      "runtimeKind": "anchor",
+      "barrios": [
+        "blockchain-com-port",
+        "stream-desktop",
+        "stream-desktop-app-cronos",
+        "bot-hub-sdk",
+        "aaia-gallery",
+        "mcp-gallery",
+        "state-machine",
+        "novelist-editor",
+        "copilot-engine",
+        "scriptorium-vps",
+        "ui-sdk-threejs",
+        "vibe-coding-suite"
+      ],
+      "razonSinBarrio": null,
+      "note": "Embudo secularizado: red-stream + runtime-mcp + infra-ui.",
+      "registro": {
+        "capa": "embudo — seculariza la promesa, un solo método legítimo",
+        "origen": "fuente directa",
+        "estado": "narrativa por ratificar · **anclado** (2026-07-15): Aleph NETWORK-ENGINE (`transmedia-system\\SCRIPTORIUM-CORE\\NETWORK-ENGINE`, el AOS — se ancló desde dentro, DB-3)"
+      }
+    },
+    {
+      "id": "05",
+      "slug": "sospecha",
+      "name": "Sospecha (Nietzsche/Marx/Freud)",
+      "runtimeKind": "cantera",
+      "barrios": [],
+      "razonSinBarrio": "Anclado a cantera/agujero negro (aleph-scriptorium · HOLONES/05-*); sin fingir runtime de barrio.",
+      "note": "Material histórico RO; no dependencia runtime del juego.",
+      "registro": {
+        "capa": "desenmascara el embudo — la razón como máscara",
+        "origen": "a generar",
+        "estado": "cabo suelto narrativo · **anclado**: el agujero negro (`aleph-scriptorium/plan/`, digestión S0/S3/S4)"
+      }
+    },
+    {
+      "id": "06",
+      "slug": "posmodernidad",
+      "name": "Posmodernidad (Lyotard/Foucault)",
+      "runtimeKind": "constelacion",
+      "barrios": [],
+      "razonSinBarrio": "Anclado a constelación spinoff (registry + fragmentos · HOLONES/06-*); sin fingir runtime de barrio.",
+      "note": "Material histórico RO; no dependencia runtime del juego.",
+      "registro": {
+        "capa": "fin de los metarrelatos — todo fragmenta",
+        "origen": "a generar",
+        "estado": "cabo suelto narrativo · **anclado**: la constelación spinoff (registry + r/s/h, S1/S2)"
+      }
+    },
+    {
+      "id": "07",
+      "slug": "script-sdk",
+      "name": "SCRIPT_SDK (holarquía como método)",
+      "runtimeKind": "metodo",
+      "barrios": [],
+      "razonSinBarrio": "Método / notaría (holón 07): relee y ancla; no es un barrio de la ciudad jugable.",
+      "note": "Gobierno metodológico; cero barrio fingido.",
+      "registro": {
+        "capa": "holárquica — el método que sostiene fragmentos sin metarrelato",
+        "origen": "**emergente** — juntura 06↔07",
+        "estado": "activo"
+      }
+    }
+  ],
+  "distritos": [
+    {
+      "id": "zigurat",
+      "displayName": "Zigurat",
+      "holonId": "01",
+      "barrios": [
+        "vscode-extension"
+      ]
+    },
+    {
+      "id": "editores",
+      "displayName": "Editores visuales",
+      "holonId": "02",
+      "barrios": [
+        "blockly-editor",
+        "wiring-editor",
+        "prolog-editor",
+        "typed-prompts-editor",
+        "workflow-editor",
+        "wiring-app-hypergraph-editor"
+      ]
+    },
+    {
+      "id": "red-stream",
+      "displayName": "Red / stream",
+      "holonId": "04",
+      "barrios": [
+        "blockchain-com-port",
+        "stream-desktop",
+        "stream-desktop-app-cronos",
+        "bot-hub-sdk"
+      ]
+    },
+    {
+      "id": "runtime-mcp",
+      "displayName": "Runtime / MCP",
+      "holonId": "04",
+      "barrios": [
+        "aaia-gallery",
+        "mcp-gallery",
+        "state-machine",
+        "novelist-editor",
+        "copilot-engine"
+      ]
+    },
+    {
+      "id": "lore-voz",
+      "displayName": "Lore / voz",
+      "holonId": "03",
+      "barrios": [
+        "document-machine-sdk",
+        "onfalo-asesor-sdk",
+        "agent-lore-sdk",
+        "vector-machine-sdk",
+        "vector-machine-ui"
+      ]
+    },
+    {
+      "id": "infra-ui",
+      "displayName": "Infra / UI",
+      "holonId": "04",
+      "barrios": [
+        "scriptorium-vps",
+        "ui-sdk-threejs",
+        "vibe-coding-suite"
+      ]
+    }
+  ],
+  "barrios": [
+    {
+      "id": "vscode-extension",
+      "slug": "vscode-extension",
+      "displayName": "VsCodeExtension",
+      "distrito": "zigurat",
+      "holonId": "01",
+      "estado": "vivo",
+      "grafo": {
+        "handoffEdges": 0
+      }
+    },
+    {
+      "id": "blockly-editor",
+      "slug": "blockly-editor",
+      "displayName": "BlocklyEditor",
+      "distrito": "editores",
+      "holonId": "02",
+      "estado": "latente",
+      "grafo": {
+        "handoffEdges": 0
+      }
+    },
+    {
+      "id": "wiring-editor",
+      "slug": "wiring-editor",
+      "displayName": "WiringEditor",
+      "distrito": "editores",
+      "holonId": "02",
+      "estado": "vivo",
+      "grafo": {
+        "handoffEdges": 0
+      }
+    },
+    {
+      "id": "prolog-editor",
+      "slug": "prolog-editor",
+      "displayName": "PrologEditor",
+      "distrito": "editores",
+      "holonId": "02",
+      "estado": "latente",
+      "grafo": {
+        "handoffEdges": 0
+      }
+    },
+    {
+      "id": "typed-prompts-editor",
+      "slug": "typed-prompts-editor",
+      "displayName": "TypedPromptsEditor",
+      "distrito": "editores",
+      "holonId": "02",
+      "estado": "latente",
+      "grafo": {
+        "handoffEdges": 0
+      }
+    },
+    {
+      "id": "workflow-editor",
+      "slug": "workflow-editor",
+      "displayName": "WorkflowEditor",
+      "distrito": "editores",
+      "holonId": "02",
+      "estado": "muerto",
+      "grafo": {
+        "handoffEdges": 0
+      }
+    },
+    {
+      "id": "wiring-app-hypergraph-editor",
+      "slug": "wiring-app-hypergraph-editor",
+      "displayName": "WiringAppHypergraphEditor",
+      "distrito": "editores",
+      "holonId": "02",
+      "estado": "latente",
+      "grafo": {
+        "handoffEdges": 0
+      }
+    },
+    {
+      "id": "blockchain-com-port",
+      "slug": "blockchain-com-port",
+      "displayName": "BlockchainComPort",
+      "distrito": "red-stream",
+      "holonId": "04",
+      "estado": "vivo",
+      "grafo": {
+        "handoffEdges": 0
+      }
+    },
+    {
+      "id": "stream-desktop",
+      "slug": "stream-desktop",
+      "displayName": "StreamDesktop",
+      "distrito": "red-stream",
+      "holonId": "04",
+      "estado": "muerto",
+      "grafo": {
+        "handoffEdges": 0
+      }
+    },
+    {
+      "id": "stream-desktop-app-cronos",
+      "slug": "stream-desktop-app-cronos",
+      "displayName": "StreamDesktopAppCronos",
+      "distrito": "red-stream",
+      "holonId": "04",
+      "estado": "muerto",
+      "grafo": {
+        "handoffEdges": 0
+      }
+    },
+    {
+      "id": "bot-hub-sdk",
+      "slug": "bot-hub-sdk",
+      "displayName": "BotHubSDK",
+      "distrito": "red-stream",
+      "holonId": "04",
+      "estado": "vivo",
+      "grafo": {
+        "handoffEdges": 0
+      }
+    },
+    {
+      "id": "aaia-gallery",
+      "slug": "aaia-gallery",
+      "displayName": "AAIAGallery",
+      "distrito": "runtime-mcp",
+      "holonId": "04",
+      "estado": "latente",
+      "grafo": {
+        "handoffEdges": 0
+      }
+    },
+    {
+      "id": "mcp-gallery",
+      "slug": "mcp-gallery",
+      "displayName": "MCPGallery",
+      "distrito": "runtime-mcp",
+      "holonId": "04",
+      "estado": "vivo",
+      "grafo": {
+        "handoffEdges": 0
+      }
+    },
+    {
+      "id": "state-machine",
+      "slug": "state-machine",
+      "displayName": "StateMachine",
+      "distrito": "runtime-mcp",
+      "holonId": "04",
+      "estado": "latente",
+      "grafo": {
+        "handoffEdges": 0
+      }
+    },
+    {
+      "id": "novelist-editor",
+      "slug": "novelist-editor",
+      "displayName": "NovelistEditor",
+      "distrito": "runtime-mcp",
+      "holonId": "04",
+      "estado": "vivo",
+      "grafo": {
+        "handoffEdges": 15
+      }
+    },
+    {
+      "id": "copilot-engine",
+      "slug": "copilot-engine",
+      "displayName": "CopilotEngine",
+      "distrito": "runtime-mcp",
+      "holonId": "04",
+      "estado": "vivo",
+      "grafo": {
+        "handoffEdges": 2
+      }
+    },
+    {
+      "id": "document-machine-sdk",
+      "slug": "document-machine-sdk",
+      "displayName": "DocumentMachineSDK",
+      "distrito": "lore-voz",
+      "holonId": "03",
+      "estado": "vivo",
+      "grafo": {
+        "handoffEdges": 47
+      }
+    },
+    {
+      "id": "onfalo-asesor-sdk",
+      "slug": "onfalo-asesor-sdk",
+      "displayName": "onfalo-asesor-sdk",
+      "distrito": "lore-voz",
+      "holonId": "03",
+      "estado": "vivo",
+      "grafo": {
+        "handoffEdges": 99
+      }
+    },
+    {
+      "id": "agent-lore-sdk",
+      "slug": "agent-lore-sdk",
+      "displayName": "AgentLoreSDK",
+      "distrito": "lore-voz",
+      "holonId": "03",
+      "estado": "vivo",
+      "grafo": {
+        "handoffEdges": 28
+      }
+    },
+    {
+      "id": "vector-machine-sdk",
+      "slug": "vector-machine-sdk",
+      "displayName": "VectorMachineSDK",
+      "distrito": "lore-voz",
+      "holonId": "03",
+      "estado": "vivo",
+      "grafo": {
+        "handoffEdges": 15
+      }
+    },
+    {
+      "id": "vector-machine-ui",
+      "slug": "vector-machine-ui",
+      "displayName": "VectorMachineUI",
+      "distrito": "lore-voz",
+      "holonId": "03",
+      "estado": "vivo",
+      "grafo": {
+        "handoffEdges": 0
+      }
+    },
+    {
+      "id": "scriptorium-vps",
+      "slug": "scriptorium-vps",
+      "displayName": "ScriptoriumVps",
+      "distrito": "infra-ui",
+      "holonId": "04",
+      "estado": "vivo",
+      "grafo": {
+        "handoffEdges": 0
+      }
+    },
+    {
+      "id": "ui-sdk-threejs",
+      "slug": "ui-sdk-threejs",
+      "displayName": "UISDKThreejs",
+      "distrito": "infra-ui",
+      "holonId": "04",
+      "estado": "vivo",
+      "grafo": {
+        "handoffEdges": 0
+      }
+    },
+    {
+      "id": "vibe-coding-suite",
+      "slug": "vibe-coding-suite",
+      "displayName": "VibeCodingSuite",
+      "distrito": "infra-ui",
+      "holonId": "04",
+      "estado": "latente",
+      "grafo": {
+        "handoffEdges": 0
+      }
+    }
+  ],
+  "asignacion": {
+    "distritoHolon": {
+      "zigurat": "01",
+      "editores": "02",
+      "lore-voz": "03",
+      "red-stream": "04",
+      "runtime-mcp": "04",
+      "infra-ui": "04"
+    },
+    "fuente": "Derivado de CENSO-ESTADOS + HOLONES.md + GRAFO; L01 MAPA-HOLONICO (lore-voz→03)."
+  },
+  "sources": {
+    "censoSha256": "cc2a92282ceee6831256e87dd6fd47f07d61270e05bd9c49232a21afceefa843",
+    "holonesSha256": "a877520a1fb56568f5e0b971c6385dff4b9f39a4988ae17d45da44edffe3d728",
+    "grafoSha256": "e638bafadcf1600eea310f70e0c7841d0cc9197a0fbc2ae87efb2f1e1b4b1845",
+    "barrioFichaCount": 24,
+    "holonesRootEntries": [
+      "01-mythos",
+      "03-emmanuel",
+      "05-aleph-scriptorium",
+      "06-aleph-scriptorium"
+    ]
+  }
+}

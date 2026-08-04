@@ -5,12 +5,15 @@
  * 2. Proyecta AlmacenResources por Streamable HTTP `/mcp`.
  *
  * Uso:
- *   bun run mcp
- *   H_SDK_MCP_PORT=8765 bun run mcp
+ *   npm run mcp                 (raíz; carga packages/app-prueba-hm/.env)
+ *   bun run mcp                 (en este paquete; carga ./.env)
+ *   H_SDK_MCP_PORT=8765 bun run mcp   (override puntual)
+ *
+ * Puerto fijo en `.env` / `.env.sample` → mismo URL en `.cursor/mcp.json`.
  *
  * Descubrimiento V (sin launcher):
  *   export H_SDK_MCP_HOST=127.0.0.1
- *   export H_SDK_MCP_PORT=<puerto impreso>
+ *   export H_SDK_MCP_PORT=<puerto del .env>
  */
 
 import { arrancarComposition } from './composition.ts';

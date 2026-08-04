@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "@h-sdk/app-prueba-hm": {
+      "url": "http://127.0.0.1:55712/mcp"
+    }
+  }
+}

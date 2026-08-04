@@ -1,0 +1,32 @@
+{
+  "name": "@h-sdk/demo-barrio-lore",
+  "version": "0.1.0",
+  "description": "Builders Three reutilizables (ciudad / barrio / flujo / host) para la demo barrio-lore; config-driven, sin ceremonia/DOM.",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts",
+    "./theme": "./src/theme/index.ts",
+    "./layout": "./src/layout/index.ts",
+    "./config": "./src/config/index.ts",
+    "./fixtures/barrio-lore": "./src/fixtures/barrio-lore.ts",
+    "./ciudad": "./src/ciudad/index.ts",
+    "./barrio": "./src/barrio/index.ts",
+    "./flujo": "./src/flujo/index.ts",
+    "./host": "./src/host/index.ts"
+  },
+  "scripts": {
+    "typecheck": "bun x tsc --noEmit",
+    "test": "bun test src"
+  },
+  "devDependencies": {
+    "@types/three": "^0.185.0"
+  },
+  "dependencies": {
+    "@zeus/ciudad": "^0.1.1",
+    "@zeus/game-engine": "^0.1.4",
+    "@zeus/ui-3d-kit": "^0.1.4",
+    "@zeus/view-kit": "^0.1.5",
+    "three": "^0.185.1"
+  }
+}

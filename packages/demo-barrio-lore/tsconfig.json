@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "types": [],
+    "lib": ["ESNext", "DOM"],
+    "moduleResolution": "bundler",
+    "allowJs": true,
+    "paths": {
+      "@zeus/ui-3d-kit/*": ["../../node_modules/@zeus/ui-3d-kit/src/*"],
+      "@zeus/view-kit/*": ["../../node_modules/@zeus/view-kit/src/*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["src/**/*.test.ts"]
+}

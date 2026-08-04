@@ -1,6 +1,5 @@
 /**
- * Entrypoint alcanzable Bun/TS de Prueba-H-M.
- * Sustituye `packages/game-prueba-hm/server.mjs` en el producto reachable.
+ * Entrypoint Bun/TS de Prueba-H-M (composition + resources).
  *
  * Uso: `bun run demo` (raíz) o `bun run packages/app-prueba-hm/src/main.ts`
  *
